@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions 
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://example.com/apod"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    name="ApodService"
+    targetNamespace="http://example.com/apod">
+
+    <types>
+        <xsd:schema targetNamespace="http://example.com/apod">
+            <xsd:element name="getApodRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="date" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="getApodResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="date" type="xsd:string"/>
+                        <xsd:element name="title" type="xsd:string"/>
+                        <xsd:element name="explanation" type="xsd:string"/>
+                        <xsd:element name="url" type="xsd:string"/>
+                        <xsd:element name="media_type" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+    </types>
+
+    <message name="GetApodRequest">
+        <part name="parameters" element="tns:getApodRequest"/>
+    </message>
+    <message name="GetApodResponse">
+        <part name="parameters" element="tns:getApodResponse"/>
+    </message>
+
+    <portType name="ApodPortType">
+        <operation name="getApod">
+            <input message="tns:GetApodRequest"/>
+            <output message="tns:GetApodResponse"/>
+        </operation>
+    </portType>
+
+    <binding name="ApodBinding" type="tns:ApodPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="getApod">
+            <soap:operation soapAction="getApod"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <service name="ApodService">
+        <port name="ApodPort" binding="tns:ApodBinding">
+            <soap:address location="http://localhost:8080/apod"/>
+        </port>
+    </service>
+</definitions>

@@ -1,0 +1,125 @@
+/biblioteca/alquilar?id=34
+
+PUT /library/books/34
+{
+    "action": "rent"
+    "userId": 12345
+}
+
+GET /libraries/12/sections/3/books/123?format=xml
+
+GET /libraries/12/sections/4/books/
+
+GET /libraries/10/sections/any/books
+
+GET /libraries/10/sections/any/books?pages_lt=100&author=J.R:R.%20Tolkien
+
+POST /users
+{
+    "name": "John Doe",
+    "email": "emails.sample@whatever.com",
+    "password": "securepassword123"
+}
+
+201 Created
+{
+    "id": 12345,
+    "name": "John Doe",
+    "email": "emails.sample@whatever.com",
+    "created_at": "2023-10-01T12:00:00Z"
+}
+
+POST /users
+{
+    "name": "John Doe",
+    "email": "emails.sample@whatever.com",
+    "password": "securepassword123"
+}
+
+PUT /users/12345
+{
+    "name": "jane doe",
+    "email": "emails.sample@whatever.com",
+    "password": "newsecurepassword456"
+}
+200 OK
+{
+    "id": 12345,
+    "name": "Jane Doe",
+    "email": "emails.sample@whatever.com",
+    "updated_at": "2023-10-02T12:00:00Z"
+}
+
+DELETE /users/12345
+204 No Content
+
+DELETE /users/12345
+404 Not Found
+
+DELETE /users?age_lt=18
+200 OK
+{
+    "deleted_count": 5
+}
+
+DELETE /users?age_lt=18
+400 Bad Request
+{
+    "error": "No users found with age less than 18"
+}
+
+--------------------------------------------
+
+PUT /users/12345
+{
+    "email": "emails.sample@whatever.com",
+    "password": "newsecurepassword456"
+}
+200 OK
+{
+    "id": 12345,
+    "name": "",
+    "email": "emails.sample@whatever.com",
+    "updated_at": "2023-10-02T12:00:00Z"
+}
+
+PATCH /users/12345
+{
+    "email": "emails.sample@whatever.com",
+    "password": "newsecurepassword456"
+}
+200 OK
+{
+    "id": 12345,
+    "name": "John Doe",
+    "email": "emails.sample@whatever.com",
+    "updated_at": "2023-10-02T12:00:00Z"
+}
+
+HEAD /users/12345
+204 No Content
+
+OPTIONS /users/12345
+Allow: GET, PUT, PATCH, DELETE
+
+OPTIONS /users
+Allow: GET, POST, DELETE
+
+404 Not 
+
+
+
+https://api.chucknorris.io/jokes?search={query}&order={order}&limit={limit}
+
+libraries/books?library_id=12&section_id=3
+
+https://api.chucknorris.io/v1/categories/dev/jokes
+
+ https://api.nasa.gov/v1/planetary/apod
+
+
+/api/prediccion/especifica/montaña/pasada/area/{area}
+
+api/v1/es/historico/especifico/areas/{area}
+
+api/v1/historic/specific/areas/{area}

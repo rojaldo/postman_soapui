@@ -1,0 +1,1310 @@
+= Postman
+:toc: left
+:icons: font
+:source-highlighter: highlight.js
+:toclevels: 3
+:diagram-plantuml-format: png
+
+Postman es una herramienta esencial para desarrolladores y testers que trabajan con APIs. Este temario está diseñado para guiarte desde los conceptos básicos hasta el uso avanzado de Postman, con ejemplos y buenas prácticas.
+
+== Introducción a las APIs y Postman
+
+=== ¿Qué es una API? Tipos de APIs (REST, SOAP, GraphQL)
+
+Una API (Application Programming Interface) es un conjunto de reglas y protocolos que permite que diferentes aplicaciones se comuniquen entre sí. Las APIs actúan como intermediarios, facilitando el intercambio de datos y funcionalidades entre sistemas, sin que estos necesiten conocer los detalles internos de implementación del otro.
+
+==== Tipos de APIs más comunes
+
+- REST (Representational State Transfer): Utiliza el protocolo HTTP y sigue principios sencillos como la manipulación de recursos mediante métodos estándar (GET, POST, PUT, DELETE). Es ampliamente utilizada por su simplicidad y compatibilidad con la web.
+- SOAP (Simple Object Access Protocol): Basada en XML, es más estricta en su estructura y ofrece mayor seguridad y transaccionalidad. Se usa en aplicaciones empresariales que requieren comunicaciones robustas y formales.
+- GraphQL: Desarrollada por Facebook, permite a los clientes especificar exactamente qué datos necesitan, optimizando la transferencia y evitando el exceso de información. Es ideal para aplicaciones modernas con necesidades de datos complejas.
+
+.Ejemplo de petición REST (GET):
+[source]
+----
+GET https://api.ejemplo.com/usuarios/1
+----
+
+.Ejemplo de consulta GraphQL:
+[source,graphql]
+----
+{
+  usuario(id: 1) {
+    nombre
+    email
+  }
+}
+----
+
+=== Beneficios de utilizar Postman
+
+Postman es una herramienta gráfica y multiplataforma que facilita el desarrollo, prueba y documentación de APIs. Sus beneficios principales incluyen:
+
+- Permite crear, enviar y analizar peticiones HTTP de forma sencilla y visual.
+- Facilita la automatización de pruebas mediante scripts y colecciones.
+- Permite organizar peticiones en colecciones y entornos, mejorando la gestión de proyectos complejos.
+- Ofrece generación automática de documentación a partir de las colecciones.
+- Facilita la colaboración en equipos mediante el uso compartido de colecciones y entornos.
+- Permite la integración con sistemas CI/CD y ejecución de pruebas automatizadas con herramientas como Newman.
+
+=== Instalación y configuración inicial
+
+Instalar Postman es un proceso sencillo:
+
+. Accede a la web oficial de Postman y descarga la versión correspondiente a tu sistema operativo (Windows, macOS o Linux).
+. Ejecuta el instalador y sigue las instrucciones en pantalla.
+. Una vez instalado, puedes crear una cuenta gratuita para sincronizar tus colecciones y configuraciones en la nube, aunque también puedes usarlo sin registrarte.
+
+.Primeros pasos tras la instalación:
+- Abre Postman y, si lo deseas, inicia sesión con tu cuenta.
+- Explora las colecciones de ejemplo que ofrece la plataforma para familiarizarte con la interfaz.
+- Configura tu primer entorno si necesitas variables globales o de entorno (por ejemplo, URLs base, tokens de autenticación).
+
+=== Exploración de la interfaz de usuario
+
+La interfaz de Postman está diseñada para ser intuitiva y eficiente. Sus componentes principales son:
+
+- **Barra lateral izquierda:** Permite acceder a colecciones, entornos, historial de peticiones y monitorización.
+- **Área central:** Aquí se crean y editan las peticiones. Puedes seleccionar el método HTTP, la URL, los parámetros, los headers y el cuerpo de la petición.
+- **Panel de respuesta:** Muestra la respuesta de la API, incluyendo el código de estado, los headers y el cuerpo de la respuesta en varios formatos (JSON, XML, HTML, etc.).
+- **Pestañas de scripts:** Permiten añadir scripts de pre-solicitud y tests automáticos en JavaScript.
+- **Runner de colecciones:** Herramienta para ejecutar flujos de pruebas automatizadas sobre colecciones completas.
+
+.Ejemplo de creación de una petición en Postman:
+[source,json]
+----
+GET https://jsonplaceholder.typicode.com/posts/1
+----
+
+Con estos fundamentos, estarás listo para empezar a explorar y probar APIs de manera profesional utilizando Postman.
+
+
+== Primeros Pasos con Postman
+
+=== Crear y enviar la primera petición HTTP
+
+El primer paso para trabajar con Postman es aprender a crear y enviar una petición HTTP. Postman ofrece una interfaz gráfica sencilla para construir peticiones y analizar sus respuestas.
+
+.Pasos para crear y enviar una petición:
+. Abre Postman y haz clic en el botón "New" o "Request".
+. Asigna un nombre a la petición y, si lo deseas, guárdala en una colección.
+. Selecciona el método HTTP (por defecto es GET).
+. Introduce la URL del endpoint al que deseas hacer la petición.
+. Haz clic en "Send" para enviar la petición.
+. Visualiza la respuesta en el panel inferior.
+
+.Ejemplo de petición GET en Postman:
+[source,json]
+----
+GET https://jsonplaceholder.typicode.com/posts/1
+----
+
+Puedes modificar el método, añadir parámetros, headers o un cuerpo según las necesidades de tu API.
+
+=== Métodos HTTP: GET, POST, PUT, DELETE, PATCH
+
+Los métodos HTTP definen la acción que quieres realizar sobre un recurso en una API. Los más utilizados son:
+
+- GET: Solicita datos de un recurso. No modifica nada en el servidor.
+- POST: Envía datos para crear un nuevo recurso.
+- PUT: Actualiza completamente un recurso existente.
+- PATCH: Actualiza parcialmente un recurso existente.
+- DELETE: Elimina un recurso.
+
+.Ejemplos de cada método en Postman:
+[source,json]
+----
+GET https://api.ejemplo.com/usuarios/1
+
+POST https://api.ejemplo.com/usuarios
+Body (JSON):
+{
+  "nombre": "Ana",
+  "email": "ana@ejemplo.com"
+}
+
+PUT https://api.ejemplo.com/usuarios/1
+Body (JSON):
+{
+  "nombre": "Ana Actualizada",
+  "email": "ana@ejemplo.com"
+}
+
+PATCH https://api.ejemplo.com/usuarios/1
+Body (JSON):
+{
+  "email": "nuevoemail@ejemplo.com"
+}
+
+DELETE https://api.ejemplo.com/usuarios/1
+----
+
+En Postman, puedes seleccionar el método deseado en el desplegable junto a la barra de URL.
+
+=== Análisis de respuestas y códigos de estado
+
+Cuando envías una petición, Postman muestra la respuesta en la parte inferior. Los elementos clave a analizar son:
+
+- **Código de estado HTTP:** Indica el resultado de la operación. Algunos códigos comunes:
+  - 200 OK: La petición fue exitosa.
+  - 201 Created: Recurso creado exitosamente (usualmente POST).
+  - 204 No Content: Operación exitosa sin contenido en la respuesta (usualmente DELETE).
+  - 400 Bad Request: Error en la petición (sintaxis o datos).
+  - 401 Unauthorized: Falta autenticación.
+  - 404 Not Found: Recurso no encontrado.
+  - 500 Internal Server Error: Error en el servidor.
+
+- **Headers de respuesta:** Información adicional sobre la respuesta (tipo de contenido, longitud, etc.).
+
+- **Cuerpo de la respuesta:** Los datos devueltos por la API, normalmente en formato JSON o XML.
+
+.Ejemplo de análisis de respuesta en Postman:
+[source,json]
+----
+Status: 200 OK
+Headers:
+  Content-Type: application/json; charset=utf-8
+
+Body:
+{
+  "id": 1,
+  "nombre": "Ana",
+  "email": "ana@ejemplo.com"
+}
+----
+
+Postman también permite visualizar la respuesta en diferentes formatos, ver el tiempo de respuesta y el tamaño de los datos recibidos.
+
+.Consejo práctico:
+Puedes añadir scripts de test en la pestaña "Tests" para validar automáticamente los códigos de estado y el contenido de la respuesta. Ejemplo:
+[source,javascript]
+----
+pm.test("El código de estado es 200", function () {
+  pm.response.to.have.status(200);
+});
+----
+
+Estos primeros pasos te permitirán comenzar a interactuar y probar cualquier API de manera eficiente y profesional usando Postman.
+
+
+
+== Colecciones y Organización
+
+=== ¿Qué es una colección?
+
+Una colección en Postman es un contenedor estructurado que agrupa múltiples peticiones HTTP relacionadas, permitiendo organizarlas de forma lógica según el proyecto, funcionalidad o entorno. Las colecciones facilitan la reutilización, documentación y automatización de pruebas sobre APIs, ya que pueden incluir no solo peticiones, sino también scripts, variables y descripciones detalladas.
+
+Ventajas de usar colecciones:
+- Organización clara de las peticiones por módulos o funcionalidades.
+- Compartición sencilla con otros miembros del equipo.
+- Posibilidad de ejecutar pruebas automatizadas sobre todas las peticiones de la colección.
+- Documentación centralizada de los endpoints y sus ejemplos.
+
+=== Crear, importar y exportar colecciones
+
+==== Crear una colección
+
+. Haz clic en el botón "New" y selecciona "Collection".
+. Asigna un nombre y, opcionalmente, una descripción.
+. Agrega peticiones nuevas o existentes a la colección.
+
+.Ejemplo de estructura de colección en formato JSON:
+[source,json]
+----
+{
+  "info": {
+    "name": "Colección de Usuarios",
+    "description": "Colección para pruebas de la API de usuarios"
+  },
+  "item": [
+    {
+      "name": "Obtener lista de usuarios",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/usuarios"
+      }
+    }
+  ]
+}
+----
+
+==== Importar una colección
+
+- Haz clic en "Import" y selecciona el archivo (JSON) exportado previamente o pega la URL de una colección pública.
+- Postman soporta la importación desde archivos locales, enlaces directos o incluso arrastrando el archivo a la ventana.
+
+==== Exportar una colección
+
+- Selecciona la colección en la barra lateral.
+- Haz clic en los tres puntos ("...") y elige "Export".
+- Elige el formato (generalmente JSON) y descarga el archivo.
+
+Esto permite compartir colecciones entre miembros del equipo o migrarlas entre entornos.
+
+=== Organización de peticiones en carpetas
+
+Dentro de una colección, puedes agrupar peticiones en carpetas para mantener una estructura lógica y facilitar la navegación.
+
+Ejemplo de organización:
+- Colección: API de Usuarios
+  - Carpeta: Autenticación
+    - Petición: Login
+    - Petición: Logout
+  - Carpeta: Gestión de usuarios
+    - Petición: Crear usuario
+    - Petición: Obtener usuarios
+    - Petición: Actualizar usuario
+
+Para crear una carpeta:
+. Haz clic derecho sobre la colección y selecciona "Add Folder".
+. Asigna un nombre y, opcionalmente, una descripción.
+. Arrastra o crea nuevas peticiones dentro de la carpeta.
+
+=== Uso de entornos y variables (globales, de entorno, de colección)
+
+Postman permite definir variables para reutilizar valores dinámicos y evitar la repetición de datos sensibles o cambiantes, como URLs base, tokens o IDs.
+
+==== Tipos de variables
+
+- **Globales:** Disponibles en cualquier colección y petición abierta en Postman.
+- **De entorno:** Asociadas a un entorno específico (por ejemplo, desarrollo, pruebas, producción). Solo están activas cuando el entorno está seleccionado.
+- **De colección:** Definidas y accesibles solo dentro de una colección concreta.
+- **Locales:** Definidas en el contexto de una petición o script, solo válidas durante la ejecución de esa petición.
+
+==== Ejemplo de uso de variables
+
+.Definición de variables de entorno:
+[source,json]
+----
+{
+  "id": "12345",
+  "name": "entorno-desarrollo",
+  "values": [
+    {
+      "key": "base_url",
+      "value": "https://api.miapp.com",
+      "enabled": true
+    },
+    {
+      "key": "token",
+      "value": "abcdef123456",
+      "enabled": true
+    }
+  ]
+}
+----
+
+.Uso de variables en una petición:
+[source]
+----
+GET {{base_url}}/usuarios
+Headers:
+  Authorization: Bearer {{token}}
+----
+
+==== Gestión de entornos
+
+- Para crear un entorno, haz clic en el icono de "Environments" y selecciona "Add".
+- Añade las variables necesarias y guarda el entorno.
+- Selecciona el entorno activo desde el menú desplegable en la parte superior derecha.
+
+Esto permite cambiar rápidamente entre diferentes configuraciones (por ejemplo, desarrollo y producción) sin modificar las peticiones.
+
+==== Ejemplo de script para establecer variables dinámicas
+
+Puedes definir variables dinámicamente en scripts de pre-solicitud:
+
+[source,javascript]
+----
+pm.environment.set("fecha_actual", new Date().toISOString());
+----
+
+De esta manera, puedes reutilizar valores generados dinámicamente en tus peticiones.
+
+Con estas herramientas, Postman permite una gestión eficiente, segura y escalable de tus pruebas y documentación de APIs, facilitando el trabajo en equipo y la automatización de flujos complejos.
+
+
+
+== Parámetros, Headers y Autenticación
+
+=== Parámetros de consulta y de ruta
+
+En las APIs, los parámetros permiten personalizar las solicitudes y acceder a recursos específicos. Los dos tipos principales son:
+
+- **Parámetros de ruta (Path Parameters):**
+  - Se insertan directamente en la ruta de la URL, entre llaves (`{}`), y actúan como marcadores de posición para valores concretos.
+  - Son obligatorios y se usan para identificar recursos únicos dentro de una colección.
+.Ejemplo de ruta con parámetro:
+[source]
+----
+GET https://api.ejemplo.com/usuarios/{usuarioId}
+----
+.Si `usuarioId` es 15, la URL final sería:
+[source]
+----
+GET https://api.ejemplo.com/usuarios/15
+----
+- Es común usar camelCase o snake_case para nombrar estos parámetros.
+
+- **Parámetros de consulta (Query Parameters):**
+  - Se añaden al final de la URL, después del signo de interrogación (`?`), y separados por `&`.
+  - Son útiles para filtrar, paginar o modificar la consulta, y suelen ser opcionales.
+  - Ejemplo de parámetros de consulta:
+    [source]
+    ----
+    GET https://api.ejemplo.com/usuarios?activo=true&rol=admin
+    ----
+  - Se pueden combinar ambos tipos en una misma solicitud:
+    [source]
+    ----
+    GET https://api.ejemplo.com/usuarios/15/pedidos?estado=entregado&limite=10
+    ----
+  - En Postman, los parámetros de consulta se pueden añadir en la pestaña "Params" del editor de peticiones.
+
+=== Configuración y uso de headers personalizados
+
+Los headers (cabeceras) son pares clave-valor que se envían junto con la petición HTTP y permiten transmitir metadatos, como el tipo de contenido, la autenticación o información personalizada.
+
+- Para configurar headers personalizados en Postman:
+  . Ve a la pestaña **Headers** de la petición.
+  . Añade los pares clave-valor necesarios, por ejemplo:
+    [source]
+    ----
+    Key: Content-Type    Value: application/json
+    Key: X-Custom-Header Value: valor-personalizado
+    ----
+- Postman permite guardar conjuntos de headers como presets para reutilizarlos fácilmente.
+- Algunos headers se generan automáticamente según la configuración de la petición, pero puedes sobreescribirlos o desactivarlos manualmente.
+- Los headers también pueden establecerse dinámicamente mediante scripts de pre-solicitud, por ejemplo:
+  [source,javascript]
+  ----
+  pm.request.headers.upsert({key: 'X-Request-ID', value: '12345'});
+  ----
+- Es común usar headers para autenticación, control de caché, tipo de contenido, etc.
+
+=== Autenticación: API Key, Basic Auth, Bearer Token, OAuth 2.0
+
+Las APIs suelen requerir autenticación para proteger recursos. Los métodos más habituales son:
+
+- **API Key:**
+  - Una clave única que identifica al cliente.
+  - Se envía como parámetro de consulta, header o body.
+  .Ejemplo en header:
+[source]
+----
+Key: x-api-key  Value: TU_API_KEY
+----
+
+- **Basic Auth:**
+  - Usa un par usuario:contraseña codificado en Base64.
+  - Se envía en el header `Authorization`.
+.Ejemplo:
+[source]
+----
+Authorization: Basic cG9zdG1hbjpwYXNzd29yZA==
+----
+  - En Postman, selecciona "Basic Auth" en la pestaña "Authorization" y Postman generará el header automáticamente.
+
+- **Bearer Token:**
+  - Utiliza un token de acceso (generalmente JWT).
+  - Se envía en el header `Authorization` con el prefijo `Bearer`.
+.Ejemplo:
+[source]
+----
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+----
+  - Es el método más común para APIs modernas y suele usarse junto con OAuth 2.0.
+
+- **OAuth 2.0:**
+  - Protocolo estándar para autorización delegada.
+  - Permite a una aplicación acceder a recursos en nombre de un usuario sin exponer su contraseña.
+  - El flujo típico implica obtener un token de acceso tras autenticar al usuario, y luego usar ese token como Bearer en el header.
+  - En Postman, puedes configurar OAuth 2.0 desde la pestaña "Authorization" seleccionando el tipo correspondiente y proporcionando los datos requeridos (client_id, client_secret, scopes, etc.).
+
+.Consejo práctico:
+En Postman, cada método de autenticación se configura fácilmente desde la pestaña "Authorization" de la petición. Según el método seleccionado, Postman añadirá automáticamente los headers necesarios.
+
+Con estos conceptos, puedes construir peticiones seguras y personalizadas en Postman, controlando tanto los parámetros como los headers y la autenticación de tus APIs.
+
+
+== Scripts en Postman: Pre-request y Tests
+
+=== Introducción a los scripts en JavaScript
+
+Postman permite automatizar y personalizar el comportamiento de las peticiones mediante scripts escritos en JavaScript. Estos scripts se pueden ejecutar en dos momentos clave:
+
+- **Pre-request scripts:** Se ejecutan antes de enviar la petición, permitiendo preparar datos, generar valores dinámicos o modificar parámetros.
+- **Tests scripts:** Se ejecutan después de recibir la respuesta, permitiendo validar el contenido, los códigos de estado y automatizar pruebas.
+
+Las APIs de Postman exponen objetos y funciones útiles, como `pm` (Postman Sandbox), que facilita el acceso a la petición, la respuesta, variables y utilidades de aserción.
+
+Principales ventajas de los scripts en Postman:
+- Automatización de pruebas y validaciones.
+- Generación dinámica de datos (tokens, fechas, identificadores).
+- Encadenamiento de peticiones y paso de datos entre ellas.
+- Validación automática de respuestas y detección de errores.
+
+=== Scripts de pre-solicitud
+
+Los scripts de pre-solicitud permiten ejecutar código justo antes de enviar la petición. Son útiles para:
+
+- Generar tokens o firmas de autenticación.
+- Calcular fechas, hashes o valores dinámicos.
+- Establecer variables de entorno o de colección.
+- Modificar headers, parámetros o el cuerpo de la petición.
+
+.Ejemplo: Generar una fecha actual y guardarla en una variable de entorno
+[source,javascript]
+----
+const fechaActual = new Date().toISOString();
+pm.environment.set("fecha_actual", fechaActual);
+----
+
+.Ejemplo: Generar un identificador aleatorio para la petición
+[source,javascript]
+----
+const uuid = pm.variables.replaceIn('{{$guid}}');
+pm.environment.set("peticion_id", uuid);
+----
+
+.Ejemplo: Modificar un header antes de enviar la petición
+[source,javascript]
+----
+pm.request.headers.upsert({ key: 'X-Request-ID', value: pm.environment.get("peticion_id") });
+----
+
+=== Scripts de test: validación de respuestas
+
+.Los scripts de test se ejecutan después de recibir la respuesta de la API. Permiten:
+- Validar el código de estado HTTP.
+- Comprobar la estructura y el contenido del cuerpo de la respuesta.
+- Verificar headers, tiempos de respuesta y otros metadatos.
+- Extraer valores de la respuesta y guardarlos como variables para peticiones futuras.
+
+.Ejemplo: Validar que el código de estado es 200
+[source,javascript]
+----
+pm.test("El código de estado es 200", function () {
+  pm.response.to.have.status(200);
+});
+----
+
+.Ejemplo: Validar que el cuerpo contiene una propiedad específica
+[source,javascript]
+----
+pm.test("La respuesta contiene el campo 'nombre'", function () {
+  const jsonData = pm.response.json();
+  pm.expect(jsonData).to.have.property('nombre');
+});
+----
+
+.Ejemplo: Extraer un token de la respuesta y guardarlo como variable
+[source,javascript]
+----
+const jsonData = pm.response.json();
+pm.environment.set("token", jsonData.token);
+----
+
+.Ejemplo: Validar múltiples condiciones en un solo test
+[source,javascript]
+----
+pm.test("Respuesta válida y usuario activo", function () {
+  const data = pm.response.json();
+  pm.expect(pm.response.code).to.eql(200);
+  pm.expect(data.activo).to.be.true;
+});
+----
+
+.Consejos prácticos:
+- Puedes combinar múltiples tests en un mismo script.
+- Los resultados de los tests aparecen en la pestaña "Test Results" tras ejecutar la petición.
+- Utiliza las funciones de aserción de ChaiJS para expresiones más potentes y legibles.
+
+Con estos scripts, Postman se convierte en una potente herramienta de pruebas automatizadas y flujos dinámicos para APIs.
+
+
+== Automatización y Flujos de Trabajo
+
+La automatización en Postman permite optimizar pruebas, simular escenarios complejos y mejorar la eficiencia en el desarrollo y validación de APIs. A continuación se explican las técnicas más relevantes para lograr flujos de trabajo avanzados.
+
+=== Uso de variables dinámicas y aleatorias
+
+Las variables dinámicas y aleatorias permiten generar datos únicos o cambiantes en cada ejecución, ideales para simular escenarios reales y evitar colisiones en pruebas.
+
+- **Variables dinámicas integradas**: Postman ofrece variables predefinidas como `{{$guid}}`, `{{$timestamp}}`, `{{$randomInt}}`, etc., que se pueden usar directamente en los campos de la petición o en scripts.
+- **Generación personalizada en scripts**: Puedes crear valores dinámicos usando JavaScript en scripts de pre-solicitud.
+
+.Ejemplo: Uso de variables dinámicas en el cuerpo de una petición
+[source,json]
+----
+{
+  "usuario": "user_{{$randomInt}}",
+  "email": "test_{{$guid}}@ejemplo.com",
+  "fecha": "{{$isoTimestamp}}"
+}
+----
+
+.Ejemplo: Generar un valor aleatorio personalizado en un script
+[source,javascript]
+----
+const randomId = Math.floor(Math.random() * 10000);
+pm.environment.set("usuario_id", randomId);
+----
+
+Estas variables pueden ser utilizadas en cualquier parte de la petición, headers, parámetros o cuerpo, y facilitan la automatización de pruebas masivas y la simulación de datos reales.
+
+=== Encadenamiento de peticiones
+
+.El encadenamiento consiste en pasar datos de la respuesta de una petición a la siguiente, permitiendo flujos de trabajo complejos como autenticación, creación y consulta de recursos, etc.
+- **Extracción de datos**: Utiliza scripts de test para guardar valores de la respuesta como variables de entorno o colección.
+- **Reutilización de variables**: Emplea las variables extraídas en peticiones posteriores.
+
+
+Este patrón es fundamental para probar flujos de autenticación, procesos multi-etapa o pruebas de integración.
+
+=== Ejecución de colecciones con el Runner
+
+El Collection Runner permite ejecutar una colección completa de peticiones de forma secuencial o iterativa, automatizando pruebas y validaciones.
+
+.Pasos para usar el Runner:
+* Haz clic en "Runner" en la parte superior izquierda de Postman.
+* Selecciona la colección y, si lo deseas, un archivo de datos para pruebas basadas en datos (CSV o JSON).
+* Configura el entorno, número de iteraciones y otras opciones.
+* Haz clic en "Run" para iniciar la ejecución.
+
+Ventajas:
+- Permite ejecutar pruebas masivas y repetitivas sin intervención manual.
+- Genera reportes de resultados de tests y tiempos de ejecución.
+- Facilita pruebas de regresión y validación continua.
+
+.Ejemplo de archivo de datos para pruebas masivas (CSV):
+[source]
+----
+usuario,email
+usuario1,usuario1@ejemplo.com
+usuario2,usuario2@ejemplo.com
+----
+
+En la colección, puedes referenciar los campos como `{{usuario}}` y `{{email}}`.
+
+=== Introducción a Newman (CLI)
+
+Newman es la herramienta de línea de comandos de Postman, ideal para integrar la ejecución de colecciones en sistemas de integración continua (CI/CD) o scripts automatizados.
+
+- **Instalación**:
+  [source,bash]
+  ----
+  npm install -g newman
+  ----
+
+- **Ejecución básica**:
+  [source,bash]
+  ----
+  newman run coleccion.json -e entorno.json
+  ----
+
+- **Opciones avanzadas**:
+  - `-d datos.csv`: Ejecuta la colección con un archivo de datos.
+  - `-r cli,html`: Genera reportes en consola y en HTML.
+  - `--bail`: Detiene la ejecución al primer error.
+
+.Ejemplo de comando completo:
+[source,bash]
+----
+newman run coleccion.json -e entorno.json -d datos.csv -r cli,html
+----
+
+.Ventajas de Newman:
+- Permite la ejecución desatendida y programada de colecciones.
+- Facilita la integración con pipelines de CI/CD (Jenkins, GitLab CI, GitHub Actions, etc.).
+- Genera reportes detallados y exportables.
+
+Con estas herramientas y técnicas, puedes automatizar completamente el ciclo de pruebas de tus APIs, asegurando calidad, eficiencia y escalabilidad en tus proyectos.
+
+
+== Documentación y Compartición
+
+La documentación y la compartición de recursos en Postman son esenciales para la colaboración eficiente y la transparencia en proyectos de APIs. Postman ofrece herramientas potentes para automatizar la generación de documentación, compartir colecciones y entornos, y publicar documentación accesible para equipos o clientes.
+
+=== Generación automática de documentación
+
+Postman puede generar documentación detallada de tus colecciones de manera automática, a partir de la información y ejemplos incluidos en cada petición.
+
+.Pasos para generar documentación:
+. Añade descripciones claras a cada colección, carpeta y petición. Puedes incluir ejemplos de solicitudes y respuestas, así como detalles sobre parámetros, headers y cuerpos.
+. Incluye ejemplos de código y respuestas en los apartados "Examples" de cada petición.
+. Haz clic derecho sobre la colección y selecciona "View Documentation" o utiliza el menú contextual para acceder a la vista previa de la documentación generada.
+
+.Características de la documentación automática:
+- Incluye la estructura de la colección, endpoints, métodos, parámetros y ejemplos.
+- Permite navegar fácilmente entre peticiones y carpetas.
+- Se actualiza automáticamente al modificar la colección.
+- Admite Markdown para dar formato a las descripciones y ejemplos.
+
+.Ejemplo de descripción en una petición:
+[source,markdown]
+----
+### Crear usuario
+Crea un nuevo usuario en el sistema.
+
+**Parámetros:**
+- nombre (string): Nombre del usuario.
+- email (string): Correo electrónico.
+
+**Ejemplo de respuesta:**
+{
+  "id": 1,
+  "nombre": "Ana",
+  "email": "ana@ejemplo.com"
+}
+----
+
+=== Compartir colecciones y entornos
+
+Postman facilita la colaboración permitiendo compartir colecciones y entornos de varias maneras:
+
+- **Compartir por enlace:** Puedes generar un enlace público o privado a una colección desde el menú "Share Collection". El enlace permite a otros importar la colección directamente en su espacio de trabajo.
+- **Exportar e importar archivos:** Las colecciones y entornos pueden exportarse como archivos JSON y luego importarse en otros equipos o instancias de Postman.
+- **Workspaces colaborativos:** Postman permite crear espacios de trabajo (Workspaces) donde varios usuarios pueden colaborar en tiempo real, compartiendo colecciones, entornos y documentación.
+- **Control de versiones:** En los Workspaces, puedes ver el historial de cambios, revertir versiones y gestionar permisos de edición o solo lectura.
+
+.Ejemplo de exportación de una colección:
+. Selecciona la colección en la barra lateral.
+. Haz clic en los tres puntos ("...") y elige "Export".
+. Descarga el archivo JSON resultante.
+
+.Ejemplo de importación:
+. Haz clic en "Import" en la parte superior izquierda.
+. Selecciona el archivo JSON de la colección o entorno.
+
+=== Publicación de documentación online
+
+Postman permite publicar la documentación de tus colecciones en línea, haciendo que sea accesible para equipos, clientes o usuarios externos.
+
+.Pasos para publicar documentación:
+. Haz clic derecho sobre la colección y selecciona "Publish Docs" o accede a la opción desde el menú de la colección.
+. Configura las opciones de visibilidad (pública o privada) y personaliza la URL si es necesario.
+. Postman generará un enlace web donde la documentación estará disponible, incluyendo ejemplos, descripciones y detalles técnicos.
+
+.Ventajas de la publicación online:
+- Acceso inmediato y centralizado a la documentación más actualizada.
+- Permite compartir la documentación con cualquier persona, incluso fuera de tu organización.
+- Soporta autenticación y control de acceso para documentación privada.
+- Facilita la integración con portales de desarrolladores y procesos de onboarding.
+
+.Consejo práctico:
+Mantén la documentación actualizada y utiliza ejemplos claros y completos. Aprovecha las capacidades de Markdown para mejorar la legibilidad y profesionalismo de la documentación publicada.
+
+Con estas herramientas, Postman se convierte en una plataforma integral para documentar, compartir y publicar APIs, mejorando la colaboración y la eficiencia en el desarrollo de software.
+
+
+== Pruebas Avanzadas y Buenas Prácticas
+
+Las pruebas avanzadas y las buenas prácticas en Postman permiten llevar la calidad y la robustez de las APIs a un nivel profesional. A continuación se abordan técnicas y recomendaciones clave para maximizar el potencial de Postman en entornos exigentes.
+
+=== Validaciones complejas
+
+Las validaciones complejas permiten asegurar que las respuestas de la API cumplen con requisitos estrictos, no solo en cuanto a códigos de estado, sino también en estructura, contenido y lógica de negocio.
+
+.**Validar estructuras de objetos anidados**
+[source,javascript]
+----
+pm.test("El usuario tiene dirección válida", function () {
+const data = pm.response.json();
+pm.expect(data).to.have.property('direccion');
+pm.expect(data.direccion).to.have.property('ciudad');
+pm.expect(data.direccion.ciudad).to.be.a('string');
+});
+----
+
+.**Comprobar la presencia de elementos en listas**
+[source,javascript]
+----
+pm.test("La respuesta contiene al menos 3 usuarios", function () {
+const data = pm.response.json();
+pm.expect(data.usuarios.length).to.be.at.least(3);
+});
+----
+
+.**Validar formatos y expresiones regulares**
+[source,javascript]
+----
+pm.test("El email tiene formato válido", function () {
+const email = pm.response.json().email;
+pm.expect(email).to.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
+});
+----
+
+.**Comparar valores entre respuesta y variables**
+[source,javascript]
+----
+pm.test("El ID devuelto coincide con el solicitado", function () {
+const data = pm.response.json();
+pm.expect(data.id).to.eql(pm.variables.get("usuario_id"));
+});
+----
+
+Estas validaciones pueden combinarse y adaptarse según la lógica de negocio y los requisitos de la API.
+
+=== Pruebas basadas en datos (Data-Driven Testing)
+
+Las pruebas basadas en datos permiten ejecutar la misma colección o petición múltiples veces con diferentes conjuntos de datos, facilitando la validación masiva y la detección de errores en escenarios variados.
+
+.**Uso del Collection Runner con archivos de datos**
+.Prepara un archivo CSV o JSON con los datos de prueba:
+[source]
+----
+nombre,email
+Ana,ana@ejemplo.com
+Luis,luis@ejemplo.com
+----
+. En el cuerpo o parámetros de la petición, usa variables como `{{nombre}}` y `{{email}}`.
+. Ejecuta la colección con el Runner y selecciona el archivo de datos.
+
+.**Acceso a datos en scripts**
+[source,javascript]
+----
+pm.test("El nombre enviado coincide con el recibido", function () {
+const data = pm.response.json();
+pm.expect(data.nombre).to.eql(pm.iterationData.get("nombre"));
+});
+----
+
+.**Ventajas del Data-Driven Testing**
+- Permite validar la robustez de la API ante múltiples entradas.
+- Facilita la automatización de pruebas de regresión.
+- Reduce el esfuerzo manual y mejora la cobertura de pruebas.
+
+=== Gestión de errores y depuración
+
+Detectar y resolver errores rápidamente es fundamental en pruebas avanzadas.
+
+.**Uso de logs y consola**
+[source,javascript]
+----
+console.log("Respuesta completa:", pm.response.text());
+----
+Los mensajes se visualizan en la pestaña "Console" de Postman.
+
+.**Validaciones explícitas de errores**
+[source,javascript]
+----
+pm.test("Error esperado: usuario no encontrado", function () {
+pm.expect(pm.response.code).to.eql(404);
+const data = pm.response.json();
+pm.expect(data.mensaje).to.eql("Usuario no encontrado");
+});
+----
+
+.**Control de flujos en scripts**
+[source,javascript]
+----
+if (!pm.response.json().token) {
+throw new Error("No se recibió el token de autenticación");
+}
+----
+
+.**Depuración de variables**
+[source,javascript]
+----
+console.log("Valor de variable token:", pm.environment.get("token"));
+----
+
+Estas técnicas ayudan a identificar rápidamente la causa de fallos y a mejorar la calidad de las pruebas.
+
+=== Buenas prácticas en la organización de colecciones
+
+Una organización eficiente de las colecciones facilita el mantenimiento, la colaboración y la escalabilidad de los proyectos.
+
+* **Estructura lógica y modular**
+  ** Agrupa peticiones por funcionalidad (usuarios, autenticación, productos, etc.).
+  ** Usa carpetas para separar flujos o módulos independientes.
+
+* **Nomenclatura clara y consistente**
+  ** Usa nombres descriptivos y normalizados para colecciones, carpetas y peticiones.
+  ** Incluye el verbo HTTP y el recurso en el nombre, por ejemplo: `GET * Listar usuarios`.
+
+* **Uso extensivo de variables y entornos**
+  ** Centraliza URLs, tokens y datos sensibles en variables de entorno o colección.
+  ** Evita valores hardcodeados en las peticiones.
+
+* **Documentación interna**
+  ** Añade descripciones detalladas a colecciones, carpetas y peticiones.
+  ** Incluye ejemplos de solicitudes y respuestas.
+
+* **Versionado y control de cambios**
+  ** Utiliza Workspaces y control de versiones para colaborar y rastrear cambios.
+  ** Exporta y respalda colecciones regularmente.
+
+* **Automatización y validación continua**
+  ** Integra las colecciones con sistemas CI/CD usando Newman.
+  ** Mantén actualizados los scripts de test y pre-solicitud.
+
+== Integraciones y Extensiones
+
+Las integraciones y extensiones de Postman permiten llevar la automatización y el control de calidad de las APIs a un siguiente nivel, facilitando su integración en flujos de trabajo profesionales y ampliando sus capacidades mediante herramientas externas y plugins.
+
+=== Integración con CI/CD
+
+Integrar Postman en pipelines de Integración Continua y Entrega Continua (CI/CD) es fundamental para asegurar la calidad y disponibilidad de las APIs en cada despliegue. La herramienta clave para esta integración es Newman, el CLI oficial de Postman.
+
+.Pasos para la integración:
+. Exporta la colección y el entorno desde Postman en formato JSON.
+. Añade los archivos exportados al repositorio de tu proyecto.
+. Instala Newman en tu entorno de CI/CD (Jenkins, GitLab CI, GitHub Actions, Azure DevOps, etc.).
+. Configura el pipeline para ejecutar los tests de Postman con Newman en cada build o despliegue.
+
+.Ejemplo de comando de ejecución en un pipeline:
+[source,bash]
+----
+newman run coleccion.json -e entorno.json --reporters cli,html
+----
+
+.Ventajas:
+- Automatización de pruebas de regresión en cada commit o despliegue.
+- Generación de reportes automáticos (CLI, HTML, JSON, JUnit).
+- Detección temprana de errores antes de llegar a producción.
+- Integración sencilla con scripts y sistemas de notificaciones.
+
+.Ejemplo de integración en un archivo YAML para GitHub Actions:
+[source,yaml]
+----
+- name: Run Postman tests with Newman
+  run: |
+    npm install -g newman
+    newman run coleccion.json -e entorno.json --reporters cli,html
+----
+
+=== Uso de Monitors para pruebas programadas
+
+Los Monitors de Postman permiten ejecutar colecciones de manera programada desde la nube de Postman, simulando pruebas periódicas (por ejemplo, cada hora, diariamente o tras cada despliegue).
+
+.Características principales:
+- Permiten programar la ejecución automática de colecciones.
+- Generan reportes de resultados y alertas ante fallos.
+- Permiten monitorizar la disponibilidad y el rendimiento de las APIs.
+- Se configuran desde la interfaz web de Postman, sin necesidad de infraestructura propia.
+
+.Pasos para crear un Monitor:
+. Selecciona la colección que deseas monitorizar.
+. Haz clic en "Monitor Collection" y configura la frecuencia de ejecución, entorno y notificaciones.
+. Visualiza los resultados históricos y las métricas de cada ejecución desde el dashboard de Monitors.
+
+.Ventajas:
+- Detección proactiva de caídas o degradaciones en la API.
+- Alertas por correo o integraciones con Slack, Microsoft Teams, etc.
+- Ideal para pruebas de smoke testing y monitorización de endpoints críticos.
+
+=== Extensiones y plugins útiles
+
+Postman se puede ampliar mediante extensiones, integraciones y plugins de terceros que potencian su funcionalidad:
+
+- **Newman HTML Extra Reporter**: Genera reportes HTML avanzados y visuales de las ejecuciones de Newman.
+- **Integraciones nativas**: Postman se conecta directamente con herramientas como Slack, GitHub, GitLab, Jira, Datadog, Splunk, y más, facilitando la notificación de resultados y la trazabilidad de incidencias.
+- **API de Postman**: Permite gestionar colecciones, entornos y monitores programáticamente, integrando Postman con sistemas personalizados.
+- **Postman Interceptor**: Extensión de navegador que captura y sincroniza cookies y cabeceras entre el navegador y Postman, útil para pruebas autenticadas.
+- **Postman Code Generators**: Genera snippets de código en múltiples lenguajes (Python, JavaScript, cURL, etc.) a partir de peticiones configuradas en Postman.
+
+.Otras integraciones populares:
+- Jenkins y otros orquestadores de CI/CD.
+- Notificaciones a canales de comunicación (Slack, Teams).
+- Dashboards de monitoreo y observabilidad (Datadog, New Relic).
+
+== Guía de Programación de Scripts
+
+Postman permite automatizar, validar y personalizar peticiones mediante scripts escritos en JavaScript. Estos scripts pueden ejecutarse antes de enviar una petición (pre-request) o después de recibir la respuesta (tests). Esta guía te ayudará a dominar la programación de scripts en Postman, desde lo básico hasta ejemplos avanzados.
+
+=== Conceptos Fundamentales
+
+- **Lenguaje**: Los scripts se escriben en JavaScript y tienen acceso a la API de Postman (`pm`).
+- **Ubicación**:
+  - Pestaña `Pre-request Script`: Código que se ejecuta antes de enviar la petición.
+  - Pestaña `Tests`: Código que se ejecuta tras recibir la respuesta.
+- **Ámbito**: Los scripts pueden aplicarse a nivel de petición, carpeta o colección, y se ejecutan en ese orden jerárquico
+=== Estructura y Objetos Clave
+
+En la programación de scripts en Postman, existen varios objetos fundamentales que facilitan la automatización, validación y manipulación de peticiones y respuestas. A continuación se explican los principales y su uso práctico con ejemplos.
+
+==== pm
+
+El objeto `pm` (Postman) es el punto de entrada principal para interactuar con la API de scripting de Postman. Permite acceder a la petición, la respuesta, variables de entorno, utilidades de aserción y mucho más.
+
+.Principales propiedades y métodos:
+- `pm.request`: Acceso a la petición actual (método, URL, headers, body).
+- `pm.response`: Acceso a la respuesta recibida (código de estado, cuerpo, headers).
+- `pm.variables`: Acceso a variables locales, de entorno, globales y de colección.
+- `pm.environment`: Métodos para leer y escribir variables de entorno.
+- `pm.collectionVariables`: Métodos para variables de colección.
+- `pm.globals`: Métodos para variables globales.
+- `pm.test()`: Definición de tests y aserciones.
+- `pm.expect()`: Utilidad de aserciones basada en ChaiJS.
+
+.Ejemplo: Validar el código de estado y extraer datos
+[source,javascript]
+----
+pm.test("Status code is 200", function () {
+  pm.response.to.have.status(200);
+});
+
+const jsonData = pm.response.json();
+pm.environment.set("userId", jsonData.id);
+----
+
+==== postman.setNextRequest
+
+La función `postman.setNextRequest()` permite controlar el flujo de ejecución de peticiones dentro de una colección, saltando entre peticiones según condiciones lógicas.
+
+- Se utiliza en scripts de test para indicar cuál será la siguiente petición a ejecutar.
+- Recibe como argumento el nombre exacto de la siguiente petición o `null` para detener la ejecución.
+
+.Ejemplo: Flujo condicional entre peticiones
+[source,javascript]
+----
+if (pm.response.code === 401) {
+  postman.setNextRequest("Obtener Token");
+} else {
+  postman.setNextRequest("Consultar Perfil");
+}
+----
+
+Esto permite crear flujos dinámicos y pruebas complejas, como reintentos, autenticaciones condicionales o saltos entre módulos.
+
+==== console
+
+El objeto `console` permite imprimir mensajes en la consola de Postman, facilitando la depuración y el análisis de valores durante la ejecución de scripts.
+
+- Métodos principales: `console.log()`, `console.info()`, `console.warn()`, `console.error()`.
+- Los mensajes se visualizan en la consola de Postman, accesible desde la interfaz o mediante atajos de teclado.
+
+.Ejemplo: Depuración de variables y respuestas
+[source,javascript]
+----
+console.log("Respuesta completa:", pm.response.text());
+console.info("Valor del token:", pm.environment.get("token"));
+console.warn("Advertencia: usuario no activo");
+console.error("Error detectado en la respuesta");
+----
+
+=== Sintaxis de validación en Postman
+
+La validación en Postman se realiza principalmente mediante scripts en la pestaña **Tests** de cada petición, utilizando el método `pm.test()` y las utilidades de aserción proporcionadas por ChaiJS (incluidas en Postman). Esto permite comprobar automáticamente que la respuesta de la API cumple con los requisitos esperados.
+
+==== Estructura básica de un test
+
+La estructura básica para una validación es:
+
+[source,javascript]
+----
+pm.test("Descripción del test", function () {
+  // Expresión de validación
+});
+----
+
+Dentro de la función puedes usar las utilidades de aserción (`pm.expect`) para comparar valores, comprobar la existencia de propiedades, validar tipos de datos, etc.
+
+==== Ejemplos de validaciones comunes
+
+.**Validar código de estado HTTP**
+[source,javascript]
+----
+pm.test("El código de estado es 200", function () {
+pm.response.to.have.status(200);
+});
+----
+
+.**Validar que el cuerpo contiene una propiedad**
+[source,javascript]
+----
+pm.test("La respuesta contiene el campo 'nombre'", function () {
+const jsonData = pm.response.json();
+pm.expect(jsonData).to.have.property('nombre');
+});
+----
+
+.**Validar el valor de una propiedad**
+[source,javascript]
+----
+pm.test("El nombre es 'Ana'", function () {
+const jsonData = pm.response.json();
+pm.expect(jsonData.nombre).to.eql("Ana");
+});
+----
+
+.**Validar el tipo de dato de una propiedad**
+[source,javascript]
+----
+pm.test("El campo 'edad' es un número", function () {
+const jsonData = pm.response.json();
+pm.expect(jsonData.edad).to.be.a('number');
+});
+----
+
+.**Validar la longitud de una lista**
+[source,javascript]
+----
+pm.test("La lista de usuarios tiene al menos 3 elementos", function () {
+const jsonData = pm.response.json();
+pm.expect(jsonData.usuarios.length).to.be.at.least(3);
+});
+----
+
+.**Validar formato usando expresiones regulares**
+[source,javascript]
+----
+pm.test("El email tiene formato válido", function () {
+const email = pm.response.json().email;
+pm.expect(email).to.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
+});
+----
+
+==== Validaciones combinadas
+
+Puedes agrupar varias validaciones dentro de un mismo test o usar varios tests independientes para una misma respuesta.
+
+.**Validaciones múltiples en un solo test**
+[source,javascript]
+----
+pm.test("Validaciones múltiples", function () {
+  const data = pm.response.json();
+  pm.expect(pm.response.code).to.eql(200);
+  pm.expect(data.activo).to.be.true;
+  pm.expect(data.email).to.match(/@/);
+});
+----
+
+==== Buenas prácticas
+
+- Utiliza descripciones claras y específicas en cada test.
+- Separa tests independientes para facilitar la identificación de fallos.
+- Aprovecha las utilidades de ChaiJS (`to.have`, `to.eql`, `to.be.a`, `to.match`, etc.) para validaciones expresivas y potentes.
+
+=== Sintaxis expect en Postman: Funcionamiento y Operadores
+
+La función `expect` en Postman es parte de la librería de aserciones ChaiJS, integrada en el entorno de scripting de la plataforma. Permite realizar comprobaciones (assertions) sobre valores, objetos, arrays y respuestas de las APIs de forma legible y expresiva. Es fundamental para validar que los resultados obtenidos cumplen con lo esperado en los scripts de test.
+
+==== ¿Cómo funciona la sintaxis expect?
+
+La sintaxis básica es:
+
+[source,javascript]
+----
+pm.expect(valor).operador(valorEsperado);
+----
+
+- `pm.expect(valor)`: Evalúa el valor que quieres comprobar.
+- `.operador(valorEsperado)`: Aplica el operador de aserción para comparar, validar tipo, existencia, formato, etc.
+
+Esta estructura permite encadenar varios operadores para realizar validaciones complejas y legibles.
+
+==== Principales operadores de expect
+
+.A continuación se listan los operadores más importantes y su explicación:
+
+[cols="1,2,2",options="header"]
+|===
+| Operador | Uso | Ejemplo
+
+| `.to.eql(valor)`
+| Compara igualdad profunda (deep equal) entre objetos, arrays o valores.
+| `pm.expect(jsonData.nombre).to.eql("Ana");`
+
+| `.to.equal(valor)`
+| Compara igualdad estricta (igual a `===` en JS).
+| `pm.expect(pm.response.code).to.equal(200);`
+
+| `.to.have.property(clave)`
+| Comprueba que existe una propiedad en un objeto.
+| `pm.expect(jsonData).to.have.property('email');`
+
+| `.to.be.a(tipo)`
+| Valida el tipo de dato (string, number, array, object, etc.).
+| `pm.expect(jsonData.edad).to.be.a('number');`
+
+| `.to.be.true` / `.to.be.false`
+| Comprueba que el valor es `true` o `false`.
+| `pm.expect(jsonData.activo).to.be.true;`
+
+| `.to.include(valor)`
+| Verifica que el array o string contiene el valor especificado.
+| `pm.expect(jsonData.roles).to.include('admin');`
+
+| `.to.match(expresionRegular)`
+| Valida que el string cumple con una expresión regular.
+| `pm.expect(jsonData.email).to.match(/@/);`
+
+| `.to.have.lengthOf(n)`
+| Comprueba la longitud de un array o string.
+| `pm.expect(jsonData.usuarios).to.have.lengthOf(3);`
+
+| `.to.be.above(n)` / `.to.be.below(n)`
+| Valida que el valor es mayor o menor que el especificado.
+| `pm.expect(jsonData.edad).to.be.above(18);`
+
+| `.to.be.at.least(n)` / `.to.be.at.most(n)`
+| Valida que el valor es al menos o como mucho el especificado.
+| `pm.expect(jsonData.puntos).to.be.at.least(10);`
+
+| `.to.be.undefined` / `.to.be.null`
+| Comprueba si el valor es `undefined` o `null`.
+| `pm.expect(jsonData.apodo).to.be.undefined;`
+|===
+
+==== Ejemplos prácticos
+
+- Validar que la respuesta contiene un campo y su valor es correcto:
+  [source,javascript]
+  ----
+  pm.test("El usuario tiene email válido", function () {
+    const data = pm.response.json();
+    pm.expect(data).to.have.property('email');
+    pm.expect(data.email).to.match(/@/);
+  });
+  ----
+
+- Comprobar que una lista tiene al menos 5 elementos:
+  [source,javascript]
+  ----
+  pm.test("Hay al menos 5 usuarios", function () {
+    const data = pm.response.json();
+    pm.expect(data.usuarios.length).to.be.at.least(5);
+  });
+  ----
+
+- Validar el tipo y valor de una propiedad:
+  [source,javascript]
+  ----
+  pm.test("La edad es un número mayor a 18", function () {
+    const data = pm.response.json();
+    pm.expect(data.edad).to.be.a('number');
+    pm.expect(data.edad).to.be.above(18);
+  });
+  ----
+
+=== Scripts de Pre-request
+
+Sirven para preparar datos, generar valores dinámicos, modificar headers o establecer variables antes de enviar la petición.
+
+.Ejemplo: Guardar una marca de tiempo en una variable de entorno
+[source,javascript]
+----
+let timestamp = Math.floor(Date.now() / 1000);
+pm.environment.set("timestamp", timestamp);
+----
+
+.Ejemplo: Generar un identificador único
+[source,javascript]
+----
+const uuid = pm.variables.replaceIn('{{$guid}}');
+pm.environment.set("peticion_id", uuid);
+----
+
+.Ejemplo: Modificar un header dinámicamente
+[source,javascript]
+----
+pm.request.headers.upsert({ key: 'X-Request-ID', value: pm.environment.get("peticion_id") });
+----
+
+=== Scripts de Test (Post-respuesta)
+
+Permiten validar la respuesta, extraer datos, comprobar headers, tiempos de respuesta y automatizar pruebas.
+
+.Ejemplo: Validar código de estado
+[source,javascript]
+----
+pm.test("Status code is 200", function () {
+  pm.response.to.have.status(200);
+});
+----
+
+.Ejemplo: Validar contenido del cuerpo de la respuesta
+[source,javascript]
+----
+pm.test("La respuesta contiene el campo 'nombre'", function () {
+  const jsonData = pm.response.json();
+  pm.expect(jsonData).to.have.property('nombre');
+});
+----
+
+.Ejemplo: Extraer un token y guardarlo como variable
+[source,javascript]
+----
+const jsonData = pm.response.json();
+pm.environment.set("token", jsonData.token);
+----
+
+.Ejemplo: Validar múltiples condiciones
+[source,javascript]
+----
+pm.test("Respuesta válida y usuario activo", function () {
+  const data = pm.response.json();
+  pm.expect(pm.response.code).to.eql(200);
+  pm.expect(data.activo).to.be.true;
+});
+----
+
+=== Uso de la Consola de Postman
+
+Puedes depurar tus scripts utilizando la consola integrada:
+
+- Abre la consola desde la esquina inferior izquierda o con `Ctrl + Alt + C` (Windows) / `⌘ + Option + C` (Mac).
+- Utiliza `console.log`, `console.info`, `console.warn` y `console.error` en tus scripts para imprimir mensajes y variables.
+
+.Ejemplo:
+[source,javascript]
+----
+console.log("Valor del token:", pm.environment.get("token"));
+----
+
+=== Ejemplos Avanzados
+
+.**Validar estructura de objetos anidados**
+[source,javascript]
+----
+pm.test("El usuario tiene dirección válida", function () {
+const data = pm.response.json();
+pm.expect(data).to.have.property('direccion');
+pm.expect(data.direccion).to.have.property('ciudad');
+pm.expect(data.direccion.ciudad).to.be.a('string');
+});
+----
+
+.**Comprobar presencia de elementos en listas**
+[source,javascript]
+----
+pm.test("La respuesta contiene al menos 3 usuarios", function () {
+const data = pm.response.json();
+pm.expect(data.usuarios.length).to.be.at.least(3);
+});
+----
+
+.**Validar formato de email**
+[source,javascript]
+----
+pm.test("El email tiene formato válido", function () {
+const email = pm.response.json().email;
+pm.expect(email).to.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
+});
+----
+
+=== Buenas Prácticas
+
+- Usa nombres descriptivos en tests y variables.
+- Centraliza valores dinámicos en variables de entorno o colección.
+- Documenta tus scripts con comentarios y Markdown en las descripciones.
+- Utiliza la consola para depurar y entender el flujo de ejecución.
+- Agrupa tests relacionados en bloques lógicos y reutiliza funciones.
+
+=== Recursos y Snippets
+
+- Postman ofrece snippets listos para usar en el editor de scripts.
+- Consulta la documentación oficial para ejemplos y.
+
+=== Flujo de Ejecución de Scripts
+
+1. Scripts pre-request a nivel de colección.
+2. Scripts pre-request a nivel de carpeta.
+3. Scripts pre-request a nivel de petición.
+4. Se envía la petición.
+5. Scripts de test a nivel de colección.
+6. Scripts de test a nivel de carpeta.
+7. Scripts de test a nivel de petición

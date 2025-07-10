@@ -1,0 +1,2725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Postman</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
+/* Uncomment the following line when using as a custom stylesheet */
+/* @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"; */
+html{font-family:sans-serif;-webkit-text-size-adjust:100%}
+a{background:none}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+b,strong{font-weight:bold}
+abbr{font-size:.9em}
+abbr[title]{cursor:help;border-bottom:1px dotted #dddddf;text-decoration:none}
+dfn{font-style:italic}
+hr{height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+audio,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type=checkbox],input[type=radio]{padding:0}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,::before,::after{box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;line-height:1;position:relative;cursor:auto;-moz-tab-size:4;-o-tab-size:4;tab-size:4;word-wrap:anywhere;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:0}
+p{line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ul.square{list-style-type:square}
+ul.circle ul:not([class]),ul.disc ul:not([class]),ul.square ul:not([class]){list-style:inherit}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:1px solid #dedede;word-wrap:normal}
+table thead,table tfoot{background:#f7f8f7}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt{background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.center{margin-left:auto;margin-right:auto}
+.stretch{width:100%}
+.clearfix::before,.clearfix::after,.float-group::before,.float-group::after{content:" ";display:table}
+.clearfix::after,.float-group::after{clear:both}
+:not(pre).nobreak{word-wrap:normal}
+:not(pre).nowrap{white-space:nowrap}
+:not(pre).pre-wrap{white-space:pre-wrap}
+:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
+pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
+pre>code{display:block}
+pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;border-radius:3px;box-shadow:0 1px 0 rgba(0,0,0,.2),inset 0 0 0 .1em #fff;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menuref{color:#000}
+.menuseq b:not(.caret),.menuref{font-weight:inherit}
+.menuseq{word-spacing:-.02em}
+.menuseq b.caret{font-size:1.25em;line-height:.8}
+.menuseq i.caret{font-weight:bold;text-align:center;width:.45em}
+b.button::before,b.button::after{position:relative;top:-1px;font-weight:400}
+b.button::before{content:"[";padding:0 3px 0 2px}
+b.button::after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header::before,#header::after,#content::before,#content::after,#footnotes::before,#footnotes::after,#footer::before,#footer::after{content:" ";display:table}
+#header::after,#content::after,#footnotes::after,#footer::after{clear:both}
+#content{margin-top:1.25em}
+#content::before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
+#header>h1:only-child{border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:flex;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span::before{content:"\00a0\2013\00a0"}
+#header .details br+span.author::before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark::before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber::after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #dddddf;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #e7e7e9;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
+@media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border:1px solid #e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:none;background:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:hsla(0,0%,100%,.8);line-height:1.44}
+#content{margin-bottom:.625em}
+.sect1{padding-bottom:.625em}
+@media screen and (min-width:768px){#content{margin-bottom:1.25em}
+.sect1{padding-bottom:1.25em}}
+.sect1:last-child{padding-bottom:0}
+.sect1+.sect1{border-top:1px solid #e7e7e9}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor::before,h2>a.anchor::before,h3>a.anchor::before,#toctitle>a.anchor::before,.sidebarblock>.content>.title>a.anchor::before,h4>a.anchor::before,h5>a.anchor::before,h6>a.anchor::before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+details{margin-left:1.25rem}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;outline:none;-webkit-tap-highlight-color:transparent}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
+details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
+details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
+.paragraph.lead>p,#preamble>.sectionbody>[class=paragraph]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
+.sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
+@media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
+@media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
+.literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
+.listingblock:hover code[data-lang]::before{display:block}
+.listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
+.listingblock.terminal pre .command:not([data-prompt])::before{content:"$"}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.prettyprint{background:#f7f7f8}
+pre.prettyprint .linenums{line-height:1.45;margin-left:2em}
+pre.prettyprint li{background:none;list-style-type:inherit;padding-left:0}
+pre.prettyprint li code[data-lang]::before{opacity:1}
+pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
+table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
+table.linenotable td.code{padding-left:.75em}
+table.linenotable td.linenos,pre.pygments .linenos{border-right:1px solid;opacity:.35;padding-right:.5em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+pre.pygments span.linenos{display:inline-block;margin-right:.75em}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote::before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.75em;margin-right:.5ex;text-align:right}
+.verseblock{margin:0 1em 1.25em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans-serif;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract blockquote::before,.quoteblock.excerpt blockquote::before,.quoteblock .quoteblock blockquote::before{display:none}
+.quoteblock.abstract blockquote,.quoteblock.abstract p,.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{line-height:1.6;word-spacing:0}
+.quoteblock.abstract{margin:0 1em 1.25em;display:block}
+.quoteblock.abstract>.title{margin:0 0 .375em;font-size:1.15em;text-align:center}
+.quoteblock.excerpt>blockquote,.quoteblock .quoteblock{padding:0 0 .25em 1em;border-left:.25em solid #dddddf}
+.quoteblock.excerpt,.quoteblock .quoteblock{margin-left:0}
+.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{color:inherit;font-size:1.0625rem}
+.quoteblock.excerpt .attribution,.quoteblock .quoteblock .attribution{color:inherit;font-size:.85rem;text-align:left;margin-right:0}
+p.tableblock:last-child{margin-bottom:0}
+td.tableblock>.content{margin-bottom:1.25em;word-wrap:anywhere}
+td.tableblock>.content>:last-child{margin-bottom:-1.25em}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all>*>tr>*{border-width:1px}
+table.grid-cols>*>tr>*{border-width:0 1px}
+table.grid-rows>*>tr>*{border-width:1px 0}
+table.frame-all{border-width:1px}
+table.frame-ends{border-width:1px 0}
+table.frame-sides{border-width:0 1px}
+table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-child>*{border-top-width:0}
+table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
+table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
+table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
+table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#f8f8f7}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
+ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
+ul.unstyled,ol.unstyled{margin-left:0}
+li>p:empty:only-child::before{content:"";display:inline-block}
+ul.checklist>li>p:first-child{margin-left:-1em}
+ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
+ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
+ul.inline{display:flex;flex-flow:row wrap;list-style:none;margin:0 0 .625em -1.25em}
+ul.inline>li{margin-left:1.25em}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+td.hdlist2{word-wrap:anywhere}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist td:not([class]):first-child{padding:.4em .75em 0;line-height:1;vertical-align:top}
+.colist td:not([class]):first-child img{max-width:none}
+.colist td:not([class]):last-child{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:4px solid #fff;box-shadow:0 0 0 1px #ddd}
+.imageblock.left{margin:.25em .625em 1.25em 0}
+.imageblock.right{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active,#footnotes .footnote a:first-of-type:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background:#00fafa}
+.black{color:#000}
+.black-background{background:#000}
+.blue{color:#0000bf}
+.blue-background{background:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background:#fa00fa}
+.gray{color:#606060}
+.gray-background{background:#7d7d7d}
+.green{color:#006000}
+.green-background{background:#007d00}
+.lime{color:#00bf00}
+.lime-background{background:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background:#7d0000}
+.navy{color:#000060}
+.navy-background{background:#00007d}
+.olive{color:#606000}
+.olive-background{background:#7d7d00}
+.purple{color:#600060}
+.purple-background{background:#7d007d}
+.red{color:#bf0000}
+.red-background{background:#fa0000}
+.silver{color:#909090}
+.silver-background{background:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background:#fafa00}
+span.icon>.fa{cursor:default}
+a span.icon>.fa{cursor:inherit}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note::before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip::before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);border-radius:50%;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]::after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@page{margin:1.25cm .75cm}
+@media print{*{box-shadow:none!important;text-shadow:none!important}
+html{font-size:80%}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]{border-bottom:1px dotted}
+abbr[title]::after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#header,#content,#footnotes,#footer{max-width:none}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span::before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]::before{display:block}
+#footer{padding:0 .9375em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+@media amzn-kf8,print{#header>h1:first-child{margin-top:1.25rem}
+.sect1{padding:0!important}
+.sect1+.sect1{border:0}
+#footer{background:none}
+#footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
+@media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Postman</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introducción_a_las_apis_y_postman">Introducción a las APIs y Postman</a>
+<ul class="sectlevel2">
+<li><a href="#_qué_es_una_api_tipos_de_apis_rest_soap_graphql">¿Qué es una API? Tipos de APIs (REST, SOAP, GraphQL)</a>
+<ul class="sectlevel3">
+<li><a href="#_tipos_de_apis_más_comunes">Tipos de APIs más comunes</a></li>
+</ul>
+</li>
+<li><a href="#_beneficios_de_utilizar_postman">Beneficios de utilizar Postman</a></li>
+<li><a href="#_instalación_y_configuración_inicial">Instalación y configuración inicial</a></li>
+<li><a href="#_exploración_de_la_interfaz_de_usuario">Exploración de la interfaz de usuario</a></li>
+</ul>
+</li>
+<li><a href="#_primeros_pasos_con_postman">Primeros Pasos con Postman</a>
+<ul class="sectlevel2">
+<li><a href="#_crear_y_enviar_la_primera_petición_http">Crear y enviar la primera petición HTTP</a></li>
+<li><a href="#_métodos_http_get_post_put_delete_patch">Métodos HTTP: GET, POST, PUT, DELETE, PATCH</a></li>
+<li><a href="#_análisis_de_respuestas_y_códigos_de_estado">Análisis de respuestas y códigos de estado</a></li>
+</ul>
+</li>
+<li><a href="#_colecciones_y_organización">Colecciones y Organización</a>
+<ul class="sectlevel2">
+<li><a href="#_qué_es_una_colección">¿Qué es una colección?</a></li>
+<li><a href="#_crear_importar_y_exportar_colecciones">Crear, importar y exportar colecciones</a>
+<ul class="sectlevel3">
+<li><a href="#_crear_una_colección">Crear una colección</a></li>
+<li><a href="#_importar_una_colección">Importar una colección</a></li>
+<li><a href="#_exportar_una_colección">Exportar una colección</a></li>
+</ul>
+</li>
+<li><a href="#_organización_de_peticiones_en_carpetas">Organización de peticiones en carpetas</a></li>
+<li><a href="#_uso_de_entornos_y_variables_globales_de_entorno_de_colección">Uso de entornos y variables (globales, de entorno, de colección)</a>
+<ul class="sectlevel3">
+<li><a href="#_tipos_de_variables">Tipos de variables</a></li>
+<li><a href="#_ejemplo_de_uso_de_variables">Ejemplo de uso de variables</a></li>
+<li><a href="#_gestión_de_entornos">Gestión de entornos</a></li>
+<li><a href="#_ejemplo_de_script_para_establecer_variables_dinámicas">Ejemplo de script para establecer variables dinámicas</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_parámetros_headers_y_autenticación">Parámetros, Headers y Autenticación</a>
+<ul class="sectlevel2">
+<li><a href="#_parámetros_de_consulta_y_de_ruta">Parámetros de consulta y de ruta</a></li>
+<li><a href="#_configuración_y_uso_de_headers_personalizados">Configuración y uso de headers personalizados</a></li>
+<li><a href="#_autenticación_api_key_basic_auth_bearer_token_oauth_2_0">Autenticación: API Key, Basic Auth, Bearer Token, OAuth 2.0</a></li>
+</ul>
+</li>
+<li><a href="#_scripts_en_postman_pre_request_y_tests">Scripts en Postman: Pre-request y Tests</a>
+<ul class="sectlevel2">
+<li><a href="#_introducción_a_los_scripts_en_javascript">Introducción a los scripts en JavaScript</a></li>
+<li><a href="#_scripts_de_pre_solicitud">Scripts de pre-solicitud</a></li>
+<li><a href="#_scripts_de_test_validación_de_respuestas">Scripts de test: validación de respuestas</a></li>
+</ul>
+</li>
+<li><a href="#_automatización_y_flujos_de_trabajo">Automatización y Flujos de Trabajo</a>
+<ul class="sectlevel2">
+<li><a href="#_uso_de_variables_dinámicas_y_aleatorias">Uso de variables dinámicas y aleatorias</a></li>
+<li><a href="#_encadenamiento_de_peticiones">Encadenamiento de peticiones</a></li>
+<li><a href="#_ejecución_de_colecciones_con_el_runner">Ejecución de colecciones con el Runner</a></li>
+<li><a href="#_introducción_a_newman_cli">Introducción a Newman (CLI)</a></li>
+</ul>
+</li>
+<li><a href="#_documentación_y_compartición">Documentación y Compartición</a>
+<ul class="sectlevel2">
+<li><a href="#_generación_automática_de_documentación">Generación automática de documentación</a></li>
+<li><a href="#_compartir_colecciones_y_entornos">Compartir colecciones y entornos</a></li>
+<li><a href="#_publicación_de_documentación_online">Publicación de documentación online</a></li>
+</ul>
+</li>
+<li><a href="#_pruebas_avanzadas_y_buenas_prácticas">Pruebas Avanzadas y Buenas Prácticas</a>
+<ul class="sectlevel2">
+<li><a href="#_validaciones_complejas">Validaciones complejas</a></li>
+<li><a href="#_pruebas_basadas_en_datos_data_driven_testing">Pruebas basadas en datos (Data-Driven Testing)</a></li>
+<li><a href="#_gestión_de_errores_y_depuración">Gestión de errores y depuración</a></li>
+<li><a href="#_buenas_prácticas_en_la_organización_de_colecciones">Buenas prácticas en la organización de colecciones</a></li>
+</ul>
+</li>
+<li><a href="#_integraciones_y_extensiones">Integraciones y Extensiones</a>
+<ul class="sectlevel2">
+<li><a href="#_integración_con_cicd">Integración con CI/CD</a></li>
+<li><a href="#_uso_de_monitors_para_pruebas_programadas">Uso de Monitors para pruebas programadas</a></li>
+<li><a href="#_extensiones_y_plugins_útiles">Extensiones y plugins útiles</a></li>
+</ul>
+</li>
+<li><a href="#_guía_de_programación_de_scripts">Guía de Programación de Scripts</a>
+<ul class="sectlevel2">
+<li><a href="#_conceptos_fundamentales">Conceptos Fundamentales</a>
+<ul class="sectlevel3">
+<li><a href="#_pm">pm</a></li>
+<li><a href="#_postman_setnextrequest">postman.setNextRequest</a></li>
+<li><a href="#_console">console</a></li>
+</ul>
+</li>
+<li><a href="#_sintaxis_de_validación_en_postman">Sintaxis de validación en Postman</a>
+<ul class="sectlevel3">
+<li><a href="#_estructura_básica_de_un_test">Estructura básica de un test</a></li>
+<li><a href="#_ejemplos_de_validaciones_comunes">Ejemplos de validaciones comunes</a></li>
+<li><a href="#_validaciones_combinadas">Validaciones combinadas</a></li>
+<li><a href="#_buenas_prácticas">Buenas prácticas</a></li>
+</ul>
+</li>
+<li><a href="#_sintaxis_expect_en_postman_funcionamiento_y_operadores">Sintaxis expect en Postman: Funcionamiento y Operadores</a>
+<ul class="sectlevel3">
+<li><a href="#_cómo_funciona_la_sintaxis_expect">¿Cómo funciona la sintaxis expect?</a></li>
+<li><a href="#_principales_operadores_de_expect">Principales operadores de expect</a></li>
+<li><a href="#_ejemplos_prácticos">Ejemplos prácticos</a></li>
+</ul>
+</li>
+<li><a href="#_scripts_de_pre_request">Scripts de Pre-request</a></li>
+<li><a href="#_scripts_de_test_post_respuesta">Scripts de Test (Post-respuesta)</a></li>
+<li><a href="#_uso_de_la_consola_de_postman">Uso de la Consola de Postman</a></li>
+<li><a href="#_ejemplos_avanzados">Ejemplos Avanzados</a></li>
+<li><a href="#_buenas_prácticas_2">Buenas Prácticas</a></li>
+<li><a href="#_recursos_y_snippets">Recursos y Snippets</a></li>
+<li><a href="#_flujo_de_ejecución_de_scripts">Flujo de Ejecución de Scripts</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Postman es una herramienta esencial para desarrolladores y testers que trabajan con APIs. Este temario está diseñado para guiarte desde los conceptos básicos hasta el uso avanzado de Postman, con ejemplos y buenas prácticas.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introducción_a_las_apis_y_postman">Introducción a las APIs y Postman</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_qué_es_una_api_tipos_de_apis_rest_soap_graphql">¿Qué es una API? Tipos de APIs (REST, SOAP, GraphQL)</h3>
+<div class="paragraph">
+<p>Una API (Application Programming Interface) es un conjunto de reglas y protocolos que permite que diferentes aplicaciones se comuniquen entre sí. Las APIs actúan como intermediarios, facilitando el intercambio de datos y funcionalidades entre sistemas, sin que estos necesiten conocer los detalles internos de implementación del otro.</p>
+</div>
+<div class="sect3">
+<h4 id="_tipos_de_apis_más_comunes">Tipos de APIs más comunes</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>REST (Representational State Transfer): Utiliza el protocolo HTTP y sigue principios sencillos como la manipulación de recursos mediante métodos estándar (GET, POST, PUT, DELETE). Es ampliamente utilizada por su simplicidad y compatibilidad con la web.</p>
+</li>
+<li>
+<p>SOAP (Simple Object Access Protocol): Basada en XML, es más estricta en su estructura y ofrece mayor seguridad y transaccionalidad. Se usa en aplicaciones empresariales que requieren comunicaciones robustas y formales.</p>
+</li>
+<li>
+<p>GraphQL: Desarrollada por Facebook, permite a los clientes especificar exactamente qué datos necesitan, optimizando la transferencia y evitando el exceso de información. Es ideal para aplicaciones modernas con necesidades de datos complejas.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo de petición REST (GET):</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">GET https://api.ejemplo.com/usuarios/1</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo de consulta GraphQL:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-graphql hljs" data-lang="graphql">{
+  usuario(id: 1) {
+    nombre
+    email
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_beneficios_de_utilizar_postman">Beneficios de utilizar Postman</h3>
+<div class="paragraph">
+<p>Postman es una herramienta gráfica y multiplataforma que facilita el desarrollo, prueba y documentación de APIs. Sus beneficios principales incluyen:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Permite crear, enviar y analizar peticiones HTTP de forma sencilla y visual.</p>
+</li>
+<li>
+<p>Facilita la automatización de pruebas mediante scripts y colecciones.</p>
+</li>
+<li>
+<p>Permite organizar peticiones en colecciones y entornos, mejorando la gestión de proyectos complejos.</p>
+</li>
+<li>
+<p>Ofrece generación automática de documentación a partir de las colecciones.</p>
+</li>
+<li>
+<p>Facilita la colaboración en equipos mediante el uso compartido de colecciones y entornos.</p>
+</li>
+<li>
+<p>Permite la integración con sistemas CI/CD y ejecución de pruebas automatizadas con herramientas como Newman.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_instalación_y_configuración_inicial">Instalación y configuración inicial</h3>
+<div class="paragraph">
+<p>Instalar Postman es un proceso sencillo:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Accede a la web oficial de Postman y descarga la versión correspondiente a tu sistema operativo (Windows, macOS o Linux).</p>
+</li>
+<li>
+<p>Ejecuta el instalador y sigue las instrucciones en pantalla.</p>
+</li>
+<li>
+<p>Una vez instalado, puedes crear una cuenta gratuita para sincronizar tus colecciones y configuraciones en la nube, aunque también puedes usarlo sin registrarte.</p>
+</li>
+</ol>
+</div>
+<div class="ulist">
+<div class="title">Primeros pasos tras la instalación:</div>
+<ul>
+<li>
+<p>Abre Postman y, si lo deseas, inicia sesión con tu cuenta.</p>
+</li>
+<li>
+<p>Explora las colecciones de ejemplo que ofrece la plataforma para familiarizarte con la interfaz.</p>
+</li>
+<li>
+<p>Configura tu primer entorno si necesitas variables globales o de entorno (por ejemplo, URLs base, tokens de autenticación).</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_exploración_de_la_interfaz_de_usuario">Exploración de la interfaz de usuario</h3>
+<div class="paragraph">
+<p>La interfaz de Postman está diseñada para ser intuitiva y eficiente. Sus componentes principales son:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Barra lateral izquierda:</strong> Permite acceder a colecciones, entornos, historial de peticiones y monitorización.</p>
+</li>
+<li>
+<p><strong>Área central:</strong> Aquí se crean y editan las peticiones. Puedes seleccionar el método HTTP, la URL, los parámetros, los headers y el cuerpo de la petición.</p>
+</li>
+<li>
+<p><strong>Panel de respuesta:</strong> Muestra la respuesta de la API, incluyendo el código de estado, los headers y el cuerpo de la respuesta en varios formatos (JSON, XML, HTML, etc.).</p>
+</li>
+<li>
+<p><strong>Pestañas de scripts:</strong> Permiten añadir scripts de pre-solicitud y tests automáticos en JavaScript.</p>
+</li>
+<li>
+<p><strong>Runner de colecciones:</strong> Herramienta para ejecutar flujos de pruebas automatizadas sobre colecciones completas.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo de creación de una petición en Postman:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">GET https://jsonplaceholder.typicode.com/posts/1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Con estos fundamentos, estarás listo para empezar a explorar y probar APIs de manera profesional utilizando Postman.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_primeros_pasos_con_postman">Primeros Pasos con Postman</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_crear_y_enviar_la_primera_petición_http">Crear y enviar la primera petición HTTP</h3>
+<div class="paragraph">
+<p>El primer paso para trabajar con Postman es aprender a crear y enviar una petición HTTP. Postman ofrece una interfaz gráfica sencilla para construir peticiones y analizar sus respuestas.</p>
+</div>
+<div class="olist arabic">
+<div class="title">Pasos para crear y enviar una petición:</div>
+<ol class="arabic">
+<li>
+<p>Abre Postman y haz clic en el botón "New" o "Request".</p>
+</li>
+<li>
+<p>Asigna un nombre a la petición y, si lo deseas, guárdala en una colección.</p>
+</li>
+<li>
+<p>Selecciona el método HTTP (por defecto es GET).</p>
+</li>
+<li>
+<p>Introduce la URL del endpoint al que deseas hacer la petición.</p>
+</li>
+<li>
+<p>Haz clic en "Send" para enviar la petición.</p>
+</li>
+<li>
+<p>Visualiza la respuesta en el panel inferior.</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo de petición GET en Postman:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">GET https://jsonplaceholder.typicode.com/posts/1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Puedes modificar el método, añadir parámetros, headers o un cuerpo según las necesidades de tu API.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_métodos_http_get_post_put_delete_patch">Métodos HTTP: GET, POST, PUT, DELETE, PATCH</h3>
+<div class="paragraph">
+<p>Los métodos HTTP definen la acción que quieres realizar sobre un recurso en una API. Los más utilizados son:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>GET: Solicita datos de un recurso. No modifica nada en el servidor.</p>
+</li>
+<li>
+<p>POST: Envía datos para crear un nuevo recurso.</p>
+</li>
+<li>
+<p>PUT: Actualiza completamente un recurso existente.</p>
+</li>
+<li>
+<p>PATCH: Actualiza parcialmente un recurso existente.</p>
+</li>
+<li>
+<p>DELETE: Elimina un recurso.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplos de cada método en Postman:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">GET https://api.ejemplo.com/usuarios/1
+
+POST https://api.ejemplo.com/usuarios
+Body (JSON):
+{
+  "nombre": "Ana",
+  "email": "ana@ejemplo.com"
+}
+
+PUT https://api.ejemplo.com/usuarios/1
+Body (JSON):
+{
+  "nombre": "Ana Actualizada",
+  "email": "ana@ejemplo.com"
+}
+
+PATCH https://api.ejemplo.com/usuarios/1
+Body (JSON):
+{
+  "email": "nuevoemail@ejemplo.com"
+}
+
+DELETE https://api.ejemplo.com/usuarios/1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>En Postman, puedes seleccionar el método deseado en el desplegable junto a la barra de URL.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_análisis_de_respuestas_y_códigos_de_estado">Análisis de respuestas y códigos de estado</h3>
+<div class="paragraph">
+<p>Cuando envías una petición, Postman muestra la respuesta en la parte inferior. Los elementos clave a analizar son:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Código de estado HTTP:</strong> Indica el resultado de la operación. Algunos códigos comunes:</p>
+</li>
+<li>
+<p>200 OK: La petición fue exitosa.</p>
+</li>
+<li>
+<p>201 Created: Recurso creado exitosamente (usualmente POST).</p>
+</li>
+<li>
+<p>204 No Content: Operación exitosa sin contenido en la respuesta (usualmente DELETE).</p>
+</li>
+<li>
+<p>400 Bad Request: Error en la petición (sintaxis o datos).</p>
+</li>
+<li>
+<p>401 Unauthorized: Falta autenticación.</p>
+</li>
+<li>
+<p>404 Not Found: Recurso no encontrado.</p>
+</li>
+<li>
+<p>500 Internal Server Error: Error en el servidor.</p>
+</li>
+<li>
+<p><strong>Headers de respuesta:</strong> Información adicional sobre la respuesta (tipo de contenido, longitud, etc.).</p>
+</li>
+<li>
+<p><strong>Cuerpo de la respuesta:</strong> Los datos devueltos por la API, normalmente en formato JSON o XML.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo de análisis de respuesta en Postman:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">Status: 200 OK
+Headers:
+  Content-Type: application/json; charset=utf-8
+
+Body:
+{
+  "id": 1,
+  "nombre": "Ana",
+  "email": "ana@ejemplo.com"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Postman también permite visualizar la respuesta en diferentes formatos, ver el tiempo de respuesta y el tamaño de los datos recibidos.</p>
+</div>
+<div class="paragraph">
+<div class="title">Consejo práctico:</div>
+<p>Puedes añadir scripts de test en la pestaña "Tests" para validar automáticamente los códigos de estado y el contenido de la respuesta. Ejemplo:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("El código de estado es 200", function () {
+  pm.response.to.have.status(200);
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Estos primeros pasos te permitirán comenzar a interactuar y probar cualquier API de manera eficiente y profesional usando Postman.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_colecciones_y_organización">Colecciones y Organización</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_qué_es_una_colección">¿Qué es una colección?</h3>
+<div class="paragraph">
+<p>Una colección en Postman es un contenedor estructurado que agrupa múltiples peticiones HTTP relacionadas, permitiendo organizarlas de forma lógica según el proyecto, funcionalidad o entorno. Las colecciones facilitan la reutilización, documentación y automatización de pruebas sobre APIs, ya que pueden incluir no solo peticiones, sino también scripts, variables y descripciones detalladas.</p>
+</div>
+<div class="paragraph">
+<p>Ventajas de usar colecciones:
+- Organización clara de las peticiones por módulos o funcionalidades.
+- Compartición sencilla con otros miembros del equipo.
+- Posibilidad de ejecutar pruebas automatizadas sobre todas las peticiones de la colección.
+- Documentación centralizada de los endpoints y sus ejemplos.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_crear_importar_y_exportar_colecciones">Crear, importar y exportar colecciones</h3>
+<div class="sect3">
+<h4 id="_crear_una_colección">Crear una colección</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Haz clic en el botón "New" y selecciona "Collection".</p>
+</li>
+<li>
+<p>Asigna un nombre y, opcionalmente, una descripción.</p>
+</li>
+<li>
+<p>Agrega peticiones nuevas o existentes a la colección.</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo de estructura de colección en formato JSON:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "info": {
+    "name": "Colección de Usuarios",
+    "description": "Colección para pruebas de la API de usuarios"
+  },
+  "item": [
+    {
+      "name": "Obtener lista de usuarios",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/usuarios"
+      }
+    }
+  ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_importar_una_colección">Importar una colección</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Haz clic en "Import" y selecciona el archivo (JSON) exportado previamente o pega la URL de una colección pública.</p>
+</li>
+<li>
+<p>Postman soporta la importación desde archivos locales, enlaces directos o incluso arrastrando el archivo a la ventana.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_exportar_una_colección">Exportar una colección</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Selecciona la colección en la barra lateral.</p>
+</li>
+<li>
+<p>Haz clic en los tres puntos ("&#8230;&#8203;") y elige "Export".</p>
+</li>
+<li>
+<p>Elige el formato (generalmente JSON) y descarga el archivo.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Esto permite compartir colecciones entre miembros del equipo o migrarlas entre entornos.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_organización_de_peticiones_en_carpetas">Organización de peticiones en carpetas</h3>
+<div class="paragraph">
+<p>Dentro de una colección, puedes agrupar peticiones en carpetas para mantener una estructura lógica y facilitar la navegación.</p>
+</div>
+<div class="paragraph">
+<p>Ejemplo de organización:
+- Colección: API de Usuarios
+  - Carpeta: Autenticación
+    - Petición: Login
+    - Petición: Logout
+  - Carpeta: Gestión de usuarios
+    - Petición: Crear usuario
+    - Petición: Obtener usuarios
+    - Petición: Actualizar usuario</p>
+</div>
+<div class="paragraph">
+<p>Para crear una carpeta:
+. Haz clic derecho sobre la colección y selecciona "Add Folder".
+. Asigna un nombre y, opcionalmente, una descripción.
+. Arrastra o crea nuevas peticiones dentro de la carpeta.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_uso_de_entornos_y_variables_globales_de_entorno_de_colección">Uso de entornos y variables (globales, de entorno, de colección)</h3>
+<div class="paragraph">
+<p>Postman permite definir variables para reutilizar valores dinámicos y evitar la repetición de datos sensibles o cambiantes, como URLs base, tokens o IDs.</p>
+</div>
+<div class="sect3">
+<h4 id="_tipos_de_variables">Tipos de variables</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Globales:</strong> Disponibles en cualquier colección y petición abierta en Postman.</p>
+</li>
+<li>
+<p><strong>De entorno:</strong> Asociadas a un entorno específico (por ejemplo, desarrollo, pruebas, producción). Solo están activas cuando el entorno está seleccionado.</p>
+</li>
+<li>
+<p><strong>De colección:</strong> Definidas y accesibles solo dentro de una colección concreta.</p>
+</li>
+<li>
+<p><strong>Locales:</strong> Definidas en el contexto de una petición o script, solo válidas durante la ejecución de esa petición.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ejemplo_de_uso_de_variables">Ejemplo de uso de variables</h4>
+<div class="listingblock">
+<div class="title">Definición de variables de entorno:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "id": "12345",
+  "name": "entorno-desarrollo",
+  "values": [
+    {
+      "key": "base_url",
+      "value": "https://api.miapp.com",
+      "enabled": true
+    },
+    {
+      "key": "token",
+      "value": "abcdef123456",
+      "enabled": true
+    }
+  ]
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Uso de variables en una petición:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">GET {{base_url}}/usuarios
+Headers:
+  Authorization: Bearer {{token}}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_gestión_de_entornos">Gestión de entornos</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Para crear un entorno, haz clic en el icono de "Environments" y selecciona "Add".</p>
+</li>
+<li>
+<p>Añade las variables necesarias y guarda el entorno.</p>
+</li>
+<li>
+<p>Selecciona el entorno activo desde el menú desplegable en la parte superior derecha.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Esto permite cambiar rápidamente entre diferentes configuraciones (por ejemplo, desarrollo y producción) sin modificar las peticiones.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ejemplo_de_script_para_establecer_variables_dinámicas">Ejemplo de script para establecer variables dinámicas</h4>
+<div class="paragraph">
+<p>Puedes definir variables dinámicamente en scripts de pre-solicitud:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.environment.set("fecha_actual", new Date().toISOString());</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>De esta manera, puedes reutilizar valores generados dinámicamente en tus peticiones.</p>
+</div>
+<div class="paragraph">
+<p>Con estas herramientas, Postman permite una gestión eficiente, segura y escalable de tus pruebas y documentación de APIs, facilitando el trabajo en equipo y la automatización de flujos complejos.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_parámetros_headers_y_autenticación">Parámetros, Headers y Autenticación</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_parámetros_de_consulta_y_de_ruta">Parámetros de consulta y de ruta</h3>
+<div class="paragraph">
+<p>En las APIs, los parámetros permiten personalizar las solicitudes y acceder a recursos específicos. Los dos tipos principales son:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Parámetros de ruta (Path Parameters):</strong></p>
+</li>
+<li>
+<p>Se insertan directamente en la ruta de la URL, entre llaves (<code>{}</code>), y actúan como marcadores de posición para valores concretos.</p>
+</li>
+<li>
+<p>Son obligatorios y se usan para identificar recursos únicos dentro de una colección.
+.Ejemplo de ruta con parámetro:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>GET https://api.ejemplo.com/usuarios/{usuarioId}</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Si <code>usuarioId</code> es 15, la URL final sería:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">GET https://api.ejemplo.com/usuarios/15</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Es común usar camelCase o snake_case para nombrar estos parámetros.</p>
+</li>
+<li>
+<p><strong>Parámetros de consulta (Query Parameters):</strong></p>
+</li>
+<li>
+<p>Se añaden al final de la URL, después del signo de interrogación (<code>?</code>), y separados por <code>&amp;</code>.</p>
+</li>
+<li>
+<p>Son útiles para filtrar, paginar o modificar la consulta, y suelen ser opcionales.</p>
+</li>
+<li>
+<p>Ejemplo de parámetros de consulta:
+[source]
+----
+GET <a href="https://api.ejemplo.com/usuarios?activo=true&amp;rol=admin" class="bare">https://api.ejemplo.com/usuarios?activo=true&amp;rol=admin</a>
+----</p>
+</li>
+<li>
+<p>Se pueden combinar ambos tipos en una misma solicitud:
+[source]
+----
+GET <a href="https://api.ejemplo.com/usuarios/15/pedidos?estado=entregado&amp;limite=10" class="bare">https://api.ejemplo.com/usuarios/15/pedidos?estado=entregado&amp;limite=10</a>
+----</p>
+</li>
+<li>
+<p>En Postman, los parámetros de consulta se pueden añadir en la pestaña "Params" del editor de peticiones.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configuración_y_uso_de_headers_personalizados">Configuración y uso de headers personalizados</h3>
+<div class="paragraph">
+<p>Los headers (cabeceras) son pares clave-valor que se envían junto con la petición HTTP y permiten transmitir metadatos, como el tipo de contenido, la autenticación o información personalizada.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Para configurar headers personalizados en Postman:</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Ve a la pestaña <strong>Headers</strong> de la petición.</p>
+</li>
+<li>
+<p>Añade los pares clave-valor necesarios, por ejemplo:
+[source]
+----
+Key: Content-Type    Value: application/json
+Key: X-Custom-Header Value: valor-personalizado
+----</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Postman permite guardar conjuntos de headers como presets para reutilizarlos fácilmente.</p>
+</li>
+<li>
+<p>Algunos headers se generan automáticamente según la configuración de la petición, pero puedes sobreescribirlos o desactivarlos manualmente.</p>
+</li>
+<li>
+<p>Los headers también pueden establecerse dinámicamente mediante scripts de pre-solicitud, por ejemplo:
+[source,javascript]
+----
+pm.request.headers.upsert({key: 'X-Request-ID', value: '12345'});
+----</p>
+</li>
+<li>
+<p>Es común usar headers para autenticación, control de caché, tipo de contenido, etc.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_autenticación_api_key_basic_auth_bearer_token_oauth_2_0">Autenticación: API Key, Basic Auth, Bearer Token, OAuth 2.0</h3>
+<div class="paragraph">
+<p>Las APIs suelen requerir autenticación para proteger recursos. Los métodos más habituales son:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>API Key:</strong></p>
+</li>
+<li>
+<p>Una clave única que identifica al cliente.</p>
+</li>
+<li>
+<p>Se envía como parámetro de consulta, header o body.
+.Ejemplo en header:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Key: x-api-key  Value: TU_API_KEY</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Basic Auth:</strong></p>
+</li>
+<li>
+<p>Usa un par usuario:contraseña codificado en Base64.</p>
+</li>
+<li>
+<p>Se envía en el header <code>Authorization</code>.
+.Ejemplo:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Authorization: Basic cG9zdG1hbjpwYXNzd29yZA==</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>En Postman, selecciona "Basic Auth" en la pestaña "Authorization" y Postman generará el header automáticamente.</p>
+</li>
+<li>
+<p><strong>Bearer Token:</strong></p>
+</li>
+<li>
+<p>Utiliza un token de acceso (generalmente JWT).</p>
+</li>
+<li>
+<p>Se envía en el header <code>Authorization</code> con el prefijo <code>Bearer</code>.
+.Ejemplo:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Es el método más común para APIs modernas y suele usarse junto con OAuth 2.0.</p>
+</li>
+<li>
+<p><strong>OAuth 2.0:</strong></p>
+</li>
+<li>
+<p>Protocolo estándar para autorización delegada.</p>
+</li>
+<li>
+<p>Permite a una aplicación acceder a recursos en nombre de un usuario sin exponer su contraseña.</p>
+</li>
+<li>
+<p>El flujo típico implica obtener un token de acceso tras autenticar al usuario, y luego usar ese token como Bearer en el header.</p>
+</li>
+<li>
+<p>En Postman, puedes configurar OAuth 2.0 desde la pestaña "Authorization" seleccionando el tipo correspondiente y proporcionando los datos requeridos (client_id, client_secret, scopes, etc.).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<div class="title">Consejo práctico:</div>
+<p>En Postman, cada método de autenticación se configura fácilmente desde la pestaña "Authorization" de la petición. Según el método seleccionado, Postman añadirá automáticamente los headers necesarios.</p>
+</div>
+<div class="paragraph">
+<p>Con estos conceptos, puedes construir peticiones seguras y personalizadas en Postman, controlando tanto los parámetros como los headers y la autenticación de tus APIs.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_scripts_en_postman_pre_request_y_tests">Scripts en Postman: Pre-request y Tests</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_introducción_a_los_scripts_en_javascript">Introducción a los scripts en JavaScript</h3>
+<div class="paragraph">
+<p>Postman permite automatizar y personalizar el comportamiento de las peticiones mediante scripts escritos en JavaScript. Estos scripts se pueden ejecutar en dos momentos clave:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Pre-request scripts:</strong> Se ejecutan antes de enviar la petición, permitiendo preparar datos, generar valores dinámicos o modificar parámetros.</p>
+</li>
+<li>
+<p><strong>Tests scripts:</strong> Se ejecutan después de recibir la respuesta, permitiendo validar el contenido, los códigos de estado y automatizar pruebas.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Las APIs de Postman exponen objetos y funciones útiles, como <code>pm</code> (Postman Sandbox), que facilita el acceso a la petición, la respuesta, variables y utilidades de aserción.</p>
+</div>
+<div class="paragraph">
+<p>Principales ventajas de los scripts en Postman:
+- Automatización de pruebas y validaciones.
+- Generación dinámica de datos (tokens, fechas, identificadores).
+- Encadenamiento de peticiones y paso de datos entre ellas.
+- Validación automática de respuestas y detección de errores.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_scripts_de_pre_solicitud">Scripts de pre-solicitud</h3>
+<div class="paragraph">
+<p>Los scripts de pre-solicitud permiten ejecutar código justo antes de enviar la petición. Son útiles para:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Generar tokens o firmas de autenticación.</p>
+</li>
+<li>
+<p>Calcular fechas, hashes o valores dinámicos.</p>
+</li>
+<li>
+<p>Establecer variables de entorno o de colección.</p>
+</li>
+<li>
+<p>Modificar headers, parámetros o el cuerpo de la petición.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Generar una fecha actual y guardarla en una variable de entorno</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">const fechaActual = new Date().toISOString();
+pm.environment.set("fecha_actual", fechaActual);</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Generar un identificador aleatorio para la petición</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">const uuid = pm.variables.replaceIn('{{$guid}}');
+pm.environment.set("peticion_id", uuid);</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Modificar un header antes de enviar la petición</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.request.headers.upsert({ key: 'X-Request-ID', value: pm.environment.get("peticion_id") });</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_scripts_de_test_validación_de_respuestas">Scripts de test: validación de respuestas</h3>
+<div class="ulist">
+<div class="title">Los scripts de test se ejecutan después de recibir la respuesta de la API. Permiten:</div>
+<ul>
+<li>
+<p>Validar el código de estado HTTP.</p>
+</li>
+<li>
+<p>Comprobar la estructura y el contenido del cuerpo de la respuesta.</p>
+</li>
+<li>
+<p>Verificar headers, tiempos de respuesta y otros metadatos.</p>
+</li>
+<li>
+<p>Extraer valores de la respuesta y guardarlos como variables para peticiones futuras.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Validar que el código de estado es 200</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("El código de estado es 200", function () {
+  pm.response.to.have.status(200);
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Validar que el cuerpo contiene una propiedad específica</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("La respuesta contiene el campo 'nombre'", function () {
+  const jsonData = pm.response.json();
+  pm.expect(jsonData).to.have.property('nombre');
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Extraer un token de la respuesta y guardarlo como variable</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">const jsonData = pm.response.json();
+pm.environment.set("token", jsonData.token);</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Validar múltiples condiciones en un solo test</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("Respuesta válida y usuario activo", function () {
+  const data = pm.response.json();
+  pm.expect(pm.response.code).to.eql(200);
+  pm.expect(data.activo).to.be.true;
+});</code></pre>
+</div>
+</div>
+<div class="ulist">
+<div class="title">Consejos prácticos:</div>
+<ul>
+<li>
+<p>Puedes combinar múltiples tests en un mismo script.</p>
+</li>
+<li>
+<p>Los resultados de los tests aparecen en la pestaña "Test Results" tras ejecutar la petición.</p>
+</li>
+<li>
+<p>Utiliza las funciones de aserción de ChaiJS para expresiones más potentes y legibles.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Con estos scripts, Postman se convierte en una potente herramienta de pruebas automatizadas y flujos dinámicos para APIs.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_automatización_y_flujos_de_trabajo">Automatización y Flujos de Trabajo</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>La automatización en Postman permite optimizar pruebas, simular escenarios complejos y mejorar la eficiencia en el desarrollo y validación de APIs. A continuación se explican las técnicas más relevantes para lograr flujos de trabajo avanzados.</p>
+</div>
+<div class="sect2">
+<h3 id="_uso_de_variables_dinámicas_y_aleatorias">Uso de variables dinámicas y aleatorias</h3>
+<div class="paragraph">
+<p>Las variables dinámicas y aleatorias permiten generar datos únicos o cambiantes en cada ejecución, ideales para simular escenarios reales y evitar colisiones en pruebas.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Variables dinámicas integradas</strong>: Postman ofrece variables predefinidas como <code>{{$guid}}</code>, <code>{{$timestamp}}</code>, <code>{{$randomInt}}</code>, etc., que se pueden usar directamente en los campos de la petición o en scripts.</p>
+</li>
+<li>
+<p><strong>Generación personalizada en scripts</strong>: Puedes crear valores dinámicos usando JavaScript en scripts de pre-solicitud.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Uso de variables dinámicas en el cuerpo de una petición</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "usuario": "user_{{$randomInt}}",
+  "email": "test_{{$guid}}@ejemplo.com",
+  "fecha": "{{$isoTimestamp}}"
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Generar un valor aleatorio personalizado en un script</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">const randomId = Math.floor(Math.random() * 10000);
+pm.environment.set("usuario_id", randomId);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Estas variables pueden ser utilizadas en cualquier parte de la petición, headers, parámetros o cuerpo, y facilitan la automatización de pruebas masivas y la simulación de datos reales.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_encadenamiento_de_peticiones">Encadenamiento de peticiones</h3>
+<div class="ulist">
+<div class="title">El encadenamiento consiste en pasar datos de la respuesta de una petición a la siguiente, permitiendo flujos de trabajo complejos como autenticación, creación y consulta de recursos, etc.</div>
+<ul>
+<li>
+<p><strong>Extracción de datos</strong>: Utiliza scripts de test para guardar valores de la respuesta como variables de entorno o colección.</p>
+</li>
+<li>
+<p><strong>Reutilización de variables</strong>: Emplea las variables extraídas en peticiones posteriores.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Este patrón es fundamental para probar flujos de autenticación, procesos multi-etapa o pruebas de integración.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ejecución_de_colecciones_con_el_runner">Ejecución de colecciones con el Runner</h3>
+<div class="paragraph">
+<p>El Collection Runner permite ejecutar una colección completa de peticiones de forma secuencial o iterativa, automatizando pruebas y validaciones.</p>
+</div>
+<div class="ulist">
+<div class="title">Pasos para usar el Runner:</div>
+<ul>
+<li>
+<p>Haz clic en "Runner" en la parte superior izquierda de Postman.</p>
+</li>
+<li>
+<p>Selecciona la colección y, si lo deseas, un archivo de datos para pruebas basadas en datos (CSV o JSON).</p>
+</li>
+<li>
+<p>Configura el entorno, número de iteraciones y otras opciones.</p>
+</li>
+<li>
+<p>Haz clic en "Run" para iniciar la ejecución.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Ventajas:
+- Permite ejecutar pruebas masivas y repetitivas sin intervención manual.
+- Genera reportes de resultados de tests y tiempos de ejecución.
+- Facilita pruebas de regresión y validación continua.</p>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo de archivo de datos para pruebas masivas (CSV):</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">usuario,email
+usuario1,usuario1@ejemplo.com
+usuario2,usuario2@ejemplo.com</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>En la colección, puedes referenciar los campos como <code>{{usuario}}</code> y <code>{{email}}</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_introducción_a_newman_cli">Introducción a Newman (CLI)</h3>
+<div class="paragraph">
+<p>Newman es la herramienta de línea de comandos de Postman, ideal para integrar la ejecución de colecciones en sistemas de integración continua (CI/CD) o scripts automatizados.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Instalación</strong>:
+[source,bash]
+----
+npm install -g newman
+----</p>
+</li>
+<li>
+<p><strong>Ejecución básica</strong>:
+[source,bash]
+----
+newman run coleccion.json -e entorno.json
+----</p>
+</li>
+<li>
+<p><strong>Opciones avanzadas</strong>:</p>
+</li>
+<li>
+<p><code>-d datos.csv</code>: Ejecuta la colección con un archivo de datos.</p>
+</li>
+<li>
+<p><code>-r cli,html</code>: Genera reportes en consola y en HTML.</p>
+</li>
+<li>
+<p><code>--bail</code>: Detiene la ejecución al primer error.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo de comando completo:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">newman run coleccion.json -e entorno.json -d datos.csv -r cli,html</code></pre>
+</div>
+</div>
+<div class="ulist">
+<div class="title">Ventajas de Newman:</div>
+<ul>
+<li>
+<p>Permite la ejecución desatendida y programada de colecciones.</p>
+</li>
+<li>
+<p>Facilita la integración con pipelines de CI/CD (Jenkins, GitLab CI, GitHub Actions, etc.).</p>
+</li>
+<li>
+<p>Genera reportes detallados y exportables.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Con estas herramientas y técnicas, puedes automatizar completamente el ciclo de pruebas de tus APIs, asegurando calidad, eficiencia y escalabilidad en tus proyectos.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_documentación_y_compartición">Documentación y Compartición</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>La documentación y la compartición de recursos en Postman son esenciales para la colaboración eficiente y la transparencia en proyectos de APIs. Postman ofrece herramientas potentes para automatizar la generación de documentación, compartir colecciones y entornos, y publicar documentación accesible para equipos o clientes.</p>
+</div>
+<div class="sect2">
+<h3 id="_generación_automática_de_documentación">Generación automática de documentación</h3>
+<div class="paragraph">
+<p>Postman puede generar documentación detallada de tus colecciones de manera automática, a partir de la información y ejemplos incluidos en cada petición.</p>
+</div>
+<div class="olist arabic">
+<div class="title">Pasos para generar documentación:</div>
+<ol class="arabic">
+<li>
+<p>Añade descripciones claras a cada colección, carpeta y petición. Puedes incluir ejemplos de solicitudes y respuestas, así como detalles sobre parámetros, headers y cuerpos.</p>
+</li>
+<li>
+<p>Incluye ejemplos de código y respuestas en los apartados "Examples" de cada petición.</p>
+</li>
+<li>
+<p>Haz clic derecho sobre la colección y selecciona "View Documentation" o utiliza el menú contextual para acceder a la vista previa de la documentación generada.</p>
+</li>
+</ol>
+</div>
+<div class="ulist">
+<div class="title">Características de la documentación automática:</div>
+<ul>
+<li>
+<p>Incluye la estructura de la colección, endpoints, métodos, parámetros y ejemplos.</p>
+</li>
+<li>
+<p>Permite navegar fácilmente entre peticiones y carpetas.</p>
+</li>
+<li>
+<p>Se actualiza automáticamente al modificar la colección.</p>
+</li>
+<li>
+<p>Admite Markdown para dar formato a las descripciones y ejemplos.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo de descripción en una petición:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-markdown hljs" data-lang="markdown">### Crear usuario
+Crea un nuevo usuario en el sistema.
+
+**Parámetros:**
+- nombre (string): Nombre del usuario.
+- email (string): Correo electrónico.
+
+**Ejemplo de respuesta:**
+{
+  "id": 1,
+  "nombre": "Ana",
+  "email": "ana@ejemplo.com"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_compartir_colecciones_y_entornos">Compartir colecciones y entornos</h3>
+<div class="paragraph">
+<p>Postman facilita la colaboración permitiendo compartir colecciones y entornos de varias maneras:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Compartir por enlace:</strong> Puedes generar un enlace público o privado a una colección desde el menú "Share Collection". El enlace permite a otros importar la colección directamente en su espacio de trabajo.</p>
+</li>
+<li>
+<p><strong>Exportar e importar archivos:</strong> Las colecciones y entornos pueden exportarse como archivos JSON y luego importarse en otros equipos o instancias de Postman.</p>
+</li>
+<li>
+<p><strong>Workspaces colaborativos:</strong> Postman permite crear espacios de trabajo (Workspaces) donde varios usuarios pueden colaborar en tiempo real, compartiendo colecciones, entornos y documentación.</p>
+</li>
+<li>
+<p><strong>Control de versiones:</strong> En los Workspaces, puedes ver el historial de cambios, revertir versiones y gestionar permisos de edición o solo lectura.</p>
+</li>
+</ul>
+</div>
+<div class="olist arabic">
+<div class="title">Ejemplo de exportación de una colección:</div>
+<ol class="arabic">
+<li>
+<p>Selecciona la colección en la barra lateral.</p>
+</li>
+<li>
+<p>Haz clic en los tres puntos ("&#8230;&#8203;") y elige "Export".</p>
+</li>
+<li>
+<p>Descarga el archivo JSON resultante.</p>
+</li>
+</ol>
+</div>
+<div class="olist arabic">
+<div class="title">Ejemplo de importación:</div>
+<ol class="arabic">
+<li>
+<p>Haz clic en "Import" en la parte superior izquierda.</p>
+</li>
+<li>
+<p>Selecciona el archivo JSON de la colección o entorno.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_publicación_de_documentación_online">Publicación de documentación online</h3>
+<div class="paragraph">
+<p>Postman permite publicar la documentación de tus colecciones en línea, haciendo que sea accesible para equipos, clientes o usuarios externos.</p>
+</div>
+<div class="olist arabic">
+<div class="title">Pasos para publicar documentación:</div>
+<ol class="arabic">
+<li>
+<p>Haz clic derecho sobre la colección y selecciona "Publish Docs" o accede a la opción desde el menú de la colección.</p>
+</li>
+<li>
+<p>Configura las opciones de visibilidad (pública o privada) y personaliza la URL si es necesario.</p>
+</li>
+<li>
+<p>Postman generará un enlace web donde la documentación estará disponible, incluyendo ejemplos, descripciones y detalles técnicos.</p>
+</li>
+</ol>
+</div>
+<div class="ulist">
+<div class="title">Ventajas de la publicación online:</div>
+<ul>
+<li>
+<p>Acceso inmediato y centralizado a la documentación más actualizada.</p>
+</li>
+<li>
+<p>Permite compartir la documentación con cualquier persona, incluso fuera de tu organización.</p>
+</li>
+<li>
+<p>Soporta autenticación y control de acceso para documentación privada.</p>
+</li>
+<li>
+<p>Facilita la integración con portales de desarrolladores y procesos de onboarding.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<div class="title">Consejo práctico:</div>
+<p>Mantén la documentación actualizada y utiliza ejemplos claros y completos. Aprovecha las capacidades de Markdown para mejorar la legibilidad y profesionalismo de la documentación publicada.</p>
+</div>
+<div class="paragraph">
+<p>Con estas herramientas, Postman se convierte en una plataforma integral para documentar, compartir y publicar APIs, mejorando la colaboración y la eficiencia en el desarrollo de software.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_pruebas_avanzadas_y_buenas_prácticas">Pruebas Avanzadas y Buenas Prácticas</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Las pruebas avanzadas y las buenas prácticas en Postman permiten llevar la calidad y la robustez de las APIs a un nivel profesional. A continuación se abordan técnicas y recomendaciones clave para maximizar el potencial de Postman en entornos exigentes.</p>
+</div>
+<div class="sect2">
+<h3 id="_validaciones_complejas">Validaciones complejas</h3>
+<div class="paragraph">
+<p>Las validaciones complejas permiten asegurar que las respuestas de la API cumplen con requisitos estrictos, no solo en cuanto a códigos de estado, sino también en estructura, contenido y lógica de negocio.</p>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Validar estructuras de objetos anidados</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("El usuario tiene dirección válida", function () {
+const data = pm.response.json();
+pm.expect(data).to.have.property('direccion');
+pm.expect(data.direccion).to.have.property('ciudad');
+pm.expect(data.direccion.ciudad).to.be.a('string');
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Comprobar la presencia de elementos en listas</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("La respuesta contiene al menos 3 usuarios", function () {
+const data = pm.response.json();
+pm.expect(data.usuarios.length).to.be.at.least(3);
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Validar formatos y expresiones regulares</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("El email tiene formato válido", function () {
+const email = pm.response.json().email;
+pm.expect(email).to.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Comparar valores entre respuesta y variables</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("El ID devuelto coincide con el solicitado", function () {
+const data = pm.response.json();
+pm.expect(data.id).to.eql(pm.variables.get("usuario_id"));
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Estas validaciones pueden combinarse y adaptarse según la lógica de negocio y los requisitos de la API.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_pruebas_basadas_en_datos_data_driven_testing">Pruebas basadas en datos (Data-Driven Testing)</h3>
+<div class="paragraph">
+<p>Las pruebas basadas en datos permiten ejecutar la misma colección o petición múltiples veces con diferentes conjuntos de datos, facilitando la validación masiva y la detección de errores en escenarios variados.</p>
+</div>
+<div class="listingblock">
+<div class="title">Prepara un archivo CSV o JSON con los datos de prueba:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">nombre,email
+Ana,ana@ejemplo.com
+Luis,luis@ejemplo.com</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>En el cuerpo o parámetros de la petición, usa variables como <code>{{nombre}}</code> y <code>{{email}}</code>.</p>
+</li>
+<li>
+<p>Ejecuta la colección con el Runner y selecciona el archivo de datos.</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Acceso a datos en scripts</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("El nombre enviado coincide con el recibido", function () {
+const data = pm.response.json();
+pm.expect(data.nombre).to.eql(pm.iterationData.get("nombre"));
+});</code></pre>
+</div>
+</div>
+<div class="ulist">
+<div class="title"><strong>Ventajas del Data-Driven Testing</strong></div>
+<ul>
+<li>
+<p>Permite validar la robustez de la API ante múltiples entradas.</p>
+</li>
+<li>
+<p>Facilita la automatización de pruebas de regresión.</p>
+</li>
+<li>
+<p>Reduce el esfuerzo manual y mejora la cobertura de pruebas.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gestión_de_errores_y_depuración">Gestión de errores y depuración</h3>
+<div class="paragraph">
+<p>Detectar y resolver errores rápidamente es fundamental en pruebas avanzadas.</p>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Uso de logs y consola</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">console.log("Respuesta completa:", pm.response.text());</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Los mensajes se visualizan en la pestaña "Console" de Postman.</p>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Validaciones explícitas de errores</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("Error esperado: usuario no encontrado", function () {
+pm.expect(pm.response.code).to.eql(404);
+const data = pm.response.json();
+pm.expect(data.mensaje).to.eql("Usuario no encontrado");
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Control de flujos en scripts</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">if (!pm.response.json().token) {
+throw new Error("No se recibió el token de autenticación");
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Depuración de variables</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">console.log("Valor de variable token:", pm.environment.get("token"));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Estas técnicas ayudan a identificar rápidamente la causa de fallos y a mejorar la calidad de las pruebas.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_buenas_prácticas_en_la_organización_de_colecciones">Buenas prácticas en la organización de colecciones</h3>
+<div class="paragraph">
+<p>Una organización eficiente de las colecciones facilita el mantenimiento, la colaboración y la escalabilidad de los proyectos.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Estructura lógica y modular</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Agrupa peticiones por funcionalidad (usuarios, autenticación, productos, etc.).</p>
+</li>
+<li>
+<p>Usa carpetas para separar flujos o módulos independientes.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Nomenclatura clara y consistente</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Usa nombres descriptivos y normalizados para colecciones, carpetas y peticiones.</p>
+</li>
+<li>
+<p>Incluye el verbo HTTP y el recurso en el nombre, por ejemplo: <code>GET * Listar usuarios</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Uso extensivo de variables y entornos</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Centraliza URLs, tokens y datos sensibles en variables de entorno o colección.</p>
+</li>
+<li>
+<p>Evita valores hardcodeados en las peticiones.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Documentación interna</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Añade descripciones detalladas a colecciones, carpetas y peticiones.</p>
+</li>
+<li>
+<p>Incluye ejemplos de solicitudes y respuestas.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Versionado y control de cambios</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Utiliza Workspaces y control de versiones para colaborar y rastrear cambios.</p>
+</li>
+<li>
+<p>Exporta y respalda colecciones regularmente.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Automatización y validación continua</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Integra las colecciones con sistemas CI/CD usando Newman.</p>
+</li>
+<li>
+<p>Mantén actualizados los scripts de test y pre-solicitud.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_integraciones_y_extensiones">Integraciones y Extensiones</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Las integraciones y extensiones de Postman permiten llevar la automatización y el control de calidad de las APIs a un siguiente nivel, facilitando su integración en flujos de trabajo profesionales y ampliando sus capacidades mediante herramientas externas y plugins.</p>
+</div>
+<div class="sect2">
+<h3 id="_integración_con_cicd">Integración con CI/CD</h3>
+<div class="paragraph">
+<p>Integrar Postman en pipelines de Integración Continua y Entrega Continua (CI/CD) es fundamental para asegurar la calidad y disponibilidad de las APIs en cada despliegue. La herramienta clave para esta integración es Newman, el CLI oficial de Postman.</p>
+</div>
+<div class="olist arabic">
+<div class="title">Pasos para la integración:</div>
+<ol class="arabic">
+<li>
+<p>Exporta la colección y el entorno desde Postman en formato JSON.</p>
+</li>
+<li>
+<p>Añade los archivos exportados al repositorio de tu proyecto.</p>
+</li>
+<li>
+<p>Instala Newman en tu entorno de CI/CD (Jenkins, GitLab CI, GitHub Actions, Azure DevOps, etc.).</p>
+</li>
+<li>
+<p>Configura el pipeline para ejecutar los tests de Postman con Newman en cada build o despliegue.</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo de comando de ejecución en un pipeline:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">newman run coleccion.json -e entorno.json --reporters cli,html</code></pre>
+</div>
+</div>
+<div class="ulist">
+<div class="title">Ventajas:</div>
+<ul>
+<li>
+<p>Automatización de pruebas de regresión en cada commit o despliegue.</p>
+</li>
+<li>
+<p>Generación de reportes automáticos (CLI, HTML, JSON, JUnit).</p>
+</li>
+<li>
+<p>Detección temprana de errores antes de llegar a producción.</p>
+</li>
+<li>
+<p>Integración sencilla con scripts y sistemas de notificaciones.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo de integración en un archivo YAML para GitHub Actions:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- name: Run Postman tests with Newman
+  run: |
+    npm install -g newman
+    newman run coleccion.json -e entorno.json --reporters cli,html</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_uso_de_monitors_para_pruebas_programadas">Uso de Monitors para pruebas programadas</h3>
+<div class="paragraph">
+<p>Los Monitors de Postman permiten ejecutar colecciones de manera programada desde la nube de Postman, simulando pruebas periódicas (por ejemplo, cada hora, diariamente o tras cada despliegue).</p>
+</div>
+<div class="ulist">
+<div class="title">Características principales:</div>
+<ul>
+<li>
+<p>Permiten programar la ejecución automática de colecciones.</p>
+</li>
+<li>
+<p>Generan reportes de resultados y alertas ante fallos.</p>
+</li>
+<li>
+<p>Permiten monitorizar la disponibilidad y el rendimiento de las APIs.</p>
+</li>
+<li>
+<p>Se configuran desde la interfaz web de Postman, sin necesidad de infraestructura propia.</p>
+</li>
+</ul>
+</div>
+<div class="olist arabic">
+<div class="title">Pasos para crear un Monitor:</div>
+<ol class="arabic">
+<li>
+<p>Selecciona la colección que deseas monitorizar.</p>
+</li>
+<li>
+<p>Haz clic en "Monitor Collection" y configura la frecuencia de ejecución, entorno y notificaciones.</p>
+</li>
+<li>
+<p>Visualiza los resultados históricos y las métricas de cada ejecución desde el dashboard de Monitors.</p>
+</li>
+</ol>
+</div>
+<div class="ulist">
+<div class="title">Ventajas:</div>
+<ul>
+<li>
+<p>Detección proactiva de caídas o degradaciones en la API.</p>
+</li>
+<li>
+<p>Alertas por correo o integraciones con Slack, Microsoft Teams, etc.</p>
+</li>
+<li>
+<p>Ideal para pruebas de smoke testing y monitorización de endpoints críticos.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_extensiones_y_plugins_útiles">Extensiones y plugins útiles</h3>
+<div class="paragraph">
+<p>Postman se puede ampliar mediante extensiones, integraciones y plugins de terceros que potencian su funcionalidad:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Newman HTML Extra Reporter</strong>: Genera reportes HTML avanzados y visuales de las ejecuciones de Newman.</p>
+</li>
+<li>
+<p><strong>Integraciones nativas</strong>: Postman se conecta directamente con herramientas como Slack, GitHub, GitLab, Jira, Datadog, Splunk, y más, facilitando la notificación de resultados y la trazabilidad de incidencias.</p>
+</li>
+<li>
+<p><strong>API de Postman</strong>: Permite gestionar colecciones, entornos y monitores programáticamente, integrando Postman con sistemas personalizados.</p>
+</li>
+<li>
+<p><strong>Postman Interceptor</strong>: Extensión de navegador que captura y sincroniza cookies y cabeceras entre el navegador y Postman, útil para pruebas autenticadas.</p>
+</li>
+<li>
+<p><strong>Postman Code Generators</strong>: Genera snippets de código en múltiples lenguajes (Python, JavaScript, cURL, etc.) a partir de peticiones configuradas en Postman.</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Otras integraciones populares:</div>
+<ul>
+<li>
+<p>Jenkins y otros orquestadores de CI/CD.</p>
+</li>
+<li>
+<p>Notificaciones a canales de comunicación (Slack, Teams).</p>
+</li>
+<li>
+<p>Dashboards de monitoreo y observabilidad (Datadog, New Relic).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_guía_de_programación_de_scripts">Guía de Programación de Scripts</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Postman permite automatizar, validar y personalizar peticiones mediante scripts escritos en JavaScript. Estos scripts pueden ejecutarse antes de enviar una petición (pre-request) o después de recibir la respuesta (tests). Esta guía te ayudará a dominar la programación de scripts en Postman, desde lo básico hasta ejemplos avanzados.</p>
+</div>
+<div class="sect2">
+<h3 id="_conceptos_fundamentales">Conceptos Fundamentales</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Lenguaje</strong>: Los scripts se escriben en JavaScript y tienen acceso a la API de Postman (<code>pm</code>).</p>
+</li>
+<li>
+<p><strong>Ubicación</strong>:</p>
+</li>
+<li>
+<p>Pestaña <code>Pre-request Script</code>: Código que se ejecuta antes de enviar la petición.</p>
+</li>
+<li>
+<p>Pestaña <code>Tests</code>: Código que se ejecuta tras recibir la respuesta.</p>
+</li>
+<li>
+<p><strong>Ámbito</strong>: Los scripts pueden aplicarse a nivel de petición, carpeta o colección, y se ejecutan en ese orden jerárquico
+=== Estructura y Objetos Clave</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>En la programación de scripts en Postman, existen varios objetos fundamentales que facilitan la automatización, validación y manipulación de peticiones y respuestas. A continuación se explican los principales y su uso práctico con ejemplos.</p>
+</div>
+<div class="sect3">
+<h4 id="_pm">pm</h4>
+<div class="paragraph">
+<p>El objeto <code>pm</code> (Postman) es el punto de entrada principal para interactuar con la API de scripting de Postman. Permite acceder a la petición, la respuesta, variables de entorno, utilidades de aserción y mucho más.</p>
+</div>
+<div class="ulist">
+<div class="title">Principales propiedades y métodos:</div>
+<ul>
+<li>
+<p><code>pm.request</code>: Acceso a la petición actual (método, URL, headers, body).</p>
+</li>
+<li>
+<p><code>pm.response</code>: Acceso a la respuesta recibida (código de estado, cuerpo, headers).</p>
+</li>
+<li>
+<p><code>pm.variables</code>: Acceso a variables locales, de entorno, globales y de colección.</p>
+</li>
+<li>
+<p><code>pm.environment</code>: Métodos para leer y escribir variables de entorno.</p>
+</li>
+<li>
+<p><code>pm.collectionVariables</code>: Métodos para variables de colección.</p>
+</li>
+<li>
+<p><code>pm.globals</code>: Métodos para variables globales.</p>
+</li>
+<li>
+<p><code>pm.test()</code>: Definición de tests y aserciones.</p>
+</li>
+<li>
+<p><code>pm.expect()</code>: Utilidad de aserciones basada en ChaiJS.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Validar el código de estado y extraer datos</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("Status code is 200", function () {
+  pm.response.to.have.status(200);
+});
+
+const jsonData = pm.response.json();
+pm.environment.set("userId", jsonData.id);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_postman_setnextrequest">postman.setNextRequest</h4>
+<div class="paragraph">
+<p>La función <code>postman.setNextRequest()</code> permite controlar el flujo de ejecución de peticiones dentro de una colección, saltando entre peticiones según condiciones lógicas.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Se utiliza en scripts de test para indicar cuál será la siguiente petición a ejecutar.</p>
+</li>
+<li>
+<p>Recibe como argumento el nombre exacto de la siguiente petición o <code>null</code> para detener la ejecución.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Flujo condicional entre peticiones</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">if (pm.response.code === 401) {
+  postman.setNextRequest("Obtener Token");
+} else {
+  postman.setNextRequest("Consultar Perfil");
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Esto permite crear flujos dinámicos y pruebas complejas, como reintentos, autenticaciones condicionales o saltos entre módulos.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_console">console</h4>
+<div class="paragraph">
+<p>El objeto <code>console</code> permite imprimir mensajes en la consola de Postman, facilitando la depuración y el análisis de valores durante la ejecución de scripts.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Métodos principales: <code>console.log()</code>, <code>console.info()</code>, <code>console.warn()</code>, <code>console.error()</code>.</p>
+</li>
+<li>
+<p>Los mensajes se visualizan en la consola de Postman, accesible desde la interfaz o mediante atajos de teclado.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Depuración de variables y respuestas</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">console.log("Respuesta completa:", pm.response.text());
+console.info("Valor del token:", pm.environment.get("token"));
+console.warn("Advertencia: usuario no activo");
+console.error("Error detectado en la respuesta");</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sintaxis_de_validación_en_postman">Sintaxis de validación en Postman</h3>
+<div class="paragraph">
+<p>La validación en Postman se realiza principalmente mediante scripts en la pestaña <strong>Tests</strong> de cada petición, utilizando el método <code>pm.test()</code> y las utilidades de aserción proporcionadas por ChaiJS (incluidas en Postman). Esto permite comprobar automáticamente que la respuesta de la API cumple con los requisitos esperados.</p>
+</div>
+<div class="sect3">
+<h4 id="_estructura_básica_de_un_test">Estructura básica de un test</h4>
+<div class="paragraph">
+<p>La estructura básica para una validación es:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("Descripción del test", function () {
+  // Expresión de validación
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Dentro de la función puedes usar las utilidades de aserción (<code>pm.expect</code>) para comparar valores, comprobar la existencia de propiedades, validar tipos de datos, etc.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ejemplos_de_validaciones_comunes">Ejemplos de validaciones comunes</h4>
+<div class="listingblock">
+<div class="title"><strong>Validar código de estado HTTP</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("El código de estado es 200", function () {
+pm.response.to.have.status(200);
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Validar que el cuerpo contiene una propiedad</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("La respuesta contiene el campo 'nombre'", function () {
+const jsonData = pm.response.json();
+pm.expect(jsonData).to.have.property('nombre');
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Validar el valor de una propiedad</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("El nombre es 'Ana'", function () {
+const jsonData = pm.response.json();
+pm.expect(jsonData.nombre).to.eql("Ana");
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Validar el tipo de dato de una propiedad</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("El campo 'edad' es un número", function () {
+const jsonData = pm.response.json();
+pm.expect(jsonData.edad).to.be.a('number');
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Validar la longitud de una lista</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("La lista de usuarios tiene al menos 3 elementos", function () {
+const jsonData = pm.response.json();
+pm.expect(jsonData.usuarios.length).to.be.at.least(3);
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Validar formato usando expresiones regulares</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("El email tiene formato válido", function () {
+const email = pm.response.json().email;
+pm.expect(email).to.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
+});</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_validaciones_combinadas">Validaciones combinadas</h4>
+<div class="paragraph">
+<p>Puedes agrupar varias validaciones dentro de un mismo test o usar varios tests independientes para una misma respuesta.</p>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Validaciones múltiples en un solo test</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("Validaciones múltiples", function () {
+  const data = pm.response.json();
+  pm.expect(pm.response.code).to.eql(200);
+  pm.expect(data.activo).to.be.true;
+  pm.expect(data.email).to.match(/@/);
+});</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_buenas_prácticas">Buenas prácticas</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Utiliza descripciones claras y específicas en cada test.</p>
+</li>
+<li>
+<p>Separa tests independientes para facilitar la identificación de fallos.</p>
+</li>
+<li>
+<p>Aprovecha las utilidades de ChaiJS (<code>to.have</code>, <code>to.eql</code>, <code>to.be.a</code>, <code>to.match</code>, etc.) para validaciones expresivas y potentes.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sintaxis_expect_en_postman_funcionamiento_y_operadores">Sintaxis expect en Postman: Funcionamiento y Operadores</h3>
+<div class="paragraph">
+<p>La función <code>expect</code> en Postman es parte de la librería de aserciones ChaiJS, integrada en el entorno de scripting de la plataforma. Permite realizar comprobaciones (assertions) sobre valores, objetos, arrays y respuestas de las APIs de forma legible y expresiva. Es fundamental para validar que los resultados obtenidos cumplen con lo esperado en los scripts de test.</p>
+</div>
+<div class="sect3">
+<h4 id="_cómo_funciona_la_sintaxis_expect">¿Cómo funciona la sintaxis expect?</h4>
+<div class="paragraph">
+<p>La sintaxis básica es:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.expect(valor).operador(valorEsperado);</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>pm.expect(valor)</code>: Evalúa el valor que quieres comprobar.</p>
+</li>
+<li>
+<p><code>.operador(valorEsperado)</code>: Aplica el operador de aserción para comparar, validar tipo, existencia, formato, etc.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Esta estructura permite encadenar varios operadores para realizar validaciones complejas y legibles.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_principales_operadores_de_expect">Principales operadores de expect</h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. A continuación se listan los operadores más importantes y su explicación:</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Operador</th>
+<th class="tableblock halign-left valign-top">Uso</th>
+<th class="tableblock halign-left valign-top">Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.to.eql(valor)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Compara igualdad profunda (deep equal) entre objetos, arrays o valores.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pm.expect(jsonData.nombre).to.eql("Ana");</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.to.equal(valor)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Compara igualdad estricta (igual a <code>===</code> en JS).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pm.expect(pm.response.code).to.equal(200);</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.to.have.property(clave)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comprueba que existe una propiedad en un objeto.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pm.expect(jsonData).to.have.property('email');</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.to.be.a(tipo)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Valida el tipo de dato (string, number, array, object, etc.).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pm.expect(jsonData.edad).to.be.a('number');</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.to.be.true</code> / <code>.to.be.false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comprueba que el valor es <code>true</code> o <code>false</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pm.expect(jsonData.activo).to.be.true;</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.to.include(valor)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Verifica que el array o string contiene el valor especificado.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pm.expect(jsonData.roles).to.include('admin');</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.to.match(expresionRegular)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Valida que el string cumple con una expresión regular.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pm.expect(jsonData.email).to.match(/@/);</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.to.have.lengthOf(n)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comprueba la longitud de un array o string.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pm.expect(jsonData.usuarios).to.have.lengthOf(3);</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.to.be.above(n)</code> / <code>.to.be.below(n)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Valida que el valor es mayor o menor que el especificado.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pm.expect(jsonData.edad).to.be.above(18);</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.to.be.at.least(n)</code> / <code>.to.be.at.most(n)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Valida que el valor es al menos o como mucho el especificado.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pm.expect(jsonData.puntos).to.be.at.least(10);</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.to.be.undefined</code> / <code>.to.be.null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comprueba si el valor es <code>undefined</code> o <code>null</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pm.expect(jsonData.apodo).to.be.undefined;</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_ejemplos_prácticos">Ejemplos prácticos</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Validar que la respuesta contiene un campo y su valor es correcto:
+[source,javascript]
+----
+pm.test("El usuario tiene email válido", function () {
+  const data = pm.response.json();
+  pm.expect(data).to.have.property('email');
+  pm.expect(data.email).to.match(/@/);
+});
+----</p>
+</li>
+<li>
+<p>Comprobar que una lista tiene al menos 5 elementos:
+[source,javascript]
+----
+pm.test("Hay al menos 5 usuarios", function () {
+  const data = pm.response.json();
+  pm.expect(data.usuarios.length).to.be.at.least(5);
+});
+----</p>
+</li>
+<li>
+<p>Validar el tipo y valor de una propiedad:
+[source,javascript]
+----
+pm.test("La edad es un número mayor a 18", function () {
+  const data = pm.response.json();
+  pm.expect(data.edad).to.be.a('number');
+  pm.expect(data.edad).to.be.above(18);
+});
+----</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_scripts_de_pre_request">Scripts de Pre-request</h3>
+<div class="paragraph">
+<p>Sirven para preparar datos, generar valores dinámicos, modificar headers o establecer variables antes de enviar la petición.</p>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Guardar una marca de tiempo en una variable de entorno</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">let timestamp = Math.floor(Date.now() / 1000);
+pm.environment.set("timestamp", timestamp);</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Generar un identificador único</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">const uuid = pm.variables.replaceIn('{{$guid}}');
+pm.environment.set("peticion_id", uuid);</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Modificar un header dinámicamente</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.request.headers.upsert({ key: 'X-Request-ID', value: pm.environment.get("peticion_id") });</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_scripts_de_test_post_respuesta">Scripts de Test (Post-respuesta)</h3>
+<div class="paragraph">
+<p>Permiten validar la respuesta, extraer datos, comprobar headers, tiempos de respuesta y automatizar pruebas.</p>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Validar código de estado</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("Status code is 200", function () {
+  pm.response.to.have.status(200);
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Validar contenido del cuerpo de la respuesta</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("La respuesta contiene el campo 'nombre'", function () {
+  const jsonData = pm.response.json();
+  pm.expect(jsonData).to.have.property('nombre');
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Extraer un token y guardarlo como variable</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">const jsonData = pm.response.json();
+pm.environment.set("token", jsonData.token);</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo: Validar múltiples condiciones</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("Respuesta válida y usuario activo", function () {
+  const data = pm.response.json();
+  pm.expect(pm.response.code).to.eql(200);
+  pm.expect(data.activo).to.be.true;
+});</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_uso_de_la_consola_de_postman">Uso de la Consola de Postman</h3>
+<div class="paragraph">
+<p>Puedes depurar tus scripts utilizando la consola integrada:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Abre la consola desde la esquina inferior izquierda o con <code>Ctrl + Alt + C</code> (Windows) / <code>⌘ + Option + C</code> (Mac).</p>
+</li>
+<li>
+<p>Utiliza <code>console.log</code>, <code>console.info</code>, <code>console.warn</code> y <code>console.error</code> en tus scripts para imprimir mensajes y variables.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">console.log("Valor del token:", pm.environment.get("token"));</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ejemplos_avanzados">Ejemplos Avanzados</h3>
+<div class="listingblock">
+<div class="title"><strong>Validar estructura de objetos anidados</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("El usuario tiene dirección válida", function () {
+const data = pm.response.json();
+pm.expect(data).to.have.property('direccion');
+pm.expect(data.direccion).to.have.property('ciudad');
+pm.expect(data.direccion.ciudad).to.be.a('string');
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Comprobar presencia de elementos en listas</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("La respuesta contiene al menos 3 usuarios", function () {
+const data = pm.response.json();
+pm.expect(data.usuarios.length).to.be.at.least(3);
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Validar formato de email</strong></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">pm.test("El email tiene formato válido", function () {
+const email = pm.response.json().email;
+pm.expect(email).to.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
+});</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_buenas_prácticas_2">Buenas Prácticas</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Usa nombres descriptivos en tests y variables.</p>
+</li>
+<li>
+<p>Centraliza valores dinámicos en variables de entorno o colección.</p>
+</li>
+<li>
+<p>Documenta tus scripts con comentarios y Markdown en las descripciones.</p>
+</li>
+<li>
+<p>Utiliza la consola para depurar y entender el flujo de ejecución.</p>
+</li>
+<li>
+<p>Agrupa tests relacionados en bloques lógicos y reutiliza funciones.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_recursos_y_snippets">Recursos y Snippets</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Postman ofrece snippets listos para usar en el editor de scripts.</p>
+</li>
+<li>
+<p>Consulta la documentación oficial para ejemplos y.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_flujo_de_ejecución_de_scripts">Flujo de Ejecución de Scripts</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Scripts pre-request a nivel de colección.</p>
+</li>
+<li>
+<p>Scripts pre-request a nivel de carpeta.</p>
+</li>
+<li>
+<p>Scripts pre-request a nivel de petición.</p>
+</li>
+<li>
+<p>Se envía la petición.</p>
+</li>
+<li>
+<p>Scripts de test a nivel de colección.</p>
+</li>
+<li>
+<p>Scripts de test a nivel de carpeta.</p>
+</li>
+<li>
+<p>Scripts de test a nivel de petición</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-07-08 17:26:20 +0200
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
+</body>
+</html>

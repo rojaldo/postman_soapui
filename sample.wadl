@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://wadl.dev.java.net/2009/02">
+  <resources base="https://api.nasa.gov/planetary/">
+    <resource path="apod">
+      <method name="GET">
+        <request>
+          <param name="api_key" style="query" type="xs:string" required="true" />
+          <param name="date" style="query" type="xs:string" required="false" />
+          <param name="start_date" style="query" type="xs:string" required="false" />
+          <param name="end_date" style="query" type="xs:string" required="false" />
+          <param name="count" style="query" type="xs:int" required="false" />
+          <param name="thumbs" style="query" type="xs:boolean" required="false" />
+          <param name="concept_tags" style="query" type="xs:boolean" required="false" />
+        </request>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+  </resources>
+</application>

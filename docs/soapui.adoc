@@ -1,0 +1,513 @@
+= SoapUI
+:toc: left
+:icons: font
+:source-highlighter: highlight.js
+:toclevels: 3
+:diagram-plantuml-format: png
+
+== Introducción a SoapUI
+
+=== ¿Qué es SoapUI?
+SoapUI es una herramienta de código abierto diseñada para realizar pruebas funcionales, de carga y de seguridad sobre servicios web, tanto SOAP como REST. Permite a los usuarios crear, ejecutar y automatizar pruebas de servicios web de manera sencilla, facilitando la validación de la interoperabilidad y el correcto funcionamiento de las APIs.
+
+=== Ventajas y casos de uso
+- **Interfaz intuitiva**: Permite crear y ejecutar pruebas sin necesidad de conocimientos avanzados de programación.
+- **Soporte para múltiples protocolos**: Prueba servicios SOAP, REST, HTTP, JMS y otros.
+- **Automatización**: Facilita la automatización de pruebas repetitivas, integrándose con herramientas como Jenkins y Maven.
+- **Validación de respuestas**: Permite definir assertions para validar el contenido y formato de las respuestas.
+- **Pruebas de carga y seguridad**: Incluye módulos para evaluar el rendimiento y la seguridad de los servicios web.
+- **Casos de uso comunes**:
+  - Validación de APIs internas y externas.
+  - Pruebas de regresión automatizadas.
+  - Integración continua en pipelines de desarrollo.
+  - Simulación de servicios mediante Mock Services.
+
+=== Instalación y configuración inicial
+1. **Requisitos previos**:
+   - Java Runtime Environment (JRE) instalado en el sistema.
+2. **Descarga**:
+   - Accede al sitio oficial de SoapUI y descarga la versión correspondiente a tu sistema operativo.
+3. **Instalación**:
+   - Ejecuta el instalador y sigue los pasos indicados. En sistemas Windows, se trata de un asistente gráfico; en Linux y MacOS, puede requerir permisos de administrador.
+4. **Primer inicio**:
+   - Al abrir SoapUI por primera vez, configura la ubicación del JRE si es necesario.
+   - Revisa las preferencias iniciales, como el idioma y la configuración de proxy si tu red lo requiere.
+5. **Verificación**:
+   - Crea un proyecto de prueba sencillo para comprobar que la instalación se realizó correctamente.
+
+== Fundamentos de Web Services
+
+=== Conceptos básicos de servicios web (SOAP y REST)
+
+Los servicios web permiten la comunicación e interoperabilidad entre aplicaciones a través de la red, utilizando estándares abiertos. Los dos enfoques más comunes son:
+
+- **SOAP (Simple Object Access Protocol)**: Protocolo basado en XML que define cómo deben estructurarse los mensajes para el intercambio de información entre sistemas. Es extensible, neutro en cuanto a plataforma y lenguaje, y suele usarse en entornos empresariales donde se requieren transacciones seguras y complejas.
+- **REST (Representational State Transfer)**: Arquitectura que utiliza los métodos estándar de HTTP (GET, POST, PUT, DELETE, etc.) para operar sobre recursos identificados por URLs. Los mensajes suelen estar en formato JSON o XML. REST es más ligero y flexible, ideal para aplicaciones web y móviles.
+
+[NOTE]
+====
+SOAP es un protocolo estricto y formal, mientras que REST es un estilo arquitectónico más simple y directo.
+====
+
+=== Estructura de mensajes SOAP
+
+.Un mensaje SOAP es un documento XML estructurado en cuatro partes principales:
+
+* **Envelope**: Elemento raíz que delimita el inicio y fin del mensaje.
+* **Header** (opcional): Contiene información de control, como autenticación, transacciones o enrutamiento.
+* **Body**: Incluye los datos de la petición o respuesta, es decir, el contenido principal del mensaje.
+* **Fault** (opcional): Proporciona detalles sobre errores ocurridos durante el procesamiento del mensaje.
+
+Ejemplo básico de mensaje SOAP:
+
+[source,xml]
+----
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:ns="http://ejemplo.com/servicio">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:ObtenerCliente>
+         <ns:Id>123</ns:Id>
+      </ns:ObtenerCliente>
+   </soapenv:Body>
+</soapenv:Envelope>
+----
+
+=== Introducción a WSDL y WADL
+
+- **WSDL (Web Services Description Language)**: Es un documento XML que describe de manera formal un servicio web SOAP. Define las operaciones disponibles, los mensajes de entrada/salida, los tipos de datos y los puntos de acceso (endpoints). Permite a las herramientas como SoapUI generar automáticamente las estructuras necesarias para consumir el servicio.
+- **WADL (Web Application Description Language)**: Similar a WSDL pero orientado a servicios REST. Especifica los recursos, los métodos disponibles y los formatos de entrada/salida. Aunque menos usado que WSDL, facilita la documentación y automatización de pruebas en APIs REST.
+
+== Primeros Pasos con SoapUI
+
+=== Interfaz de usuario de SoapUI
+
+.La interfaz de SoapUI está diseñada para facilitar la creación y ejecución de pruebas sobre servicios web. Sus principales componentes son:
+- **Barra de menús**: Acceso a funciones generales como abrir, guardar proyectos, preferencias y herramientas.
+- **Panel de proyectos**: Visualiza y organiza todos los proyectos, test suites, casos de prueba y recursos asociados.
+- **Área de trabajo**: Espacio donde se muestran los detalles y editores de los elementos seleccionados (proyectos, solicitudes, respuestas, scripts, etc.).
+- **Consola de logs**: Muestra información de ejecución, errores y mensajes de depuración.
+- **Panel de propiedades**: Permite ver y editar propiedades de proyectos, test suites, test cases y otros elementos.
+
+=== Creación de un proyecto SOAP
+
+.Para comenzar a trabajar con servicios SOAP en SoapUI, sigue estos pasos:
+* Abre SoapUI y selecciona la opción `File > New SOAP Project` o haz clic derecho en el panel de proyectos y elige `New SOAP Project`.
+* Asigna un nombre descriptivo al proyecto en el campo `Project Name`.
+* Si ya dispones de un archivo WSDL o una URL, pégala en el campo `Initial WSDL/WADL`.
+* Marca la opción `Create Requests` si deseas que SoapUI genere automáticamente las peticiones de ejemplo para cada operación.
+* Haz clic en `OK` para crear el proyecto.
+
+=== Importación de WSDL
+
+.El archivo o URL WSDL define la estructura y operaciones del servicio SOAP. Para importar un WSDL en SoapUI:
+* Al crear un nuevo proyecto, introduce la URL o ruta local del archivo WSDL en el campo correspondiente.
+* SoapUI analizará el WSDL y generará automáticamente la estructura de servicios, puertos y operaciones.
+* Si necesitas agregar un WSDL a un proyecto existente, haz clic derecho sobre el proyecto y selecciona `Add WSDL`.
+
+=== Ejecución de una petición SOAP
+
+.Una vez importado el WSDL y generado el proyecto, puedes ejecutar una petición SOAP siguiendo estos pasos:
+* Expande el árbol del proyecto hasta localizar la operación que deseas probar (dentro de `Service > Port > Operation`).
+* Haz doble clic sobre la operación y se abrirá una ventana de solicitud (Request).
+* Completa los campos requeridos en el mensaje SOAP generado (por ejemplo, IDs, parámetros, etc.).
+* Haz clic en el botón `Submit` (icono de play/triángulo verde) para enviar la petición al endpoint definido.
+* Observa la respuesta en el panel derecho, donde podrás revisar el contenido del mensaje de respuesta, los tiempos de ejecución y cualquier error.
+
+== Pruebas REST con SoapUI
+
+=== Creación de un proyecto REST
+
+.Para comenzar a trabajar con servicios REST en SoapUI, sigue estos pasos:
+* Abre SoapUI y selecciona la opción `File > New REST Project` o haz clic derecho en el panel de proyectos y elige `New REST Project`.
+* Introduce la URL base del endpoint REST en el campo correspondiente. Esta URL puede ser la de un recurso o la raíz de la API.
+* Asigna un nombre descriptivo al proyecto en el campo `Project Name`.
+* Haz clic en `OK` para crear el proyecto.
+
+=== Importación de endpoints REST
+
+.Existen varias formas de importar endpoints REST en SoapUI:
+
+- **Desde una URL**: Al crear el proyecto, introduce directamente la URL del endpoint REST.
+- **Desde un archivo OpenAPI/Swagger**: Haz clic derecho sobre el proyecto y selecciona `Import Swagger/OpenAPI Definition`, luego proporciona la URL o el archivo JSON/YAML.
+- **Manual**: Agrega recursos y métodos manualmente desde el panel de proyecto, especificando las rutas y los métodos HTTP necesarios.
+
+
+=== Ejecución de peticiones GET, POST, PUT y DELETE
+
+.Para realizar pruebas sobre los distintos métodos HTTP en SoapUI:
+
+* Expande el árbol del proyecto hasta encontrar el recurso y método que deseas probar (por ejemplo, `GET /clientes`, `POST /clientes`).
+* Haz doble clic sobre el método para abrir la ventana de solicitud.
+* Completa los parámetros necesarios:
+   ** **Query Params**: Parámetros en la URL.
+   ** **Headers**: Encabezados HTTP como `Content-Type`, `Authorization`, etc.
+   ** **Request Body**: Para métodos como POST y PUT, introduce el cuerpo de la petición en formato JSON o XML.
+* Haz clic en el botón `Submit` (icono de play/triángulo verde) para enviar la petición al endpoint.
+* Revisa la respuesta en el panel derecho, donde podrás ver el código de estado HTTP, los headers de respuesta y el contenido devuelto por el servicio.
+
+== Validación de Respuestas REST
+
+=== Validaciones básicas de respuestas
+
+En las pruebas de servicios REST con SoapUI, las validaciones básicas aseguran que la respuesta obtenida cumple con los requisitos funcionales. 
+
+.Entre las validaciones más habituales se encuentran:
+
+* Verificar el código de estado HTTP (por ejemplo, 200 OK para éxito, 404 para recurso no encontrado).
+* Comprobar que la respuesta contiene ciertos valores, claves o estructuras JSON.
+* Validar que los encabezados HTTP contienen información esperada (como `Content-Type: application/json`).
+* Confirmar que los tiempos de respuesta están dentro de los límites aceptables.
+
+.Ejemplo de validación manual:
+[source,javascript]
+----
+// Validar código de estado HTTP
+if (messageExchange.responseStatusCode !== 200) {
+    throw "El código de estado no es 200";
+}
+
+// Validar que la respuesta contiene una clave específica
+var json = JSON.parse(messageExchange.responseContent);
+if (!json.hasOwnProperty('resultado')) {
+    throw "Falta el campo 'resultado' en la respuesta";
+}
+----
+
+=== Uso de assertions (validaciones)
+
+.SoapUI permite añadir assertions directamente sobre los pasos de solicitud REST para automatizar la validación de las respuestas. Para agregar una assertion:
+
+* Selecciona el TestStep de la solicitud REST.
+* Ve a la pestaña `Assertions`.
+* Haz clic en `Add Assertion` y elige el tipo de assertion que deseas utilizar.
+* Configura los valores o expresiones esperadas según la validación a realizar.
+
+También puedes usar Script Assertions para validaciones avanzadas, utilizando Groovy o JavaScript. Por ejemplo, para validar que el campo `status` en una respuesta JSON es `"OK"`:
+
+[source,javascript]
+----
+// Validar campo 'status' en la respuesta JSON
+var responseJson = JSON.parse(messageExchange.responseContent);
+if (responseJson.status !== "OK") {
+    throw "El campo 'status' no es 'OK'";
+}
+----
+
+=== Tipos de assertions en SoapUI
+
+.SoapUI ofrece una variedad de assertions para servicios REST, entre las más utilizadas:
+
+* **Contains / Not Contains**: Verifica si la respuesta contiene (o no) un texto o valor específico.
+* **JSONPath Match**: Permite validar valores específicos en respuestas JSON utilizando expresiones JSONPath.
+* **Status Code**: Comprueba que el código de estado HTTP es el esperado.
+* **Response SLA**: Valida que el tiempo de respuesta no supere un umbral definido.
+* **Schema Compliance**: Verifica que la respuesta JSON cumple con un esquema determinado.
+* **Script Assertion**: Permite escribir validaciones personalizadas en Groovy o JavaScript.
+
+.Ejemplo de assertion JSONPath Match:
+[source,jsonpath]
+----
+$.usuario.id == 123
+----
+
+.Ejemplo de assertion de tiempo de respuesta en JavaScript:
+[source,javascript]
+----
+// Validar que el tiempo de respuesta sea menor a 500 ms
+if (messageExchange.timeTaken > 500) {
+    throw "El tiempo de respuesta supera los 500 ms";
+}
+----
+
+== Automatización de Pruebas
+
+=== Creación de TestSuites y TestCases
+
+La automatización en SoapUI se estructura a través de TestSuites y TestCases, permitiendo organizar y ejecutar pruebas de manera eficiente y repetible.
+
+- **TestSuite**: Es un contenedor que agrupa varios casos de prueba (TestCases) relacionados, facilitando la gestión y ejecución conjunta de pruebas funcionales o de regresión.
+- **TestCase**: Es una secuencia de pasos de prueba (TestSteps) que valida una funcionalidad específica del servicio web. Cada TestCase puede tener sus propias variables, assertions y lógica de ejecución.
+
+Pasos para crear un TestSuite y TestCase:
+. Haz clic derecho sobre el proyecto y selecciona `New TestSuite`.
+. Asigna un nombre descriptivo y guarda.
+. Haz clic derecho sobre el TestSuite y selecciona `New TestCase`.
+. Nombra el TestCase y comienza a agregar TestSteps según la lógica de la prueba.
+
+=== TestSteps: tipos y configuración
+
+.Los TestSteps son las unidades básicas de ejecución dentro de un TestCase. SoapUI ofrece distintos tipos de TestSteps, cada uno configurable según el objetivo de la prueba:
+
+- **SOAP Request**: Envía peticiones SOAP y valida las respuestas.
+- **REST Request**: Realiza peticiones REST (GET, POST, PUT, DELETE, etc.).
+- **HTTP Request**: Permite probar cualquier endpoint HTTP.
+- **Groovy Script**: Ejecuta scripts en Groovy para lógica avanzada, manipulación de datos o control de flujo.
+- **JavaScript**: Permite scripting personalizado para validaciones o transformaciones.
+- **Properties**: Define y gestiona variables a nivel de TestCase o TestSuite.
+- **DataSource/DataLoop**: Facilita pruebas basadas en datos externos (archivos Excel, CSV, bases de datos).
+- **Delay**: Introduce pausas entre pasos de prueba.
+- **MockResponse**: Simula respuestas de servicios para pruebas aisladas.
+
+.Configuración básica de un TestStep:
+* Selecciona el TestCase y haz clic derecho para añadir un nuevo TestStep.
+* Elige el tipo de TestStep y configúralo:
+   ** Para solicitudes, define la URL, método, encabezados y cuerpo del mensaje.
+   ** Para scripts, introduce el código necesario en Groovy o JavaScript.
+   ** Para DataSource, especifica el archivo o fuente de datos y mapea los campos.
+
+.Ejemplo de TestStep con JavaScript para validar una respuesta:
+[source,javascript]
+----
+// Validar que el campo 'status' sea 'OK'
+var responseJson = JSON.parse(messageExchange.responseContent);
+if (responseJson.status !== "OK") {
+    throw "El campo 'status' no es 'OK'";
+}
+----
+
+=== Ejecución de pruebas automatizadas
+
+SoapUI permite ejecutar pruebas de forma manual o automatizada, integrándose fácilmente en pipelines de integración continua.
+
+* **Ejecución manual**:
+  ** Haz clic derecho sobre el TestSuite o TestCase y selecciona `Run`.
+  ** Observa los resultados en tiempo real, incluyendo logs y assertions.
+
+* **Ejecución automatizada**:
+  ** Utiliza la herramienta de línea de comandos `testrunner` incluida con SoapUI para ejecutar pruebas sin interfaz gráfica.
+  ** Sintaxis básica:
+[source,bash]
+----
+testrunner.sh -s"NombreTestSuite" -c"NombreTestCase" -r -j -f"/ruta/resultados" proyecto-soapui.xml
+----
+  ** Integra la ejecución en scripts de automatización, sistemas CI/CD como Jenkins, o tareas programadas.
+
+* **Reportes y logs**:
+  ** SoapUI genera reportes en formatos XML, HTML y JUnit, útiles para análisis y seguimiento.
+  ** Los resultados de cada ejecución incluyen detalles de cada TestStep, assertions y tiempos de respuesta.
+
+
+== Variables y Parámetros
+
+=== Uso de propiedades en proyectos y test cases
+
+.SoapUI permite gestionar variables a través de propiedades, que pueden definirse en distintos niveles para facilitar la reutilización y parametrización de pruebas:
+
+- **Propiedades de proyecto**: Son accesibles desde cualquier TestSuite, TestCase o TestStep dentro del mismo proyecto. Se definen en la pestaña `Custom Properties` del proyecto.
+- **Propiedades de TestSuite**: Útiles para agrupar variables que solo serán usadas en un conjunto específico de casos de prueba.
+- **Propiedades de TestCase**: Permiten definir variables locales a un caso de prueba, ideales para valores que solo afectan a ese flujo.
+- **Propiedades de TestStep**: Cada paso de prueba puede tener sus propias propiedades, útiles para almacenar resultados temporales o datos intermedios.
+
+.Para definir una propiedad:
+* Haz clic derecho sobre el nivel deseado (proyecto, TestSuite, TestCase o TestStep).
+* Selecciona `Add Property` y asigna nombre y valor.
+
+.Para acceder a una propiedad en una solicitud o script, utiliza la sintaxis:
+----
+${#Project#nombrePropiedad}
+${#TestSuite#nombrePropiedad}
+${#TestCase#nombrePropiedad}
+${#TestStep#nombrePropiedad}
+----
+
+=== Parámetros dinámicos y globales
+
+- **Propiedades globales**: Son accesibles desde cualquier proyecto abierto en SoapUI. Se configuran en `File > Preferences > Global Properties` y son útiles para valores como URLs de entornos, credenciales o tokens reutilizables.
+- **Propiedades dinámicas**: Pueden establecerse o modificarse durante la ejecución de las pruebas usando scripts (Groovy o JavaScript) o mediante el TestStep `Property Transfer`. Esto permite adaptar el flujo de pruebas según los resultados obtenidos en tiempo real.
+
+.Ejemplo de asignación dinámica en JavaScript:
+[source,javascript]
+----
+// Establecer una propiedad en el TestCase
+testRunner.testCase.setPropertyValue("token", "valor_dinamico");
+----
+
+.Uso de una propiedad dinámica en una solicitud:
+----
+Authorization: Bearer ${#TestCase#token}
+----
+
+=== Transferencia de datos entre pasos
+
+La transferencia de datos entre pasos es esencial para pruebas complejas donde la salida de un paso se usa como entrada en otro. 
+
+.SoapUI facilita esto mediante:
+- **Property Transfer TestStep**: Permite mapear valores de una respuesta (por ejemplo, un ID generado) a una propiedad de destino (en otro TestStep, TestCase o TestSuite).
+  . Añade un TestStep de tipo `Property Transfer`.
+  . Define el origen (por ejemplo, el resultado de una expresión JSONPath o XPath en la respuesta).
+  . Define el destino (la propiedad donde se almacenará el valor).
+
+- **Scripting**: Usando Groovy o JavaScript, puedes extraer valores y asignarlos a propiedades para su reutilización.
+
+.Ejemplo en JavaScript para transferir un valor de la respuesta JSON:
+[source,javascript]
+----
+// Extraer 'sessionId' de la respuesta y guardarlo como propiedad del TestCase
+var responseJson = JSON.parse(messageExchange.responseContent);
+testRunner.testCase.setPropertyValue("sessionId", responseJson.sessionId);
+----
+
+Luego, puedes utilizar `${#TestCase#sessionId}` en cualquier paso posterior.
+
+
+== Scripts en JavaScript
+
+=== Introducción a JavaScript en SoapUI
+
+SoapUI permite la automatización y personalización de pruebas mediante el uso de scripts. Aunque Groovy es el lenguaje de scripting por defecto, también es posible utilizar JavaScript para crear validaciones, manipular datos, transferir propiedades y controlar el flujo de ejecución de los TestCases. Los scripts en JavaScript se pueden emplear en los TestSteps de tipo "Script Assertion" o "Script TestStep", así como en eventos personalizados.
+
+.Ventajas de usar JavaScript en SoapUI:
+- Sintaxis familiar para desarrolladores web y de APIs.
+- Permite realizar validaciones complejas directamente sobre las respuestas.
+- Facilita la manipulación de datos JSON, muy común en APIs REST.
+
+=== Ejemplos prácticos de scripting
+
+==== Validar código de estado HTTP y contenido de respuesta
+
+[source,javascript]
+----
+// Validar que el código de estado HTTP sea 200
+if (messageExchange.responseStatusCode !== 200) {
+    throw "El código de estado no es 200";
+}
+
+// Validar que la respuesta JSON contiene el campo 'activo'
+var json = JSON.parse(messageExchange.responseContent);
+if (!json.hasOwnProperty('activo')) {
+    throw "Falta el campo 'activo' en la respuesta";
+}
+----
+
+==== Extraer y guardar valores como propiedades
+
+[source,javascript]
+----
+// Extraer 'token' de la respuesta y guardarlo como propiedad del TestCase
+var responseJson = JSON.parse(messageExchange.responseContent);
+testRunner.testCase.setPropertyValue("token", responseJson.token);
+----
+
+==== Validar tiempo de respuesta
+
+[source,javascript]
+----
+// Verificar que el tiempo de respuesta no supere los 500 ms
+if (messageExchange.timeTaken > 500) {
+    throw "El tiempo de respuesta supera los 500 ms";
+}
+----
+
+==== Transferir datos entre TestSteps
+
+[source,javascript]
+----
+// Tomar 'userId' de la respuesta y asignarlo como propiedad global
+var json = JSON.parse(messageExchange.responseContent);
+project.setPropertyValue("userId", json.userId);
+----
+
+=== Automatización avanzada con scripts
+
+.Los scripts en JavaScript permiten implementar lógica avanzada y flujos dinámicos en las pruebas:
+* **Control de flujo**: Saltar pasos, condicionar la ejecución según resultados previos o repetir acciones.
+* **Manejo de datos externos**: Leer o escribir archivos, conectar con servicios externos mediante HTTP.
+* **Generación dinámica de datos**: Crear valores únicos, fechas, identificadores, etc., para pruebas automatizadas.
+* **Integración con sistemas externos**: Llamar APIs de terceros, enviar notificaciones, registrar resultados personalizados.
+
+== Data Driven Testing
+
+=== Pruebas basadas en datos (DataSource y DataLoop)
+
+El enfoque Data Driven Testing en SoapUI permite ejecutar pruebas repetitivas utilizando diferentes conjuntos de datos, facilitando la validación de múltiples escenarios sin duplicar casos de prueba. Los elementos clave son:
+
+- **DataSource**: Define la fuente de datos que alimentará los TestSteps subsiguientes. Puede ser un archivo externo (Excel, CSV), una base de datos, una tabla interna o una lista de valores.
+- **DataLoop**: Controla la iteración sobre los datos del DataSource, ejecutando los TestSteps hijos para cada fila o registro.
+
+.Pasos para configurar Data Driven Testing:
+* Añade un TestStep de tipo `DataSource` al TestCase.
+* Configura el tipo de fuente de datos (por ejemplo, archivo Excel o CSV) y mapea las columnas a variables.
+* Añade los TestSteps que utilizarán los datos (por ejemplo, solicitudes REST/SOAP).
+* Añade un TestStep de tipo `DataLoop` para definir el rango de iteración (normalmente, desde el DataSource hasta el último TestStep dependiente).
+* Ejecuta el TestCase: SoapUI repetirá los pasos para cada conjunto de datos.
+
+=== Integración con archivos externos (Excel, CSV)
+
+SoapUI facilita la integración con archivos externos para alimentar las pruebas con datos variados:
+
+* **Archivos Excel**:
+  ** Selecciona el tipo `Excel` en el DataSource.
+  ** Especifica la ruta del archivo y la hoja a utilizar.
+  ** SoapUI leerá cada fila como un conjunto de variables accesibles mediante `${DataSource#nombreColumna}`.
+
+* **Archivos CSV**:
+  ** Selecciona el tipo `CSV` en el DataSource.
+  ** Indica la ruta del archivo y el delimitador de columnas.
+  ** Cada fila del CSV será un conjunto de datos para una iteración.
+
+* **Uso combinado**:
+  ** Es posible combinar varios DataSource para pruebas más complejas.
+  ** Los datos pueden transferirse entre pasos utilizando scripts o el TestStep `Property Transfer`.
+
+== Reportes y Análisis de Resultados
+
+=== Generación de reportes de pruebas
+
+SoapUI permite generar reportes detallados sobre la ejecución de pruebas, facilitando la documentación y el seguimiento de la calidad de las APIs probadas. Existen varias formas de obtener reportes:
+
+* **Desde la interfaz gráfica**:
+  ** Tras ejecutar un TestSuite o TestCase, puedes visualizar los resultados en la pestaña de resultados, donde se muestran los pasos ejecutados, el estado de cada assertion y los tiempos de respuesta.
+  ** Puedes exportar los resultados en formatos como XML, HTML o JUnit para su análisis externo.
+  ** Para exportar un reporte, haz clic derecho sobre el TestSuite/TestCase y selecciona la opción de exportación deseada.
+
+* **Desde la línea de comandos**:
+  ** Utilizando la herramienta `testrunner` incluida en SoapUI, puedes ejecutar pruebas y generar reportes automáticamente en diferentes formatos.
+
+.**Personalización de reportes**:
+  - SoapUI Pro permite crear plantillas personalizadas para los reportes, adaptando el contenido y formato según las necesidades del equipo o del cliente.
+  - Es posible incluir gráficos, métricas agregadas y resúmenes ejecutivos.
+
+=== Análisis de logs y resultados
+
+El análisis de logs y resultados es clave para identificar errores, cuellos de botella y oportunidades de mejora en los servicios probados. 
+
+.SoapUI ofrece diversas herramientas para este fin:
+
+* **Consola de logs**:
+  ** La consola integrada muestra información en tiempo real durante la ejecución de pruebas, incluyendo mensajes de éxito, advertencias y errores.
+  ** Puedes filtrar los logs por tipo (HTTP, errores de assertions, scripts, etc.) para facilitar el diagnóstico.
+
+* **Detalles de ejecución**:
+  ** Cada TestStep muestra el resultado de las assertions, el contenido de las respuestas y los tiempos de ejecución.
+  ** Es posible expandir cada paso para ver los mensajes de error específicos y los datos intercambiados.
+
+* **Logs de scripts**:
+  ** Los scripts en JavaScript o Groovy pueden escribir mensajes personalizados en los logs usando, por ejemplo:
+    
+* **Historial de ejecuciones**:
+  ** SoapUI guarda el historial de ejecuciones recientes, permitiendo comparar resultados y analizar tendencias a lo largo del tiempo.
+
+* **Análisis de tiempos y SLA**:
+  ** Los reportes y logs incluyen métricas de tiempo de respuesta para cada petición, facilitando la detección de degradaciones de rendimiento.
+  ** Puedes configurar assertions de tiempo (SLA) para alertar si una respuesta supera el umbral definido.
+
+=== Uso de plugins y extensiones
+
+SoapUI puede ampliarse mediante plugins y extensiones para cubrir necesidades específicas o integrar nuevas funcionalidades:
+
+* **Plugins oficiales y de la comunidad**:
+  ** Existen plugins para ampliar el soporte de protocolos, añadir nuevas assertions, integrar con sistemas externos o mejorar la generación de reportes.
+  ** Los plugins pueden instalarse desde el gestor de extensiones de SoapUI (`Help > Plugin Manager`) o manualmente descargando el archivo JAR correspondiente y copiándolo en la carpeta `plugins` de la instalación.
+
+* **Ejemplos de plugins útiles**:
+  ** **JDBC Plugin**: Añade soporte ampliado para pruebas sobre bases de datos.
+  ** **Groovy Console**: Facilita la edición y depuración de scripts Groovy.
+  ** **OpenAPI/Swagger Plugin**: Mejora la importación y documentación de APIs REST.
+  ** **Custom Assertions**: Permite crear y compartir assertions personalizadas.
+
+* **Desarrollo de extensiones propias**:
+  ** SoapUI permite desarrollar plugins personalizados en Java para adaptar la herramienta a flujos de trabajo específicos, integrar sistemas propietarios o añadir lógica avanzada.
+
+* **Extensiones vía scripting**:
+  ** Mediante scripts en Groovy o JavaScript, es posible extender el comportamiento de SoapUI, automatizar tareas, manipular datos externos o interactuar con otros sistemas directamente desde los TestSteps.
