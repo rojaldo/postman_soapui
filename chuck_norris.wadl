@@ -1,0 +1,34 @@
+<application xmlns="http://wadl.dev.java.net/2009/02">
+  <resources base="https://api.chucknorris.io/">
+    <resource path="jokes/random">
+      <method name="GET">
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="jokes/random">
+      <param name="category" style="query" type="xs:string" required="false"/>
+      <method name="GET">
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="jokes/categories">
+      <method name="GET">
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="jokes/search">
+      <param name="query" style="query" type="xs:string" required="true"/>
+      <method name="GET">
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+  </resources>
+</application>

@@ -1,0 +1,62 @@
+<application xmlns="http://wadl.dev.java.net/2009/02">
+  <resources base="https://opentdb.com/">
+    <!-- Obtener preguntas -->
+    <resource path="api.php">
+      <method name="GET">
+        <request>
+          <param name="amount" style="query" type="xs:int" required="true"/>
+          <param name="category" style="query" type="xs:int" required="false"/>
+          <param name="difficulty" style="query" type="xs:string" required="false"/>
+          <param name="type" style="query" type="xs:string" required="false"/>
+          <param name="encode" style="query" type="xs:string" required="false"/>
+          <param name="token" style="query" type="xs:string" required="false"/>
+        </request>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+
+    <!-- Listar categorías -->
+    <resource path="api_category.php">
+      <method name="GET">
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+
+    <!-- Contar preguntas por categoría -->
+    <resource path="api_count.php">
+      <method name="GET">
+        <request>
+          <param name="category" style="query" type="xs:int" required="true"/>
+        </request>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+
+    <!-- Contar todas las preguntas globalmente -->
+    <resource path="api_count_global.php">
+      <method name="GET">
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+
+    <!-- Obtener un token de sesión -->
+    <resource path="api_token.php">
+      <method name="GET">
+        <request>
+          <param name="command" style="query" type="xs:string" required="true"/>
+        </request>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+  </resources>
+</application>
