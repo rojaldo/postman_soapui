@@ -58,8 +58,7 @@ SOAP es un protocolo estricto y formal, mientras que REST es un estilo arquitect
 * **Body**: Incluye los datos de la petición o respuesta, es decir, el contenido principal del mensaje.
 * **Fault** (opcional): Proporciona detalles sobre errores ocurridos durante el procesamiento del mensaje.
 
-Ejemplo básico de mensaje SOAP:
-
+.Ejemplo básico de mensaje SOAP:
 [source,xml]
 ----
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
@@ -73,10 +72,194 @@ Ejemplo básico de mensaje SOAP:
 </soapenv:Envelope>
 ----
 
+.Ejemplo de respuesta SOAP:
+[source,xml]
+----
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:ns="http://ejemplo.com/servicio">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:ObtenerClienteResponse>
+         <ns:Cliente>
+            <ns:Id>123</ns:Id>
+            <ns:Nombre>Juan Pérez</ns:Nombre>
+            <ns:Email>juan.perez@ejemplo.com</ns:Email>
+          </ns:Cliente>
+      </ns:ObtenerClienteResponse>
+    </soapenv:Body>
+</soapenv:Envelope>
+----
+
+=== Fundamentos de SOAP
+
+
+==== Arquitrectura y principios de SOAP
+
+SOAP se basa en una arquitectura cliente-servidor donde el cliente envía una solicitud al servidor, que procesa la petición y devuelve una respuesta. Los principios fundamentales de SOAP incluyen:
+* **Independencia de plataforma y lenguaje**: SOAP puede ser implementado en cualquier plataforma o lenguaje de programación que soporte XML y HTTP.
+* **Extensibilidad**: SOAP permite la inclusión de extensiones a través del uso de headers personalizados.
+* **Neutralidad**: SOAP no está ligado a ningún protocolo de transporte específico, aunque comúnmente se utiliza sobre HTTP/HTTPS.
+* **Formalidad**: SOAP define un conjunto estricto de reglas para la estructura de los mensajes, asegurando la interoperabilidad entre diferentes sistemas.
+
+==== Ventajas y desventajas de SOAP
+
+.Ventajas de SOAP:
+* Estandarizado y ampliamente adoptado en entornos empresariales.
+* Soporte robusto para transacciones, seguridad (WS-Security) y confiabilidad (WS-ReliableMessaging).
+* Capacidad para manejar operaciones complejas y servicios distribuidos.
+* Soporte para múltiples protocolos de transporte (HTTP, SMTP, TCP, etc.).
+
+.Desventajas de SOAP:
+* Mayor complejidad y sobrecarga debido al uso de XML y la estructura formal.
+* Menor rendimiento en comparación con REST, especialmente en aplicaciones web y móviles.
+* Curva de aprendizaje más pronunciada para desarrolladores nuevos en servicios web.
+* Menor flexibilidad en comparación con REST, que se adapta mejor a arquitecturas modernas y ligeras.
+
 === Introducción a WSDL y WADL
 
+.WSDL y WADL son lenguajes de descripción utilizados para definir la estructura y las operaciones de los servicios web, facilitando su consumo e integración.
 - **WSDL (Web Services Description Language)**: Es un documento XML que describe de manera formal un servicio web SOAP. Define las operaciones disponibles, los mensajes de entrada/salida, los tipos de datos y los puntos de acceso (endpoints). Permite a las herramientas como SoapUI generar automáticamente las estructuras necesarias para consumir el servicio.
 - **WADL (Web Application Description Language)**: Similar a WSDL pero orientado a servicios REST. Especifica los recursos, los métodos disponibles y los formatos de entrada/salida. Aunque menos usado que WSDL, facilita la documentación y automatización de pruebas en APIs REST.
+
+==== Estructura básica de un archivo WSDL
+
+.Un archivo WSDL consta de varios elementos clave:
+* **definitions**: Elemento raíz que contiene toda la definición del servicio.
+* **types**: Define los tipos de datos utilizados en los mensajes, generalmente mediante XML Schema
+* **message**: Describe los mensajes de entrada y salida, especificando los datos que se intercambian.
+* **portType**: Define las operaciones disponibles en el servicio y los mensajes asociados a cada
+* **binding**: Especifica el protocolo y formato de los mensajes para cada operación (por ejemplo, SOAP sobre HTTP).
+* **service**: Define el endpoint o punto de acceso donde se encuentra el servicio.
+
+.Ejemplo básico de WSDL:
+[source,xml]
+----
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="http://ejemplo.com/servicio"
+             targetNamespace="http://ejemplo.com/servicio">
+   <types>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ejemplo.com/servicio">
+         <xsd:element name="ObtenerCliente">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Id" type="xsd:int"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+          <xsd:element name="ObtenerClienteResponse">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Cliente" type="tns:Cliente"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+          <xsd:complexType name="Cliente">
+            <xsd:sequence>
+               <xsd:element name="Id" type="xsd:int"/>
+               <xsd:element name="Nombre" type="xsd:string"/>
+               <xsd:element name="Email" type="xsd:string"/>
+            </xsd:sequence>
+         </xsd:complexType>
+      </xsd:schema>
+   </types>
+   <message name="ObtenerClienteRequest">
+      <part name="parameters" element="tns:ObtenerCliente"/>
+   </message>
+   <message name="ObtenerClienteResponse">
+      <part name="parameters" element="tns:ObtenerClienteResponse"/>
+   </message>
+   <portType name="ServicioClientePortType">
+      <operation name="ObtenerCliente">
+         <input message="tns:ObtenerClienteRequest"/>
+         <output message="tns:ObtenerClienteResponse"/>
+      </operation>
+   </portType>
+   <binding name="ServicioClienteBinding" type="tns:ServicioClientePortType">
+      <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+      <operation name="ObtenerCliente">
+         <soap:operation soapAction="http://ejemplo.com/servicio/ObtenerCliente"/>
+         <input>
+            <soap:body use="literal"/>
+         </input>
+         <output>
+            <soap:body use="literal"/>
+         </output>
+      </operation>
+   </binding>
+   <service name="ServicioCliente">
+      <port name="ServicioClientePort" binding="tns:ServicioClienteBinding">
+         <soap:address location="http://localhost:8080/servicioCliente"/>
+      </port>
+   </service>
+</definitions>
+----
+
+==== Tipos de datos y operaciones en WSDL
+En el WSDL, los tipos de datos se definen utilizando XML Schema (XSD), lo que permite describir estructuras complejas y simples. Las operaciones representan las acciones que el servicio puede realizar, cada una asociada a mensajes de entrada y salida.
+
+.Ejemplo de definición de tipos y operaciones:
+[source,xml]
+----
+<types>
+   <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ejemplo.com/servicio">
+      <xsd:element name="ObtenerCliente">
+         <xsd:complexType>
+            <xsd:sequence>
+               <xsd:element name="Id" type="xsd:int"/>
+            </xsd:sequence>
+         </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ObtenerClienteResponse">
+         <xsd:complexType>
+            <xsd:sequence>
+               <xsd:element name="Cliente" type="tns:Cliente"/>
+            </xsd:sequence>
+         </xsd:complexType>
+      </xsd:element>
+      <xsd:complexType name="Cliente">
+         <xsd:sequence>
+            <xsd:element name="Id" type="xsd:int"/>
+            <xsd:element name="Nombre" type="xsd:string"/>
+            <xsd:element name="Email" type="xsd:string"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:schema>
+</types>
+<portType name="ServicioClientePortType">
+   <operation name="ObtenerCliente">
+      <input message="tns:ObtenerClienteRequest"/>
+      <output message="tns:ObtenerClienteResponse"/>
+   </operation>
+</portType>
+
+<binding name="ServicioClienteBinding" type="tns:ServicioClientePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="ObtenerCliente">
+        <soap:operation soapAction="http://ejemplo.com/servicio/ObtenerCliente"/>
+        <input>
+          <soap:body use="literal"/>
+        </input>
+        <output>
+          <soap:body use="literal"/>
+        </output>
+    </operation>
+</binding>
+----
+
+=== Buenas prácticas en SOAP
+
+SOAP, a diferencia de REST, sigue un conjunto más estricto de normas y convenciones debido a su naturaleza basada en XML y su enfoque en la formalidad.
+En el diseño y uso de servicios SOAP, es importante seguir ciertas buenas prácticas para garantizar la interoperabilidad, seguridad y mantenibilidad de los servicios.
+
+.Algunas buenas prácticas al trabajar con servicios SOAP incluyen:
+* **Definir un WSDL claro y completo**: Asegúrate de que el WSDL describa todas las operaciones, tipos de datos y errores posibles.
+* **Usar namespaces**: Evita conflictos de nombres utilizando espacios de nombres (namespaces) adecuados en los mensajes XML.
+* **Manejo de errores**: Implementa el elemento Fault para proporcionar información detallada sobre errores.
+* **Seguridad**: Utiliza WS-Security para proteger los mensajes con firmas digitales y cifrado.
+* **Versionado**: Mantén versiones claras de los servicios para evitar ruptturas en la compatibilidad.
+* **Documentación**: Proporciona documentación accesible y ejemplos de uso para facilitar la integración por parte de otros desarrolladores.
+
 
 == Primeros Pasos con SoapUI
 
