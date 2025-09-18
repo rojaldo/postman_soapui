@@ -1,0 +1,140 @@
+openapi: 3.0.0
+info:
+  title: Documentación del API de OpenTDB
+  description: API para obtener preguntas de trivia
+  version: 1.0.0
+servers:
+  - url: https://opentdb.com
+    description: Servidor de producción
+  - url: http://localhost:8080
+    description: Servidor local
+paths:
+  /api_category.php:
+    get:
+      summary: Obtener categorías
+      description: Obtiene una lista de categorías disponibles.
+      responses:
+        '200':
+          description: Categorías obtenidas correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trivia_categories:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Category'
+  /api_count.php:
+    get:
+      summary: Obtener el número total de preguntas
+      description: Obtiene el número total de preguntas disponibles en la base de datos.
+      responses:
+        '200':
+          description: Número de preguntas obtenido correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  overall:
+                    type: object
+                    properties:
+                      total_num_of_questions:
+                        type: integer
+                        example: 50000
+  /api.php:
+    get:
+      summary: Obtener preguntas de trivia
+      description: Obtiene una lista de preguntas de trivia.
+      parameters:
+        - name: amount
+          in: query 
+          description: Número de preguntas a obtener (mínimo 1, máximo 50).
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            example: 10
+        - name: category
+          in: query
+          description: ID de la categoría de las preguntas. Esta ID está en el rango de 9 a 32.
+          required: false
+          schema:
+            type: integer
+            example: 9
+        - name: difficulty
+          in: query
+          description: Dificultad de las preguntas ('easy', 'medium' o 'hard').
+          required: false
+          # Valores posibles: easy, medium, hard
+          schema:
+            type: string
+            enum:
+              - easy
+              - medium
+              - hard
+            example: easy
+        - name: type
+          in: query
+          description: Tipo de las preguntas ('multiple', con 4 posibles respuestas o 'boolean', con 2 posibles respuestas).
+          required: false
+          # Valores posibles: multiple, boolean
+          schema:
+            type: string
+            enum:
+              - multiple
+              - boolean
+            example: multiple
+      responses:
+        '200':
+          description: Preguntas obtenidas correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response_code:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Question'
+components:
+  schemas:
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 9
+        name:
+          type: string
+          example: General Knowledge
+    Question:
+      type: object
+      properties:
+        category:
+          type: string
+          example: Video Games
+        type:
+          type: string
+          example: multiple
+        difficulty:
+          type: string
+          example: easy
+        question:
+          type: string
+          example: What was the first game to be released in the Tony Hawk's series?
+        correct_answer:
+          type: string
+          example: Pro Skater
+        incorrect_answers:
+          type: array
+          items:
+            type: string
+          example:
+            - Shred Session
+            - Ride
+            - Skate Jam
