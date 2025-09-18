@@ -93,10 +93,12 @@ SOAP es un protocolo estricto y formal, mientras que REST es un estilo arquitect
 === Fundamentos de SOAP
 
 
-==== Arquitrectura y principios de SOAP
+==== Arquitectura y principios de SOAP
 
-SOAP se basa en una arquitectura cliente-servidor donde el cliente envía una solicitud al servidor, que procesa la petición y devuelve una respuesta. Los principios fundamentales de SOAP incluyen:
-* **Independencia de plataforma y lenguaje**: SOAP puede ser implementado en cualquier plataforma o lenguaje de programación que soporte XML y HTTP.
+SOAP se basa en una arquitectura cliente-servidor donde el cliente envía una solicitud al servidor, que procesa la petición y devuelve una respuesta. 
+
+.Los principios fundamentales de SOAP incluyen:
+* **Independencia de plataforma y lenguaje**: SOAP puede ser implementado en cualquier plataforma o lenguaje de programación que soporte XML.
 * **Extensibilidad**: SOAP permite la inclusión de extensiones a través del uso de headers personalizados.
 * **Neutralidad**: SOAP no está ligado a ningún protocolo de transporte específico, aunque comúnmente se utiliza sobre HTTP/HTTPS.
 * **Formalidad**: SOAP define un conjunto estricto de reglas para la estructura de los mensajes, asegurando la interoperabilidad entre diferentes sistemas.
