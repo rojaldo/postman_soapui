@@ -456,6 +456,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_fundamentos_de_soap">Fundamentos de SOAP</a>
 <ul class="sectlevel3">
 <li><a href="#_arquitectura_y_principios_de_soap">Arquitectura y principios de SOAP</a></li>
+<li><a href="#_reglas_en_soap">Reglas en SOAP</a></li>
 <li><a href="#_ventajas_y_desventajas_de_soap">Ventajas y desventajas de SOAP</a></li>
 </ul>
 </li>
@@ -748,9 +749,133 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><strong>Neutralidad</strong>: SOAP no está ligado a ningún protocolo de transporte específico, aunque comúnmente se utiliza sobre HTTP/HTTPS.</p>
 </li>
 <li>
-<p><strong>Formalidad</strong>: SOAP define un conjunto estricto de reglas para la estructura de los mensajes, asegurando la interoperabilidad entre diferentes sistemas.</p>
+<p><strong>Formalidad</strong>: SOAP define un conjunto de reglas para la estructura de los mensajes, asegurando la interoperabilidad entre diferentes sistemas.</p>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_reglas_en_soap">Reglas en SOAP</h4>
+<div class="paragraph">
+<p>SOAP sigue un conjunto de reglas estrictas para garantizar la interoperabilidad y el correcto funcionamiento de los servicios web. Estas reglas incluyen:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Estructura del mensaje SOAP</strong>:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Todo mensaje SOAP debe ser un documento XML bien formado.</p>
+</li>
+<li>
+<p>Debe contener un elemento raíz <code>&lt;Envelope&gt;</code> que delimita el inicio y el fin del mensaje.</p>
+</li>
+<li>
+<p>Dentro del <code>&lt;Envelope&gt;</code>, debe haber dos elementos principales:</p>
+</li>
+<li>
+<p><code>&lt;Header&gt;</code> (opcional): Contiene información de control, como autenticación o enrutamiento.</p>
+</li>
+<li>
+<p><code>&lt;Body&gt;</code>: Contiene los datos de la solicitud o respuesta.</p>
+</li>
+<li>
+<p><code>&lt;Fault&gt;</code> (opcional): Proporciona información sobre errores que pueden ocurrir durante el procesamiento del mensaje.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Uso de namespaces</strong>:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Los mensajes SOAP deben usar namespaces XML para evitar conflictos de nombres entre elementos.</p>
+</li>
+<li>
+<p>El namespace estándar de SOAP es <code><a href="http://schemas.xmlsoap.org/soap/envelope/" class="bare">http://schemas.xmlsoap.org/soap/envelope/</a></code>.</p>
+</li>
+<li>
+<p>Los elementos específicos del servicio deben definirse en un namespace separado.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Neutralidad de transporte</strong>:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>SOAP no está ligado a un protocolo de transporte específico. Aunque comúnmente se usa con HTTP/HTTPS, también puede funcionar sobre SMTP, TCP, entre otros.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Extensibilidad</strong>:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>SOAP permite agregar extensiones mediante el uso de headers personalizados en el <code>&lt;Header&gt;</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Manejo de errores</strong>:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Los errores deben representarse mediante el elemento <code>&lt;Fault&gt;</code> dentro del <code>&lt;Body&gt;</code>.</p>
+</li>
+<li>
+<p>El <code>&lt;Fault&gt;</code> debe incluir información detallada sobre el error, como el código y la descripción.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Formato de datos</strong>:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Los datos en los mensajes SOAP deben estar codificados en XML.</p>
+</li>
+<li>
+<p>Se pueden usar esquemas XML (XSD) para definir y validar los tipos de datos.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Interoperabilidad</strong>:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Los mensajes SOAP deben seguir estrictamente las especificaciones del protocolo para garantizar que puedan ser procesados por cualquier sistema compatible.</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo de una estructura de mensaje SOAP con Fault:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"&gt;
+   &lt;soapenv:Header/&gt;
+   &lt;soapenv:Body&gt;
+      &lt;soapenv:Fault&gt;
+         &lt;faultcode&gt;soapenv:Client&lt;/faultcode&gt;
+         &lt;faultstring&gt;Error en la solicitud&lt;/faultstring&gt;
+         &lt;detail&gt;
+            &lt;errorDetails&gt;Detalles del error específico&lt;/errorDetails&gt;
+         &lt;/detail&gt;
+      &lt;/soapenv:Fault&gt;
+   &lt;/soapenv:Body&gt;
+&lt;/soapenv:Envelope&gt;</code></pre>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -1916,7 +2041,7 @@ project.setPropertyValue("userId", json.userId);</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-18 11:58:55 +0200
+Last updated 2025-10-05 12:57:07 +0200
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

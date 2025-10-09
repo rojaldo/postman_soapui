@@ -101,7 +101,58 @@ SOAP se basa en una arquitectura cliente-servidor donde el cliente envía una so
 * **Independencia de plataforma y lenguaje**: SOAP puede ser implementado en cualquier plataforma o lenguaje de programación que soporte XML.
 * **Extensibilidad**: SOAP permite la inclusión de extensiones a través del uso de headers personalizados.
 * **Neutralidad**: SOAP no está ligado a ningún protocolo de transporte específico, aunque comúnmente se utiliza sobre HTTP/HTTPS.
-* **Formalidad**: SOAP define un conjunto estricto de reglas para la estructura de los mensajes, asegurando la interoperabilidad entre diferentes sistemas.
+* **Formalidad**: SOAP define un conjunto de reglas para la estructura de los mensajes, asegurando la interoperabilidad entre diferentes sistemas.
+
+==== Reglas en SOAP
+
+SOAP sigue un conjunto de reglas estrictas para garantizar la interoperabilidad y el correcto funcionamiento de los servicios web. Estas reglas incluyen:
+
+1. **Estructura del mensaje SOAP**:
+   - Todo mensaje SOAP debe ser un documento XML bien formado.
+   - Debe contener un elemento raíz `<Envelope>` que delimita el inicio y el fin del mensaje.
+   - Dentro del `<Envelope>`, debe haber dos elementos principales:
+     - `<Header>` (opcional): Contiene información de control, como autenticación o enrutamiento.
+     - `<Body>`: Contiene los datos de la solicitud o respuesta.
+     - `<Fault>` (opcional): Proporciona información sobre errores que pueden ocurrir durante el procesamiento del mensaje.
+
+2. **Uso de namespaces**:
+   - Los mensajes SOAP deben usar namespaces XML para evitar conflictos de nombres entre elementos.
+   - El namespace estándar de SOAP es `http://schemas.xmlsoap.org/soap/envelope/`.
+   - Los elementos específicos del servicio deben definirse en un namespace separado.
+
+3. **Neutralidad de transporte**:
+   - SOAP no está ligado a un protocolo de transporte específico. Aunque comúnmente se usa con HTTP/HTTPS, también puede funcionar sobre SMTP, TCP, entre otros.
+
+4. **Extensibilidad**:
+   - SOAP permite agregar extensiones mediante el uso de headers personalizados en el `<Header>`.
+
+5. **Manejo de errores**:
+   - Los errores deben representarse mediante el elemento `<Fault>` dentro del `<Body>`.
+   - El `<Fault>` debe incluir información detallada sobre el error, como el código y la descripción.
+
+6. **Formato de datos**:
+   - Los datos en los mensajes SOAP deben estar codificados en XML.
+   - Se pueden usar esquemas XML (XSD) para definir y validar los tipos de datos.
+
+7. **Interoperabilidad**:
+   - Los mensajes SOAP deben seguir estrictamente las especificaciones del protocolo para garantizar que puedan ser procesados por cualquier sistema compatible.
+
+.Ejemplo de una estructura de mensaje SOAP con Fault:
+[source,xml]
+----
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soapenv:Fault>
+         <faultcode>soapenv:Client</faultcode>
+         <faultstring>Error en la solicitud</faultstring>
+         <detail>
+            <errorDetails>Detalles del error específico</errorDetails>
+         </detail>
+      </soapenv:Fault>
+   </soapenv:Body>
+</soapenv:Envelope>
+----
 
 ==== Ventajas y desventajas de SOAP
 

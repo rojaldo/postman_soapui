@@ -1,0 +1,129 @@
+openapi: 3.0.3
+info:
+  title: NASA APOD API
+  description: >
+    La API de APOD (Astronomy Picture of the Day) proporciona la imagen astronómica del día, con una explicación escrita por astrónomos profesionales de la NASA. 
+    Puedes obtener la imagen del día actual o especificar una fecha específica.
+  version: 1.0.0
+  contact:
+    name: NASA Open APIs
+    url: https://api.nasa.gov
+    email: hola@api.nasa.gov
+
+servers:
+  - url: https://api.nasa.gov
+
+paths:
+  /planetary/apod:
+    get:
+      summary: Obtiene la imagen astronómica del día (APOD)
+      description: >
+        Devuelve información sobre la imagen astronómica del día. Puedes pasar una fecha para obtener una imagen específica. Puede ser una imagen o un video. Para usar la API, necesitas una clave API que puedes obtener gratis en https://api.nasa.gov.      
+      parameters:
+        - name: api_key
+          in: query
+          description: >
+            Tu clave API de NASA. Puedes usar `DEMO_KEY` para pruebas.
+          required: true
+          schema:
+            type: string
+            example: DEMO_KEY
+        - name: date
+          in: query
+          description: >
+            Fecha de la imagen deseada en formato YYYY-MM-DD. Si se omite, se devuelve la imagen del día actual.
+          required: false
+          schema:
+            type: string
+            format: date
+            example: 2025-10-02
+        - name: thumbs
+          in: query
+          description: >
+            Si se establece en `true`, devuelve miniaturas para los videos.
+          required: false
+          schema:
+            type: boolean
+            default: false
+        - name: start_date
+          in: query
+          description: >
+            Fecha de inicio para obtener un rango de imágenes en formato YYYY-MM-DD. Si se proporciona, `end_date` también debe ser proporcionado.
+          required: false
+          schema:
+            type: string
+            format: date
+            example: 2025-10-01
+        - name: end_date
+          in: query
+          description: >
+            Fecha de fin para obtener un rango de imágenes en formato YYYY-MM-DD. Si se proporciona, `start_date` también debe ser proporcionado.
+          required: false
+          schema:
+            type: string
+            format: date
+            example: 2025-10-02
+        - name: count
+          in: query
+          description: >
+            Número de imágenes aleatorias a devolver. Si se proporciona, no se deben proporcionar `date`, `start_date` o `end_date`.
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            example: 5
+
+      responses:
+        '200':
+          description: Respuesta exitosa con la imagen del día.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  date:
+                    type: string
+                    format: date
+                    example: "2025-10-02"
+                  explanation:
+                    type: string
+                    example: "Una imagen tomada por el telescopio Hubble mostrando galaxias en colisión."
+                  media_type:
+                    type: string
+                    enum: [image, video]
+                    example: image
+                  service_version:
+                    type: string
+                    example: "v1"
+                  title:
+                    type: string
+                    example: "Galaxias en colisión"
+                  url:
+                    type: string
+                    format: uri
+                    example: "https://apod.nasa.gov/apod/image/2301/collision.jpg"
+                  hdurl:
+                    type: string
+                    format: uri
+                    example: "https://apod.nasa.gov/apod/image/2301/collision_hd.jpg"
+                  thumbnail_url:
+                    type: string
+                    format: uri
+                    example: "https://img.youtube.com/vi/abc123/0.jpg"
+        '400':
+          description: Solicitud inválida (parámetros incorrectos)
+        '403':
+          description: Acceso prohibido – clave API inválida o sin permisos
+        '500':
+          description: Error interno del servidor
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: query
+      name: api_key
+
+security:
+  - ApiKeyAuth: []

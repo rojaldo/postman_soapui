@@ -50,7 +50,7 @@ paths:
       parameters:
         - name: amount
           in: query 
-          description: Número de preguntas a obtener (mínimo 1, máximo 50).
+          description: Número de preguntas a obtener 
           required: true
           schema:
             type: integer
@@ -63,6 +63,8 @@ paths:
           required: false
           schema:
             type: integer
+            minimum: 9
+            maximum: 32
             example: 9
         - name: difficulty
           in: query
@@ -97,10 +99,43 @@ paths:
                 properties:
                   response_code:
                     type: integer
+                    example: 0
                   results:
                     type: array
                     items:
                       $ref: '#/components/schemas/Question'
+        '400':
+          description: Solicitud incorrecta (parámetros inválidos).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response_code:
+                    type: integer
+                    example: 1
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Question'
+                    example: []
+        '500':
+          description: Error del servidor.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response_code:
+                    type: integer
+                    example: 2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Question'
+                    example: []
+    
+
 components:
   schemas:
     Category:

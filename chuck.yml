@@ -1,0 +1,98 @@
+openapi: 3.0.3
+info:
+  title: Chuck Norris Jokes API
+  description: API para obtener chistes aleatorios de Chuck Norris, listados por categoría y búsqueda libre.
+  version: 1.0.0
+servers:
+  - url: https://api.chucknorris.io
+paths:
+  /jokes/random:
+    get:
+      summary: Retrieve a random joke
+      description: Obtiene un chiste aleatorio de Chuck Norris. Se puede filtrar por categoría.
+      parameters:
+        - name: category
+          in: query
+          required: false
+          description: Nombre de la categoría para filtrar los chistes.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Joke object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Joke'
+  /jokes/categories:
+    get:
+      summary: Retrieve categories list
+      description: Obtiene la lista de categorías disponibles.
+      responses:
+        '200':
+          description: Lista de categorías
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /jokes/search:
+    get:
+      summary: Search jokes
+      description: Busca chistes de Chuck Norris por texto libre.
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: Texto a buscar en los chistes.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Resultados de búsqueda
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    description: Total de resultados encontrados.
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Joke'
+components:
+  schemas:
+    Joke:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            type: string
+          example: []
+        created_at:
+          type: string
+          format: date-time
+          example: "2025-10-02T00:00:00Z"
+        icon_url:
+          type: string
+          format: uri
+          example: "https://assets.chucknorris.host/img/avatar/chuck-norris.png"
+        id:
+          type: string
+          example: "abc123"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2025-10-02T00:00:00Z"
+        url:
+          type: string
+          format: uri
+          example: "https://api.chucknorris.io/jokes/abc123"
+        value:
+          type: string
+          description: Texto del chiste
+          example: "Chuck Norris counted to infinity. Twice."
