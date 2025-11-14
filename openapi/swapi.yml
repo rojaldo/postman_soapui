@@ -1,0 +1,735 @@
+openapi: '3.0.3'
+info:
+  title: Star Wars API (SWAPI)
+  description: The Star Wars API is the world's first fully open Star Wars data source, aggregating all structured data such as characters, planets, and starships.
+  version: '1.0'
+  contact:
+    name: SWAPI Team
+    url: https://swapi.dev
+    email: contact@swapi.dev
+servers:
+  - url: https://swapi.dev/api/
+    description: The Star Wars API server
+  - url: http://localhost:3000/api/
+    description: Local Development Server
+
+paths:
+  /films:
+    get:
+      summary: Get all films
+      description: Retrieve a list of all Star Wars films
+      parameters:
+        - name: format
+          in: query
+          description: Specify the response format in english or wookiee
+          required: false
+          schema:
+            type: string
+            example: wookiee
+        - name: search
+          in: query
+          description: Search term to filter films by title
+          required: false
+          schema:
+            type: string
+            example: hope
+        - name: page
+          in: query
+          description: Page number for paginated results
+          required: false
+          schema:
+            type: integer
+            enum:
+              - 1
+            example: 1
+      responses:
+        '200':
+          description: List of films retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 6
+                  next:
+                    type: string
+                    nullable: true
+                    example: null
+                  previous:
+                    type: string
+                    nullable: true
+                    example: null
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Film'
+          
+  /films/{id}:
+    get:
+      summary: Get a film by ID
+      description: Retrieve a specific Star Wars film by its ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the film to retrieve
+          required: true
+          schema:
+            type: integer
+            example: 1
+
+      responses:
+        '200':
+          description: Film retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Film'
+  /people:
+    get:
+      summary: Get all people
+      description: Retrieve a list of all Star Wars characters
+      parameters:
+        - name: format
+          in: query
+          description: Specify the response format in english or wookiee
+          required: false
+          schema:
+            type: string
+            example: wookiee
+        - name: search
+          in: query
+          description: Search term to filter people by name
+          required: false
+          schema:
+            type: string
+            example: luke
+        - name: page
+          in: query
+          description: Page number for paginated results
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: List of people retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Person'
+  /people/{id}:
+    get:
+      summary: Get a person by ID
+      description: Retrieve a specific Star Wars character by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Person retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+  /planets:
+    get:
+      summary: Get all planets
+      description: Retrieve a list of all Star Wars planets
+      parameters:
+        - name: format
+          in: query
+          description: Specify the response format in english or wookiee
+          required: false
+          schema:
+            type: string
+            example: wookiee
+        - name: search
+          in: query
+          description: Search term to filter planets by name
+          required: false
+          schema:
+            type: string
+            example: tatooine
+        - name: page
+          in: query
+          description: Page number for paginated results
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: List of planets retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Planet'
+  /planets/{id}:
+    get:
+      summary: Get a planet by ID
+      description: Retrieve a specific Star Wars planet by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Planet retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Planet'
+  /species:
+    get:
+      summary: Get all species
+      description: Retrieve a list of all Star Wars species
+      parameters:
+        - name: format
+          in: query
+          description: Specify the response format in english or wookiee
+          required: false
+          schema:
+            type: string
+            example: wookiee
+        - name: search
+          in: query
+          description: Search term to filter species by name
+          required: false
+          schema:
+            type: string
+            example: human
+        - name: page
+          in: query
+          description: Page number for paginated results
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: List of species retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Species'
+  /species/{id}:
+    get:
+      summary: Get a species by ID
+      description: Retrieve a specific Star Wars species by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Species retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Species'
+  /starships:
+    get:
+      summary: Get all starships
+      description: Retrieve a list of all Star Wars starships
+      parameters:
+        - name: format
+          in: query
+          description: Specify the response format in english or wookiee
+          required: false
+          schema:
+            type: string
+            example: wookiee
+        - name: search
+          in: query
+          description: Search term to filter starships by name
+          required: false
+          schema:
+            type: string
+            example: x-wing
+        - name: page
+          in: query
+          description: Page number for paginated results
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: List of starships retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Starship'
+  /starships/{id}:
+    get:
+      summary: Get a starship by ID
+      description: Retrieve a specific Star Wars starship by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Starship retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Starship'
+  /vehicles:
+    get:
+      summary: Get all vehicles
+      description: Retrieve a list of all Star Wars vehicles
+      parameters:
+        - name: format
+          in: query
+          description: Specify the response format in english or wookiee
+          required: false
+          schema:
+            type: string
+            example: wookiee
+        - name: search
+          in: query
+          description: Search term to filter vehicles by name
+          required: false
+          schema:
+            type: string
+            example: sand-crawler
+        - name: page
+          in: query
+          description: Page number for paginated results
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: List of vehicles retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Vehicle'
+
+components:
+  schemas:
+    Film:
+      type: object
+      properties:
+        url:
+          type: string
+          example: "https://swapi.dev/api/films/1/"
+        title:
+          type: string
+          example: "A New Hope"
+        episode_id:
+          type: integer
+          example: 4
+        opening_crawl:
+          type: string
+          example: "It is a period of civil war..."
+        director:
+          type: string
+          example: "George Lucas"
+        producer:
+          type: string
+          example: "Gary Kurtz, Rick McCallum"
+        release_date:
+          type: string
+          format: date
+          example: "1977-05-25"
+        characters:
+          type: array
+          items:
+            type: string
+          example:
+            - "https://swapi.dev/api/people/1/"
+            - "https://swapi.dev/api/people/2/"
+        planets:
+          type: array
+          items:
+            type: string
+          example:
+            - "https://swapi.dev/api/planets/1/"
+        starships:
+          type: array
+          items:
+            type: string
+          example:
+            - "https://swapi.dev/api/starships/2/"
+        vehicles:
+          type: array
+          items:
+            type: string
+          example:
+            - "https://swapi.dev/api/vehicles/4/"
+        species:
+          type: array
+          items:
+            type: string
+          example:
+            - "https://swapi.dev/api/species/1/"
+        created:
+          type: string
+          format: date-time
+          example: "2014-12-10T14:23:31.880000Z"
+        edited:
+          type: string
+          format: date-time
+          example: "2014-12-12T11:24:39.858000Z"
+    Person:
+      type: object
+      properties:
+        url:
+          type: string
+          example: "https://swapi.dev/api/people/1/"
+        name:
+          type: string
+          example: "Luke Skywalker"
+        height:
+          type: string
+          example: "172"
+        mass:
+          type: string
+          example: "77"
+        hair_color:
+          type: string
+          example: "blond"
+        skin_color:
+          type: string
+          example: "fair"
+        eye_color:
+          type: string
+          example: "blue"
+        birth_year:
+          type: string
+          example: "19BBY"
+        gender:
+          type: string
+          example: "male"
+        homeworld:
+          type: string
+          example: "https://swapi.dev/api/planets/1/"
+        films:
+          type: array
+          items:
+            type: string
+        species:
+          type: array
+          items:
+            type: string
+        vehicles:
+          type: array
+          items:
+            type: string
+        starships:
+          type: array
+          items:
+            type: string
+        created:
+          type: string
+          format: date-time
+        edited:
+          type: string
+          format: date-time
+    Planet:
+      type: object
+      properties:
+        url:
+          type: string
+          example: "https://swapi.dev/api/planets/1/"
+        name:
+          type: string
+          example: "Tatooine"
+        rotation_period:
+          type: string
+          example: "23"
+        orbital_period:
+          type: string
+          example: "304"
+        diameter:
+          type: string
+          example: "10465"
+        climate:
+          type: string
+          example: "arid"
+        gravity:
+          type: string
+          example: "1 standard"
+        terrain:
+          type: string
+          example: "desert"
+        surface_water:
+          type: string
+          example: "1"
+        population:
+          type: string
+          example: "200000"
+        residents:
+          type: array
+          items:
+            type: string
+        films:
+          type: array
+          items:
+            type: string
+        created:
+          type: string
+          format: date-time
+        edited:
+          type: string
+          format: date-time
+    Species:
+      type: object
+      properties:
+        url:
+          type: string
+          example: "https://swapi.dev/api/species/1/"
+        name:
+          type: string
+          example: "Human"
+        classification:
+          type: string
+          example: "mammal"
+        designation:
+          type: string
+          example: "sentient"
+        average_height:
+          type: string
+          example: "180"
+        average_lifespan:
+          type: string
+          example: "120"
+        eye_colors:
+          type: string
+          example: "brown, blue, green, yellow, black, orange"
+        hair_colors:
+          type: string
+          example: "blonde, brown, black, red"
+        skin_colors:
+          type: string
+          example: "caucasian, black, asian, hispanic"
+        language:
+          type: string
+          example: "Galactic Basic"
+        homeworld:
+          type: string
+          example: "https://swapi.dev/api/planets/1/"
+        people:
+          type: array
+          items:
+            type: string
+        films:
+          type: array
+          items:
+            type: string
+        created:
+          type: string
+          format: date-time
+        edited:
+          type: string
+          format: date-time
+    Starship:
+      type: object
+      properties:
+        url:
+          type: string
+          example: "https://swapi.dev/api/starships/9/"
+        name:
+          type: string
+          example: "X-Wing"
+        model:
+          type: string
+          example: "T-65 X-wing starfighter"
+        manufacturer:
+          type: string
+          example: "Incom Corporation"
+        cost_in_credits:
+          type: string
+          example: "149999"
+        length:
+          type: string
+          example: "12.9"
+        max_atmosphering_speed:
+          type: string
+          example: "1050"
+        crew:
+          type: string
+          example: "1"
+        passengers:
+          type: string
+          example: "0"
+        cargo_capacity:
+          type: string
+          example: "64"
+        consumables:
+          type: string
+          example: "5 days"
+        hyperdrive_rating:
+          type: string
+          example: "1.0"
+        mglt:
+          type: string
+          example: "100"
+        starship_class:
+          type: string
+          example: "Starfighter"
+        pilots:
+          type: array
+          items:
+            type: string
+        films:
+          type: array
+          items:
+            type: string
+        created:
+          type: string
+          format: date-time
+        edited:
+          type: string
+          format: date-time
+    Character:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Luke Skywalker"
+        height:
+          type: string
+          example: "172"
+        mass:
+          type: string
+          example: "77"
+        homeworld:
+          type: string
+          example: "Tatooine"
+    Vehicle:
+      type: object
+      properties:
+        url:
+          type: string
+          example: "https://swapi.dev/api/vehicles/4/"
+        name:
+          type: string
+          example: "Sand Crawler"
+        model:
+          type: string
+          example: "Digger Crawler"
+        manufacturer:
+          type: string
+          example: "Corellia Mining Corporation"
+        cost_in_credits:
+          type: string
+          example: "150000"
+        length:
+          type: string
+          example: "36.8"
+        max_atmosphering_speed:
+          type: string
+          example: "30"
+        crew:
+          type: string
+          example: "46"
+        passengers:
+          type: string
+          example: "30"
+        cargo_capacity:
+          type: string
+          example: "50000"
+        consumables:
+          type: string
+          example: "2 months"
+        vehicle_class:
+          type: string
+          example: "wheeled"
+        pilots:
+          type: array
+          items:
+            type: string
+        films:
+          type: array
+          items:
+            type: string
+        created:
+          type: string
+          format: date-time
+        edited:
+          type: string
+          format: date-time
