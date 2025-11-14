@@ -1,0 +1,244 @@
+openapi: 3.0.3
+info:
+  title: Chuck Norris Jokes API
+  description: API for retrieving Chuck Norris jokes
+  version: 1.0.0
+  contact:
+    name: Chuck Norris IO
+    url: https://api.chucknorris.io
+
+servers:
+  - url: https://api.chucknorris.io
+    description: Production server
+
+paths:
+  /jokes/random:
+    get:
+      summary: Retrieve a random Chuck Norris joke
+      description: Returns a random Chuck Norris joke in JSON format
+      operationId: getRandomJoke
+      parameters:
+        - name: category
+          in: query
+          description: Category to filter jokes
+          required: false
+          schema:
+            type: string
+            enum:
+              - animal
+              - career
+              - celebrity
+              - dev
+              - explicit
+              - fashion
+              - food
+              - history
+              - money
+              - movie
+              - music
+              - political
+              - religion
+              - science
+              - sport
+              - travel
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Joke'
+              example:
+                categories: []
+                created_at: "2020-01-05 13:42:28.984661"
+                icon_url: "https://api.chucknorris.io/img/avatar/chuck-norris.png"
+                id: "2aDeXc2WR_uo7gfgFKfYBA"
+                updated_at: "2020-01-05 13:42:28.984661"
+                url: "https://api.chucknorris.io/jokes/2aDeXc2WR_uo7gfgFKfYBA"
+                value: "Chuck Norris is so fast he can turn off the light and be in bed before it's dark."
+        '400':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                timestamp: "2025-10-30T16:12:36.918Z"
+                status: 400
+                error: "Bad Request"
+                path: "/jokes/random"
+
+  /jokes/categories:
+    get:
+      summary: Retrieve list of available categories
+      description: Returns all available joke categories
+      operationId: getCategories
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  enum:
+                    - animal
+                    - career
+                    - celebrity
+                    - dev
+                    - explicit
+                    - fashion
+                    - food
+                    - history
+                    - money
+                    - movie
+                    - music
+                    - political
+                    - religion
+                    - science
+                    - sport
+                    - travel
+              example:
+                - animal
+                - career
+                - celebrity
+                - dev
+                - explicit
+                - fashion
+                - food
+                - history
+                - money
+                - movie
+                - music
+                - political
+                - religion
+                - science
+                - sport
+                - travel
+
+  /jokes/search:
+    get:
+      summary: Free text search for jokes
+      description: Search for Chuck Norris jokes by query string
+      operationId: searchJokes
+      parameters:
+        - name: query
+          in: query
+          description: Search query string
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Joke:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            type: string
+            enum:
+              - animal
+              - career
+              - celebrity
+              - dev
+              - explicit
+              - fashion
+              - food
+              - history
+              - money
+              - movie
+              - music
+              - political
+              - religion
+              - science
+              - sport
+              - travel
+          description: List of categories the joke belongs to
+          example: []
+        created_at:
+          type: string
+          description: Timestamp when the joke was created
+          example: "2025-10-30T16:12:36.918Z"
+        icon_url:
+          type: string
+          format: uri
+          description: URL of Chuck Norris avatar icon
+          example: "https://example.com/icon.png"
+        id:
+          type: string
+          description: Unique identifier for the joke
+          example: "12345"
+        updated_at:
+          type: string
+          description: Timestamp when the joke was last updated
+          example: "2025-10-30T16:12:36.918Z"
+        url:
+          type: string
+          format: uri
+          description: URL to the joke
+          example: "https://api.chucknorris.io/jokes/12345"
+        value:
+          type: string
+          description: The actual joke text
+          example: "Chuck Norris can divide by zero."
+      required:
+        - categories
+        - created_at
+        - icon_url
+        - id
+        - updated_at
+        - url
+        - value
+
+    SearchResult:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total number of results found
+          example: 1
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Joke'
+      required:
+        - total
+        - result
+
+    Error:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp when the error occurred
+        status:
+          type: integer
+          description: HTTP status code
+        error:
+          type: string
+          description: Error message
+        path:
+          type: string
+          description: Request path that caused the error
+      required:
+        - timestamp
+        - status
+        - error
+        - path

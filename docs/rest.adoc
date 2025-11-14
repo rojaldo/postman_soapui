@@ -1,0 +1,6848 @@
+= Guía Completa de Arquitectura REST
+
+== 1. Introducción a REST
+
+=== 1.1 ¿Qué es REST?
+
+REST (Representational State Transfer) es un estilo arquitectónico para diseñar sistemas distribuidos basados en web.
+
+==== Definición de Componentes
+* **Representational**: Los recursos se representan en diferentes formatos (JSON, XML, HTML)
+* **State**: El estado actual del recurso
+* **Transfer**: Se transfiere entre cliente y servidor mediante HTTP
+
+==== Características Fundamentales
+* Estilo arquitectónico basado en web (aprovecha protocolo HTTP)
+* Utiliza recursos identificables mediante URIs/URLs
+* Operaciones estándar mediante métodos HTTP (GET, POST, PUT, DELETE)
+* Comunicación stateless (sin estado en servidor)
+* Respuestas con códigos de estado HTTP explícitos
+* Formato de datos agnóstico del protocolo
+
+==== Comparativa: REST vs SOAP vs RPC
+
+===== SOAP (Simple Object Access Protocol)
+* Protocolo pesado basado en XML
+* Mayor complejidad y overhead
+* Requiere especificaciones WSDL
+* Mejor para sistemas empresariales complejos
+* Difícil de debuggear
+* Requiere librerías específicas
+
+===== RPC (Remote Procedure Call)
+* Enfoque: "Llamar una función remota"
+* Centrado en acciones (verbos)
+* Difícil de cachear
+* Baja escalabilidad
+* Ejemplo: XML-RPC, JSON-RPC
+* Acoplamiento cliente-servidor
+
+===== REST (Recomendado para web moderna)
+* Arquitectura ligera y flexible
+* Centrada en recursos (sustantivos)
+* Aprovecha HTTP nativamente
+* Fácil de cachear y escalar
+* Debuggable con navegador o curl
+* Mayor flexibilidad
+
+==== Ventajas Principales de REST
+* **Simplicidad**: Fácil de entender e implementar
+* **Escalabilidad**: Diseñado para escalar horizontalmente
+* **Cacheable**: Aprovecha los mecanismos de caché HTTP
+* **Independencia**: No depende de lenguaje o plataforma
+* **Amplio soporte**: Soportado en navegadores, herramientas y frameworks
+* **Alineación web**: Sigue estándares HTTP existentes
+* **Menor ancho de banda**: Respuestas más compactas
+* **Stateless**: Facilita la distribución de carga
+
+==== Desventajas y Limitaciones de REST
+* Puede requerir múltiples requests para datos complejos
+* Menos eficiente que RPC en algunos casos
+* Requiere disciplina en el diseño
+* Puede resultar en "over-fetching" o "under-fetching"
+
+==== Casos de Uso Ideales
+* APIs web públicas y privadas
+* Aplicaciones mobile (iOS, Android)
+* Integraciones entre sistemas
+* Arquitecturas de microservicios
+* Single Page Applications (SPA)
+* IoT y sistemas distribuidos
+* Aplicaciones en tiempo real
+* Backend para múltiples clientes
+
+==== Cuándo NO usar REST
+* Sistemas que requieren comunicación en tiempo real compleja (preferir WebSockets)
+* Aplicaciones con esquemas muy complejos y cambiantes (considerar GraphQL)
+* Sistemas de comunicación de baja latencia crítica
+* Cuando se necesita control fino sobre el protocolo de transporte
+
+=== 1.2 Historia y Evolución
+
+==== Orígenes: La Tesis de Roy Fielding (2000)
+* Roy Fielding, investigador del W3C y Apache Software Foundation
+* Publicó su tesis doctoral "Architectural Styles and the Design of Network-based Software Architectures"
+* Definió formalmente los principios de REST basándose en la arquitectura web existente
+* Objetivo: Crear un modelo que explicara por qué HTTP funcionaba tan bien
+* Influencia de trabajos previos sobre estilos arquitectónicos
+
+==== Evolución del Protocolo HTTP
+
+===== HTTP/0.9 (1991)
+* Versión original muy simple
+* Solo soportaba GET
+* Sin headers
+* Conexión de corta duración
+
+===== HTTP/1.0 (1996)
+* Introdujo POST y HEAD
+* Headers de solicitud y respuesta
+* Códigos de estado HTTP (2xx, 3xx, 4xx, 5xx)
+* Tipos de contenido (Content-Type)
+* Primera versión con características REST-friendly
+
+===== HTTP/1.1 (1997)
+* Mejoras significativas de performance
+* PUT y DELETE (pilares de REST)
+* Keep-Alive (conexiones persistentes)
+* Caching mejorado (ETag, Last-Modified)
+* Compresión (Content-Encoding)
+* Host virtual support
+
+===== HTTP/2 (2015)
+* Multiplexing de streams
+* Compresión de headers
+* Push de recursos
+* Mejor performance en conexiones lentas
+
+===== HTTP/3 (2022)
+* Basado en QUIC
+* Reducción de latencia
+* Mejor manejo de pérdida de paquetes
+
+==== Adopción en la Industria
+
+===== Primeros Adoptantes (2000-2005)
+* Amazon: Lanzó Amazon Web Services (AWS) con API REST en 2002
+* Flickr: API REST para compartir fotos
+* Del.icio.us: Servicio de marcadores con REST
+* Inicio de la "Web 2.0"
+
+===== Consolidación (2005-2010)
+* Twitter: API REST pública en 2006
+* Facebook: Graph API basada en REST
+* Google: APIs REST para múltiples servicios
+* Adopción masiva en aplicaciones web
+
+===== Madurez (2010-2015)
+* REST se convierte en estándar de facto
+* Aparece OpenAPI/Swagger para documentación
+* Microservicios basados en REST
+* Mobile APIs (iOS y Android)
+
+===== Era Moderna (2015-Presente)
+* REST consolidado como arquitectura principal
+* Competencia con GraphQL
+* APIs REST en IoT y Edge Computing
+* Evolución hacia APIs más complejas
+* Hipermedia y HATEOAS ganan relevancia
+
+==== Hitos Importantes
+* 2000: Roy Fielding define REST formalmente
+* 2002: AWS lanza su API REST revolucionaria
+* 2006: Twitter API REST pública
+* 2010: Adopción masiva en empresas tecnológicas
+* 2014: Surge GraphQL como alternativa
+* 2020: REST sigue siendo el estándar dominante
+* 2023-2024: Evolución hacia APIs más especializadas
+
+==== Impacto en la Industria
+* Transformó la forma de diseñar aplicaciones web
+* Facilitó la integración entre sistemas
+* Posibilitó el desarrollo de microservicios
+* Permitió la explosión de las aplicaciones mobile
+* Basamento de la arquitectura cloud moderna
+* Estándar en IoT y sistemas distribuidos
+
+==== Competidores y Alternativas
+* **SOAP** (anterior a REST, aún en uso empresarial)
+* **GraphQL** (desde 2012, complemento o alternativa)
+* **gRPC** (Google, para sistemas de alto rendimiento)
+* **WebSockets** (para comunicación en tiempo real)
+* **Apache Thrift** (RPC alternativo)
+
+== 2. Principios Fundamentales de REST
+
+=== 2.1 Restricciones Arquitectónicas
+
+Las restricciones arquitectónicas son los principios fundamentales que definen a REST. Estas fueron formalmente definidas por Roy Fielding en su tesis doctoral.
+
+==== 1. Arquitectura Cliente-Servidor
+
+===== Descripción
+* Separación clara de responsabilidades entre cliente y servidor
+* El cliente inicia las solicitudes
+* El servidor responde a las solicitudes
+* Independencia en la evolución de ambos componentes
+
+===== Beneficios
+* Portabilidad del cliente (web, mobile, desktop)
+* Escalabilidad del servidor
+* Simplificación de arquitectura
+* Permite desarrollo independiente
+
+===== Ejemplo
+[source]
+----
+Cliente                          Servidor
+  |                                |
+  |---- GET /api/usuarios ----->   |
+  |                                |
+  |  <---- [JSON usuarios] -----   |
+  |                                |
+----
+
+==== 2. Stateless (Sin Estado)
+
+===== Descripción
+* El servidor NO almacena contexto de cliente
+* Cada solicitud contiene toda la información necesaria
+* No hay sesiones almacenadas en el servidor
+* Cada request es independiente
+
+===== Ventajas
+* Escalabilidad horizontal ilimitada
+* Facilita balanceo de carga
+* Simplifica recuperación ante fallos
+* Mejora el rendimiento
+* No requiere sincronización entre servidores
+
+===== Desventajas
+* Mayor tamaño de las solicitudes
+* Requiere más procesamiento por request
+* Necesita autenticación en cada solicitud
+
+===== Ejemplo Correcto (Stateless)
+[source,json]
+----
+Request Header:
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+El servidor no almacena sesión, valida el token en cada solicitud
+----
+
+===== Ejemplo Incorrecto (Stateful)
+[source]
+----
+Request 1: Login
+Session guardada en servidor bajo ID: abc123
+
+Request 2: GET /api/usuarios
+El servidor busca la sesión abc123 en memoria
+Esto viola el principio stateless
+----
+
+==== 3. Cacheable
+
+===== Descripción
+* Las respuestas deben indicar si pueden ser cacheadas
+* Aprovecha mecanismos de caché HTTP
+* Reduce tráfico de red
+* Mejora la experiencia del usuario
+
+===== Headers de Caché Importantes
+* `Cache-Control`: Define política de caché
+* `ETag`: Identificador de versión de recurso
+* `Last-Modified`: Fecha última modificación
+* `Expires`: Fecha de expiración
+
+===== Estrategias de Caché
+* **Cache-Control: public** - Cualquiera puede cachear
+* **Cache-Control: private** - Solo el cliente cachea
+* **Cache-Control: max-age=3600** - Válido por 1 hora
+* **Cache-Control: no-cache** - Revalidar antes de usar
+
+===== Ejemplo
+[source]
+----
+Response Headers:
+Cache-Control: public, max-age=3600
+ETag: "33a64df551"
+Last-Modified: Wed, 21 Oct 2025 07:28:00 GMT
+
+GET /api/usuarios
+Si no ha expirado → Se sirve del caché local
+Si ha expirado → Revalida con If-None-Match o If-Modified-Since
+----
+
+==== 4. Uniform Interface (Interfaz Uniforme)
+
+===== Descripción
+* Interfaz consistente entre clientes y servidor
+* Simplifica la arquitectura
+* Facilita la comprensión de la API
+* Se compone de 4 sub-restricciones
+
+===== Sub-restricción: Identificación de Recursos
+* Recursos identificables por URIs
+* Los URIs no cambian
+* Una URI representa un único recurso
+* Un recurso puede tener múltiples representaciones
+
+===== Sub-restricción: Manipulación de Recursos
+* Se manipulan a través de representaciones
+* El cliente envía la representación del nuevo estado
+* El servidor actualiza el recurso
+
+===== Sub-restricción: Mensajes Auto-descriptivos
+* Cada mensaje contiene información de cómo procesarlo
+* Incluye Content-Type, método HTTP, etc.
+* Reduce acoplamiento cliente-servidor
+
+===== Sub-restricción: HATEOAS (Hypermedia as the Engine of Application State)
+* Respuestas incluyen enlaces a otros recursos relacionados
+* El cliente descubre acciones disponibles
+* Disminuye el acoplamiento
+
+===== Ejemplo HATEOAS
+[source,json]
+----
+{
+  "id": 1,
+  "nombre": "Juan",
+  "email": "juan@example.com",
+  "_links": {
+    "self": {
+      "href": "/api/usuarios/1"
+    },
+    "todos": {
+      "href": "/api/usuarios"
+    },
+    "actualizar": {
+      "href": "/api/usuarios/1",
+      "method": "PUT"
+    },
+    "eliminar": {
+      "href": "/api/usuarios/1",
+      "method": "DELETE"
+    }
+  }
+}
+----
+
+==== 5. Layered System (Sistema en Capas)
+
+===== Descripción
+* Arquitectura en capas/niveles
+* Cada capa tiene responsabilidades específicas
+* El cliente no conoce si está conectado al servidor final
+* Intermediarios transparentes para el cliente
+
+===== Capas Típicas
+* **Capa de Presentación**: Interfaz con el cliente
+* **Capa de Negocio**: Lógica de aplicación
+* **Capa de Persistencia**: Acceso a datos
+* **Capa de Seguridad**: Autenticación y autorización
+
+===== Ventajas
+* Escalabilidad
+* Flexibilidad
+* Permite intermediarios (proxy, load balancer)
+* Mejora la seguridad (encriptación entre capas)
+* Facilita el testing y mantenimiento
+
+===== Ejemplo de Arquitectura en Capas
+[source]
+----
+Cliente
+   ↓
+[API Gateway]
+   ↓
+[Load Balancer]
+   ↓
+[Servidor Aplicación]
+   ↓
+[Caché Redis]
+   ↓
+[Base de Datos]
+
+El cliente no sabe cuántas capas hay, solo se comunica con la API
+----
+
+==== 6. Code on Demand (Bajo Demanda) - OPCIONAL
+
+===== Descripción
+* El servidor puede extender funcionalidad del cliente
+* Envía código ejecutable al cliente (JavaScript, applets)
+* Es la restricción OPCIONAL de REST
+* Menos común en APIs modernas
+
+===== Casos de Uso
+* JavaScript en aplicaciones web
+* Plugins descargables
+* Applets Java (histórico)
+
+===== Ventajas
+* Reduce funcionalidad del cliente
+* Actualización dinámica de comportamiento
+* Flexibilidad
+
+===== Desventajas
+* Reduce seguridad
+* Complejidad
+* Problemas de compatibilidad
+* Menos usado en APIs REST modernas
+
+===== Ejemplo
+[source,javascript]
+----
+// El servidor envía JavaScript que el cliente ejecuta
+const script = document.createElement('script');
+script.src = '/api/validadores.js';
+script.onload = function() {
+  // Usar funciones del servidor
+  validarFormulario(data);
+};
+document.head.appendChild(script);
+----
+
+==== Resumen de Restricciones
+
+[width="100%",options="header"]
+|===
+| Restricción | Obligatoria | Beneficio Principal | Desafío Principal
+| Cliente-Servidor | Sí | Separación de responsabilidades | Complejidad inicial
+| Stateless | Sí | Escalabilidad ilimitada | Requests más grandes
+| Cacheable | Sí | Mejor performance | Gestión de invalidación
+| Uniform Interface | Sí | Simplicidad y consistencia | Requiere disciplina
+| Layered System | Sí | Flexibilidad y seguridad | Latencia adicional
+| Code on Demand | No | Flexibilidad | Seguridad y complejidad
+|===
+
+=== 2.2 Componentes Clave
+
+Los componentes clave son los elementos fundamentales que conforman una arquitectura REST. Cada uno juega un papel crítico en el diseño y funcionamiento de APIs REST.
+
+==== 1. Recursos
+
+===== Definición
+* Entidades o datos que la API expone
+* Identificables de forma única
+* Pueden ser modificados, consultados o eliminados
+* Abstracciones de información del dominio
+
+===== Características
+* **Sustantivos**: Se modelan como nombres, no verbos
+* **Únicos**: Cada recurso tiene una identidad propia
+* **Reutilizables**: Pueden ser accedidos por múltiples clientes
+* **Independientes**: No dependen de otros recursos
+
+===== Ejemplos de Recursos
+* Usuarios
+* Productos
+* Pedidos
+* Comentarios
+* Artículos
+* Categorías
+
+===== Ejemplos Incorrectos (Verbos)
+* getUsuarios ❌ (Incorrecto: verbo)
+* createProduct ❌ (Incorrecto: verbo)
+* deleteOrder ❌ (Incorrecto: verbo)
+
+===== Recursos Correctos
+* Usuarios ✓
+* Productos ✓
+* Pedidos ✓
+
+===== Recursos Compuestos
+* Colecciones: /usuarios (todos los usuarios)
+* Instancias: /usuarios/123 (usuario específico)
+* Sub-recursos: /usuarios/123/pedidos (pedidos del usuario 123)
+* Propiedades: /usuarios/123/nombre (propiedad específica)
+
+==== 2. URIs (Identificadores Uniformes de Recursos)
+
+===== Definición
+* Dirección única que identifica un recurso
+* Estructura predecible y consistente
+* Formato estándar en toda la API
+* Legible y autodescriptiva
+
+===== Estructura Base
+[source]
+----
+https://api.ejemplo.com/v1/usuarios/123
+│                      │  │   │        │
+│                      │  │   │        └─ Identificador único
+│                      │  │   └────────── Nombre del recurso (plural)
+│                      │  └────────────── Versión de API
+│                      └────────────────── Dominio
+└──────────────────────────────────────── Protocolo (HTTPS)
+----
+
+===== Buenas Prácticas para URIs
+
+====== 1. Usar nombres plurales
+[source]
+----
+✓ Correcto:   /api/usuarios
+✓ Correcto:   /api/productos
+✗ Incorrecto: /api/usuario
+✗ Incorrecto: /api/producto
+----
+
+====== 2. Usar sustantivos, no verbos
+[source]
+----
+✓ Correcto:   POST /api/usuarios (crear usuario)
+✓ Correcto:   GET /api/usuarios/123 (obtener usuario)
+✗ Incorrecto: GET /api/getUsuarios
+✗ Incorrecto: POST /api/crearUsuario
+----
+
+====== 3. Jerarquía clara
+[source]
+----
+✓ Correcto:   /api/usuarios/123/pedidos
+             (Pedidos del usuario 123)
+
+✓ Correcto:   /api/usuarios/123/pedidos/456
+             (Pedido 456 del usuario 123)
+
+✗ Incorrecto: /api/pedidos/456/usuarios/123
+             (Relación confusa)
+----
+
+====== 4. Evitar extensiones de archivo
+[source]
+----
+✓ Correcto:   /api/usuarios/123
+✗ Incorrecto: /api/usuarios/123.json
+✗ Incorrecto: /api/usuarios/123.xml
+----
+
+====== 5. Usar minúsculas y guiones
+[source]
+----
+✓ Correcto:   /api/usuarios-activos
+✓ Correcto:   /api/datos-personales
+✗ Incorrecto: /api/usuariosActivos (camelCase)
+✗ Incorrecto: /api/USUARIOS (mayúsculas)
+----
+
+===== Versionado de API
+[source]
+----
+/v1/usuarios      (Versión 1)
+/v2/usuarios      (Versión 2 - cambios incompatibles)
+
+O en header:
+X-API-Version: 2
+----
+
+===== Parámetros de Query
+[source]
+----
+GET /api/usuarios?page=1&limit=10&estado=activo
+
+Componentes:
+- page=1        (Número de página)
+- limit=10      (Cantidad de registros)
+- estado=activo (Filtro)
+----
+
+==== 3. Métodos HTTP
+
+===== Definición
+* Verbos que indican la acción a realizar en un recurso
+* Estándares HTTP definidos en RFC 7231
+* Cada método tiene semántica específica
+* Combinación de método + URI define la operación
+
+===== Métodos Principales
+
+====== GET - Obtener Datos
+[source]
+----
+Semantica: Recuperar información
+Seguro: Sí (no modifica el servidor)
+Idempotente: Sí (múltiples llamadas = mismo resultado)
+Cuerpo de request: No
+Cuerpo de response: Sí
+Cacheable: Sí
+
+Ejemplos:
+GET /api/usuarios             (Obtener todos)
+GET /api/usuarios/123         (Obtener uno)
+GET /api/usuarios?estado=activo (Con filtros)
+----
+
+====== POST - Crear Datos
+[source]
+----
+Semántica: Crear nuevo recurso
+Seguro: No (modifica el servidor)
+Idempotente: No (cada llamada crea un nuevo)
+Cuerpo de request: Sí
+Cuerpo de response: Sí (recurso creado)
+Cacheable: No
+
+Ejemplo:
+POST /api/usuarios
+Content-Type: application/json
+
+{
+  "nombre": "Juan",
+  "email": "juan@example.com"
+}
+
+Response:
+201 Created
+{
+  "id": 123,
+  "nombre": "Juan",
+  "email": "juan@example.com"
+}
+----
+
+====== PUT - Reemplazar Completamente
+[source]
+----
+Semántica: Reemplazar recurso completo
+Seguro: No
+Idempotente: Sí (múltiples llamadas = mismo resultado)
+Cuerpo de request: Sí
+Cuerpo de response: Sí (opcional)
+Cacheable: No
+
+Ejemplo:
+PUT /api/usuarios/123
+Content-Type: application/json
+
+{
+  "nombre": "Juan Modificado",
+  "email": "juan.nuevo@example.com"
+}
+
+Nota: Se envían TODOS los campos
+----
+
+====== PATCH - Actualizar Parcialmente
+[source]
+----
+Semántica: Actualizar parcialmente
+Seguro: No
+Idempotente: Depende de la implementación
+Cuerpo de request: Sí
+Cuerpo de response: Sí (opcional)
+Cacheable: No
+
+Ejemplo:
+PATCH /api/usuarios/123
+Content-Type: application/json
+
+{
+  "email": "juan.nuevo@example.com"
+}
+
+Nota: Se envían SOLO los campos a modificar
+----
+
+====== DELETE - Eliminar
+[source]
+----
+Semántica: Eliminar recurso
+Seguro: No
+Idempotente: Sí
+Cuerpo de request: No
+Cuerpo de response: No (normalmente)
+Cacheable: No
+
+Ejemplo:
+DELETE /api/usuarios/123
+
+Response:
+204 No Content
+----
+
+====== HEAD - Obtener Metadatos
+[source]
+----
+Semántica: Como GET pero sin cuerpo de response
+Seguro: Sí
+Idempotente: Sí
+Cuerpo de request: No
+Cuerpo de response: No
+Uso: Verificar disponibilidad, obtener metadata
+
+Ejemplo:
+HEAD /api/usuarios/123
+
+Response headers:
+Content-Type: application/json
+Content-Length: 1234
+Last-Modified: Wed, 21 Oct 2025 07:28:00 GMT
+----
+
+====== OPTIONS - Metadatos de Operaciones
+[source]
+----
+Semántica: Opciones disponibles para un recurso
+Seguro: Sí
+Idempotente: Sí
+Uso: Descubrir métodos permitidos (CORS, etc)
+
+Ejemplo:
+OPTIONS /api/usuarios
+
+Response headers:
+Allow: GET, POST, PUT, DELETE, OPTIONS
+Access-Control-Allow-Methods: GET, POST, PUT, DELETE
+----
+
+===== Comparativa de Métodos
+
+[width="100%",options="header"]
+|===
+| Método | Seguro | Idempotente | Cacheable | Uso Principal
+| GET | Sí | Sí | Sí | Obtener datos
+| POST | No | No | No | Crear datos
+| PUT | No | Sí | No | Reemplazar completo
+| PATCH | No | Depende | No | Actualizar parcial
+| DELETE | No | Sí | No | Eliminar datos
+| HEAD | Sí | Sí | Sí | Metadatos
+| OPTIONS | Sí | Sí | No | Opciones disponibles
+|===
+
+==== 4. Representaciones
+
+===== Definición
+* Forma en que se presenta un recurso
+* El mismo recurso puede tener múltiples representaciones
+* Formato independiente del almacenamiento interno
+* Transferencia de estado entre cliente y servidor
+
+===== Representaciones Comunes
+
+====== JSON (Más común)
+[source,json]
+----
+{
+  "id": 123,
+  "nombre": "Juan",
+  "email": "juan@example.com",
+  "fecha_creacion": "2025-10-21T10:30:00Z"
+}
+----
+
+====== XML
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<usuario>
+  <id>123</id>
+  <nombre>Juan</nombre>
+  <email>juan@example.com</email>
+  <fecha_creacion>2025-10-21T10:30:00Z</fecha_creacion>
+</usuario>
+----
+
+====== HTML
+[source,html]
+----
+<html>
+  <body>
+    <h1>Usuario</h1>
+    <p>Nombre: Juan</p>
+    <p>Email: juan@example.com</p>
+  </body>
+</html>
+----
+
+===== Content Negotiation
+[source]
+----
+Cliente especifica formato deseado mediante header Accept:
+
+GET /api/usuarios/123
+Accept: application/json
+
+O mediante query parameter (menos recomendado):
+
+GET /api/usuarios/123?format=json
+----
+
+===== Headers de Representación
+[source]
+----
+Content-Type: application/json; charset=utf-8
+Content-Length: 256
+Content-Encoding: gzip
+Content-Language: es
+----
+
+==== 5. Códigos de Estado HTTP
+
+===== Definición
+* Respuesta estándar que indica el resultado de la solicitud
+* Estructura: 3 dígitos (categoría + código específico)
+* Crítico para REST: comunican el estado de la operación
+* El cliente debe actuar según el código recibido
+
+===== Categorías
+
+====== 2xx - Éxito
+[source]
+----
+200 OK
+  - La solicitud fue exitosa
+  - Incluye el resultado esperado
+
+201 Created
+  - Recurso creado exitosamente
+  - Incluir header Location
+
+202 Accepted
+  - Solicitud aceptada pero aún procesándose
+  - Para operaciones asincrónicas
+
+204 No Content
+  - Éxito pero sin contenido en respuesta
+  - Típico en DELETE
+
+206 Partial Content
+  - Respuesta parcial (importante para paginación)
+----
+
+====== 3xx - Redirección
+[source]
+----
+301 Moved Permanently
+  - Recurso movido permanentemente
+  - Cliente debe usar nueva URI
+
+302 Found
+  - Redirección temporal
+  - Cliente puede seguir usando URI antigua
+
+304 Not Modified
+  - Recurso no modificado desde última solicitud
+  - Usa ETag o Last-Modified
+
+307 Temporary Redirect
+  - Redirección temporal con método preservado
+----
+
+====== 4xx - Error del Cliente
+[source]
+----
+400 Bad Request
+  - Solicitud malformada o inválida
+  - El cliente debe corregir
+
+401 Unauthorized
+  - Autenticación requerida
+  - Cliente no autenticado
+
+403 Forbidden
+  - Cliente autenticado pero sin permisos
+  - No tiene autorización
+
+404 Not Found
+  - Recurso no existe
+  - URI inválida
+
+409 Conflict
+  - Conflicto en el estado del recurso
+  - Ej: versión desactualizada
+
+422 Unprocessable Entity
+  - Sintaxis válida pero semántica inválida
+  - Validación fallida
+----
+
+====== 5xx - Error del Servidor
+[source]
+----
+500 Internal Server Error
+  - Error general en el servidor
+  - No específico
+
+501 Not Implemented
+  - Funcionalidad no implementada
+
+502 Bad Gateway
+  - Gateway o proxy error
+
+503 Service Unavailable
+  - Servidor no disponible temporalmente
+  - Mantenimiento, sobrecarga
+----
+
+===== Uso Correcto de Códigos
+[source]
+----
+POST /api/usuarios
+{
+  "nombre": "Juan",
+  "email": "juan@example.com"
+}
+
+✓ 201 Created (Usuario creado)
+✗ 200 OK (Incorrecto: debe ser 201)
+✗ 204 No Content (Incorrecto: hay que retornar el recurso)
+
+---
+
+GET /api/usuarios/999
+
+✓ 404 Not Found (No existe)
+✗ 200 OK (Incorrecto: no existe el recurso)
+✗ 500 Internal Server Error (Incorrecto: cliente intentó mal)
+
+---
+
+PATCH /api/usuarios/123
+{email: "invalido"}
+
+✓ 422 Unprocessable Entity (Validación falla)
+✗ 400 Bad Request (Menos específico)
+✗ 200 OK (Incorrecto: no se guardó)
+----
+
+===== Tabla de Referencia Rápida
+
+[width="100%",options="header"]
+|===
+| Código | Significado | Acción Cliente
+| 200 | OK | Continuar, datos en respuesta
+| 201 | Created | Recurso creado, verificar Location
+| 204 | No Content | Operación exitosa, sin datos
+| 400 | Bad Request | Corregir solicitud
+| 401 | Unauthorized | Autenticarse
+| 403 | Forbidden | No tiene acceso
+| 404 | Not Found | Recurso no existe
+| 409 | Conflict | Resolver conflicto
+| 422 | Unprocessable | Validar datos
+| 500 | Server Error | Reintentar o reportar
+|===
+
+== 3. Diseño de Recursos
+
+=== 3.1 Identificación de Recursos
+
+La identificación correcta de recursos es fundamental para diseñar APIs REST coherentes y mantenibles.
+
+==== 1. Modelar como Sustantivos, No Verbos
+
+===== Principio Fundamental
+* Los recursos son entidades, no acciones
+* Se representan con nombres (sustantivos)
+* Los verbos (acciones) se expresan mediante métodos HTTP
+* Esto simplifica la API y la hace más predecible
+
+===== Enfoque Incorrecto (Orientado a Acciones)
+[source]
+----
+GET  /api/obtenerUsuarios
+POST /api/crearUsuario
+PUT  /api/actualizarUsuario/123
+POST /api/eliminarUsuario/123
+GET  /api/buscarUsuariosPorEmail?email=juan@example.com
+----
+
+**Problemas:**
+* Proliferación de endpoints
+* Inconsistencia en nomenclatura
+* Difícil de mantener y escalar
+* No aprovecha HTTP nativamente
+* Confunde recursos con operaciones
+
+===== Enfoque Correcto (Orientado a Recursos)
+[source]
+----
+GET    /api/usuarios              (obtener todos)
+POST   /api/usuarios              (crear uno)
+GET    /api/usuarios/123          (obtener uno)
+PUT    /api/usuarios/123          (actualizar uno)
+DELETE /api/usuarios/123          (eliminar uno)
+GET    /api/usuarios?email=juan@example.com (buscar)
+----
+
+**Ventajas:**
+* Menos endpoints
+* Consistencia total
+* Fácil de descubrir
+* Aprovecha HTTP correctamente
+* Métodos HTTP comunican la acción
+
+===== Comparativa Detallada
+
+[width="100%",options="header"]
+|===
+| Acción | ❌ Incorrecto (Verbos) | ✓ Correcto (Sustantivos)
+| Listar todos | GET /api/getUsuarios | GET /api/usuarios
+| Obtener uno | GET /api/getUserById/123 | GET /api/usuarios/123
+| Crear | POST /api/createUser | POST /api/usuarios
+| Actualizar | POST /api/updateUser/123 | PUT /api/usuarios/123
+| Eliminar | GET /api/deleteUser/123 | DELETE /api/usuarios/123
+| Buscar | GET /api/searchUsers | GET /api/usuarios?query=...
+| Activar | POST /api/activateUser/123 | PATCH /api/usuarios/123
+| Exportar | GET /api/exportUsers | GET /api/usuarios?format=csv
+|===
+
+===== Ejemplos de Recursos Correctos
+[source]
+----
+Usuarios:
+  /api/usuarios
+  /api/usuarios/123
+  /api/usuarios/123/perfil
+  /api/usuarios/123/preferencias
+
+Productos:
+  /api/productos
+  /api/productos/456
+  /api/productos/456/categorias
+  /api/productos/456/resenas
+
+Pedidos:
+  /api/pedidos
+  /api/pedidos/789
+  /api/pedidos/789/items
+  /api/pedidos/789/historial
+
+Equipos:
+  /api/equipos
+  /api/equipos/team-1
+  /api/equipos/team-1/miembros
+  /api/equipos/team-1/proyectos
+----
+
+==== 2. Usar Nombres Plurales
+
+===== Regla General
+* Los endpoints principales SIEMPRE en plural
+* Representa la colección de recursos
+* Aplica incluso si solo existe un recurso
+* Proporciona uniformidad
+
+===== Plural Siempre
+[source]
+----
+✓ Correcto:   GET /api/usuarios
+✗ Incorrecto: GET /api/usuario
+
+✓ Correcto:   GET /api/configuraciones
+✗ Incorrecto: GET /api/configuracion
+
+✓ Correcto:   GET /api/categorias
+✗ Incorrecto: GET /api/categoria
+----
+
+===== Excepciones Permitidas
+
+====== Recurso Singleton (Único en el Sistema)
+[source]
+----
+Casos donde tiene sentido usar singular:
+
+GET /api/perfil           (perfil del usuario autenticado)
+GET /api/configuracion    (configuración global del sistema)
+GET /api/estadisticas     (estadísticas del sistema)
+GET /api/salud            (health check)
+
+Pero mejor práctica:
+GET /api/usuarios/me/perfil
+GET /api/configuracion-sistema
+GET /api/sistema/estadisticas
+----
+
+====== Rutas de Acción Especiales
+[source]
+----
+POST /api/usuarios/123/cambiar-contrasena
+POST /api/usuarios/123/recuperar-contrasena
+POST /api/pedidos/123/confirmar
+POST /api/pedidos/123/enviar
+
+Mejor práctica (con sub-recursos):
+PATCH /api/usuarios/123 (cambiar campos)
+POST /api/usuarios/123/contrasena-reset
+PATCH /api/pedidos/123 (estado: confirmado)
+POST /api/pedidos/123/envios
+----
+
+===== Ventajas del Plural
+* **Consistencia**: Todos los endpoints siguen el mismo patrón
+* **Escalabilidad**: Fácil agregar nuevos recursos
+* **Previsibilidad**: El cliente sabe cómo construir URIs
+* **Uniformidad**: No hay excepciones confusas
+* **API homogénea**: Mejor experiencia para desarrolladores
+
+==== 3. Jerarquía Lógica de Recursos
+
+===== Definición
+* Relaciones significativas entre recursos
+* Estructura que refleja el dominio del negocio
+* Profundidad limitada (máximo 2-3 niveles)
+* Claridad en la relación padre-hijo
+
+===== Estructura Jerárquica
+
+====== Nivel 1: Colección Principal
+[source]
+----
+/api/usuarios              (Colección raíz)
+/api/productos             (Colección raíz)
+/api/pedidos               (Colección raíz)
+/api/categorias            (Colección raíz)
+----
+
+====== Nivel 2: Recurso Específico
+[source]
+----
+/api/usuarios/123          (Usuario 123)
+/api/productos/456         (Producto 456)
+/api/pedidos/789           (Pedido 789)
+----
+
+====== Nivel 3: Sub-recursos
+[source]
+----
+/api/usuarios/123/pedidos          (Pedidos del usuario 123)
+/api/usuarios/123/direcciones      (Direcciones del usuario 123)
+/api/productos/456/resenas         (Reseñas del producto 456)
+/api/pedidos/789/items             (Items del pedido 789)
+/api/pedidos/789/envios            (Envíos del pedido 789)
+----
+
+===== Jeraquía Correcta
+
+====== ✓ Correcto: Relaciones Claras
+[source]
+----
+Estructura lógica:
+Empresa
+  └─ Equipos
+      └─ Miembros
+          └─ Tareas
+
+URIs:
+GET /api/empresas/1/equipos
+GET /api/empresas/1/equipos/5
+GET /api/empresas/1/equipos/5/miembros
+GET /api/empresas/1/equipos/5/miembros/10
+GET /api/empresas/1/equipos/5/miembros/10/tareas
+----
+
+====== ❌ Incorrecto: Anidamiento Excesivo
+[source]
+----
+GET /api/empresas/1/equipos/5/miembros/10/tareas/20/comentarios/30
+
+Problemas:
+- Demasiado profundo
+- Lento de procesar
+- Difícil de construir URIs
+- Acoplamiento innecesario
+----
+
+===== Alternativa: Usar IDs Directos
+[source]
+----
+Cuando la jerarquía es profunda, usar IDs directos:
+
+Incorrecto profundo:
+GET /api/empresas/1/equipos/5/miembros/10/tareas/20
+
+Mejor:
+GET /api/tareas/20
+
+O simplificar:
+GET /api/empresas/1/tareas?miembro_id=10
+----
+
+===== Guía de Profundidad
+
+[width="100%",options="header"]
+|===
+| Profundidad | Recomendación | Ejemplo
+| 1 nivel | Siempre ok | /api/usuarios
+| 2 niveles | Siempre ok | /api/usuarios/123/pedidos
+| 3 niveles | Ok si relación clara | /api/usuarios/123/pedidos/456/items
+| 4+ niveles | ❌ Evitar | /api/empresas/1/equipos/5/miembros/10/tareas/20
+|===
+
+===== Ejemplos de Jerarquías Bien Diseñadas
+
+====== E-commerce
+[source]
+----
+/api/categorias
+/api/categorias/123
+/api/categorias/123/productos
+/api/categorias/123/productos/456
+/api/categorias/123/productos/456/variantes
+/api/categorias/123/productos/456/resenas
+
+O para detalles:
+/api/productos/456
+/api/productos/456/variantes
+/api/productos/456/resenas
+----
+
+====== Red Social
+[source]
+----
+/api/usuarios
+/api/usuarios/123
+/api/usuarios/123/amigos
+/api/usuarios/123/publicaciones
+/api/usuarios/123/publicaciones/456
+/api/usuarios/123/publicaciones/456/comentarios
+/api/usuarios/123/publicaciones/456/me-gusta
+
+O simplificado:
+/api/publicaciones/456
+/api/publicaciones/456/comentarios
+/api/comentarios/789/me-gusta
+----
+
+====== Sistema de Gestión de Proyectos
+[source]
+----
+/api/proyectos
+/api/proyectos/123
+/api/proyectos/123/tableros
+/api/proyectos/123/tableros/456
+/api/proyectos/123/tableros/456/tarjetas
+
+Simplificado:
+/api/proyectos/123
+/api/tableros/456 (contiene referencia a proyecto)
+/api/tarjetas/789
+----
+
+===== Cuándo Usar Jerarquía Anidada
+
+====== ✓ Usar Anidación Cuando:
+* La relación es FUERTEMENTE dependiente
+* El sub-recurso NO tiene significado sin el padre
+* La relación es 1-a-muchos bien definida
+* Simplifica la lógica de negocio
+
+[source]
+----
+Ejemplo fuerte:
+/api/usuarios/123/direcciones
+(Una dirección sin usuario no tiene sentido)
+
+/api/pedidos/456/items
+(Un item sin pedido no tiene sentido)
+----
+
+====== ❌ NO Usar Anidación Cuando:
+* El sub-recurso tiene identidad independiente
+* Se puede acceder sin el padre
+* La relación es muchos-a-muchos
+* El sub-recurso tiene múltiples padres
+
+[source]
+----
+Incorrecto:
+/api/usuarios/123/productos/456
+(Usar: GET /api/productos/456 directamente)
+
+Incorrecto:
+/api/articulos/123/etiquetas/456
+(Las etiquetas existen independientemente)
+
+Correcto:
+GET /api/articulos/123/etiquetas (relación)
+GET /api/etiquetas/456 (recurso directo)
+----
+
+===== Parámetros Query para Filtrado
+[source]
+----
+En lugar de anidación excesiva, usar query parameters:
+
+Incorrecto (anidación profunda):
+/api/usuarios/123/pedidos?estado=completado
+
+Mejor (con parámetros):
+/api/pedidos?usuario_id=123&estado=completado
+/api/pedidos?usuario=123&estado=completado&fecha_desde=2025-01-01
+
+Ventajas:
+- Más flexible
+- Menos profundidad
+- Facilita filtrado múltiple
+- Mejor reutilización de endpoints
+----
+
+===== Resumen de Buenas Prácticas
+
+[width="100%",options="header"]
+|===
+| Aspecto | ✓ Correcto | ❌ Incorrecto
+| Nomenclatura | Sustantivos (usuarios) | Verbos (getUsuarios)
+| Número | Plural (usuarios) | Singular (usuario)
+| Profundidad | 2-3 niveles máximo | 4+ niveles
+| Relación | Jerárquica clara | Confusa o aleatoria
+| Alternativa | Filtros y query params | Anidación profunda
+| Acción | HTTP methods | En la URI
+| Identidad | ID único | Composición de IDs
+|===
+
+=== 3.2 URIs Bien Formadas
+
+Una URI bien formada es fundamental para crear APIs REST intuitivas, mantenibles y profesionales.
+
+==== 1. Estructura Clara y Predecible
+
+===== Componentes de una URI
+
+[source]
+----
+https://api.ejemplo.com/v1/usuarios/123/pedidos
+│      │                 │  │      │   │      │
+│      │                 │  │      │   │      └─ Recurso específico o ID
+│      │                 │  │      │   └────── ID del padre
+│      │                 │  │      └────────── Nombre del recurso (plural)
+│      │                 └────────────────── Versión de API
+│      └────────────────────────────────────── Host/Dominio
+└─────────────────────────────────────────────── Esquema (HTTPS)
+----
+
+===== Estructura Estándar Recomendada
+[source]
+----
+[ESQUEMA]://[DOMINIO]/[VERSIÓN]/[RECURSOS]/[ID]/[SUB-RECURSOS]/[ID]
+
+Ejemplos:
+https://api.ejemplo.com/v1/usuarios
+https://api.ejemplo.com/v1/usuarios/123
+https://api.ejemplo.com/v1/usuarios/123/pedidos
+https://api.ejemplo.com/v1/usuarios/123/pedidos/456
+----
+
+===== Características de Buena Formación
+* **Predecible**: Siguiendo el patrón, se puede adivinar la URI
+* **Consistente**: Todas las URIs siguen la misma estructura
+* **Legible**: Fácil de entender sin documentación
+* **Escalable**: Fácil agregar nuevos recursos
+* **Sin ambigüedad**: No hay confusión sobre lo que representa
+
+===== ✓ URIs Bien Formadas
+[source]
+----
+https://api.github.com/v3/users/octocat
+https://api.ejemplo.com/v1/productos/123
+https://api.ejemplo.com/v1/usuarios/456/pedidos/789
+https://api.banco.com/v2/cuentas/cuenta-001/movimientos
+https://api.social.com/v1/usuarios/user-123/publicaciones/pub-456
+----
+
+===== ❌ URIs Mal Formadas
+[source]
+----
+https://api.ejemplo.com/users/getUser/123           (verbo en URI)
+https://api.ejemplo.com/v1/usuarios/123/editar      (acción en URI)
+https://api.ejemplo.com/v1/GetUsuarios              (mayúsculas)
+https://api.ejemplo.com/v1/usuario_activos          (singular + guiones/underscores)
+https://api.ejemplo.com/v1/usuarios/123.json        (extensión de archivo)
+https://api.ejemplo.com/v1/usuarios/123?getpedidos  (acción en query)
+----
+
+===== Patrón de Construcción
+
+[width="100%",options="header"]
+|===
+| Nivel | Patrón | Ejemplo | Descripción
+| 1 | /[recurso] | /usuarios | Colección completa
+| 2 | /[recurso]/[id] | /usuarios/123 | Recurso específico
+| 3 | /[recurso]/[id]/[sub-recurso] | /usuarios/123/pedidos | Sub-colección
+| 4 | /[recurso]/[id]/[sub-recurso]/[id] | /usuarios/123/pedidos/456 | Sub-recurso específico
+|===
+
+==== 2. Versionado de API
+
+El versionado es crítico para mantener compatibilidad mientras evolucionas la API.
+
+===== Estrategias de Versionado
+
+====== Opción 1: Versionado en URI (Más común)
+[source]
+----
+https://api.ejemplo.com/v1/usuarios
+https://api.ejemplo.com/v2/usuarios
+https://api.ejemplo.com/v3/usuarios
+
+Ventajas:
+* Explícito y visible
+* Fácil para routing
+* Claro para desarrolladores
+* Compatible con cachés
+
+Desventajas:
+* Multiplica endpoints
+* Duplica código
+* Requiere mantener múltiples versiones
+----
+
+====== Opción 2: Versionado en Header
+[source]
+----
+GET /api/usuarios
+X-API-Version: 2
+
+O usando Accept header:
+GET /api/usuarios
+Accept: application/vnd.ejemplo.v2+json
+
+Ventajas:
+* Una única URI
+* Menos duplicación
+* Más RESTful
+
+Desventajas:
+* Menos visible
+* Más complejo de debuggear
+* Puede confundir a desarrolladores
+----
+
+====== Opción 3: Versionado en Query Parameter
+[source]
+----
+GET /api/usuarios?version=2
+GET /api/usuarios?v=2
+
+Ventajas:
+* Simple de implementar
+
+Desventajas:
+* Menos estándar
+* Difícil de cachear
+* No es la mejor práctica
+----
+
+===== Recomendación: Versionado en URI
+[source]
+----
+✓ RECOMENDADO:
+/v1/usuarios
+/v2/usuarios
+
+Razones:
+- Estándar en la industria (AWS, GitHub, Twilio)
+- Fácil de implementar
+- Claro para todos
+- Fácil de documentar
+- Facilita testing
+----
+
+===== Estructura de Versiones
+
+[source]
+----
+/v1/usuarios              (Primera versión)
+/v2/usuarios              (Cambios incompatibles)
+/v3/usuarios              (Más cambios incompatibles)
+
+NO hacer:
+/v1.0/usuarios            (Usar solo mayor)
+/v1_beta/usuarios         (No usar labels)
+/usuarios/v1              (Versión al final)
+----
+
+===== Ciclo de Vida de Versiones
+
+[source]
+----
+Fase 1: Beta/RC (3-6 meses)
+  - Disponible pero inestable
+  - Headers de advertencia
+  - Cambios rápidos permitidos
+  
+Fase 2: Producción (Varios años)
+  - Versión estable
+  - Garantía de compatibilidad
+  - Solo cambios backward-compatible
+  
+Fase 3: Deprecación (6-12 meses)
+  - Anunciar obsolescencia
+  - Guiar a nueva versión
+  - Headers de deprecación
+  
+Fase 4: Retiro (Después de deprecación)
+  - Remover completamente
+  - Solo si hay alternativa
+
+Ejemplo de timeline:
+2024-01-01: v3 lanzada
+2024-01-01 - 2025-06-01: v2 production pero deprecated
+2025-06-01: v2 retira
+----
+
+===== Headers de Deprecación Recomendados
+[source]
+----
+HTTP/1.1 200 OK
+Deprecation: true
+Sunset: Wed, 31 Dec 2025 23:59:59 GMT
+X-API-Warn: "API v1 will be deprecated on 2025-12-31"
+Link: <https://api.ejemplo.com/v2/usuarios>; rel="successor-version"
+
+Más moderno (RFC 8594):
+Deprecation: true
+Sunset: Wed, 31 Dec 2025 23:59:59 GMT
+----
+
+===== Guía de Cuándo Cambiar de Versión
+
+====== Cambiar a Nueva Versión (v1 → v2)
+* Remover endpoints
+* Cambiar formato de respuesta (breaking)
+* Cambiar significado de campos
+* Remover parámetros requeridos
+
+[source]
+----
+Cambios breaking:
+v1: {id: 123, nombre: "Juan"}
+v2: {userId: 123, fullName: "Juan"}
+
+v1: GET /usuarios retorna array
+v2: GET /usuarios retorna {data: array}
+
+v1: campo "email" requerido
+v2: campo "email" opcional
+----
+
+====== No Cambiar de Versión (Mantener en v1)
+* Agregar nuevos endpoints
+* Agregar nuevos campos opcionales
+* Agregar parámetros opcionales
+* Cambiar valores internos (no expuestos)
+
+[source]
+----
+Cambios no-breaking:
+v1: {id: 123, nombre: "Juan"}
+v1: {id: 123, nombre: "Juan", edad: 30}  ✓ Agregar campo
+
+v1: GET /usuarios (requiere auth)
+v1: GET /usuarios, GET /usuarios/activos  ✓ Agregar endpoint
+
+v1: limit=10 (por defecto)
+v1: limit=10 (nuevamente, o limit=20)  ✓ Cambiar interno
+----
+
+==== 3. Evitar Acciones en la URI
+
+Una de las violaciones más comunes de REST es incluir acciones como verbos en las URIs.
+
+===== ❌ Antipatrón: Verbos en URIs
+
+[source]
+----
+GET /api/usuarios/obtener
+GET /api/usuarios/123/obtener
+POST /api/usuarios/crear
+POST /api/usuarios/123/actualizar
+GET /api/usuarios/123/eliminar
+GET /api/usuarios/buscar?nombre=Juan
+POST /api/usuarios/123/cambiarEstado?nuevo_estado=activo
+----
+
+**Problemas:**
+* Proliferación de endpoints innecesarios
+* Confunde recursos con acciones
+* No aprovecha HTTP correctamente
+* Difícil de mantener y escalar
+* Acoplamiento innecesario cliente-servidor
+
+===== ✓ Patrón Correcto: Métodos HTTP como Verbos
+
+[source]
+----
+GET /api/usuarios              (obtener todos)
+GET /api/usuarios/123          (obtener uno)
+POST /api/usuarios             (crear)
+PUT /api/usuarios/123          (actualizar completo)
+PATCH /api/usuarios/123        (actualizar parcial)
+DELETE /api/usuarios/123       (eliminar)
+GET /api/usuarios?nombre=Juan  (buscar)
+----
+
+===== Tabla Comparativa: Verbos en URI vs HTTP Methods
+
+[width="100%",options="header"]
+|===
+| Acción | ❌ Incorrecto | ✓ Correcto | Método HTTP
+| Obtener todos | GET /api/usuarios/listar | GET /api/usuarios | GET
+| Obtener uno | GET /api/usuarios/obtener/123 | GET /api/usuarios/123 | GET
+| Crear | POST /api/usuarios/crear | POST /api/usuarios | POST
+| Actualizar | PUT /api/usuarios/actualizar/123 | PUT /api/usuarios/123 | PUT
+| Parcial | POST /api/usuarios/123/editar | PATCH /api/usuarios/123 | PATCH
+| Eliminar | GET /api/usuarios/eliminar/123 | DELETE /api/usuarios/123 | DELETE
+| Buscar | GET /api/usuarios/buscar | GET /api/usuarios?q=... | GET + Query
+| Activar | POST /api/usuarios/123/activar | PATCH /api/usuarios/123 | PATCH
+| Exportar | GET /api/usuarios/exportar | GET /api/usuarios?format=csv | GET + Query
+|===
+
+===== Casos Especiales: Cuándo Permitir Acciones en URI
+
+====== Operaciones Complejas sin Representación Obvia
+[source]
+----
+Casos raros donde puede ser aceptable:
+
+POST /api/usuarios/123/cambiar-contrasena
+  Body: {contrasena_actual, contrasena_nueva}
+
+POST /api/usuarios/123/reenviar-verificacion
+
+POST /api/pedidos/123/confirmar
+
+POST /api/usuarios/123/login-forzado
+
+Mejor alternativa (más RESTful):
+PATCH /api/usuarios/123
+  {contrasena: "nueva"}
+
+POST /api/usuarios/123/verificaciones
+
+PATCH /api/pedidos/123
+  {estado: "confirmado"}
+----
+
+====== Búsquedas Complejas
+[source]
+----
+Aceptable:
+POST /api/usuarios/buscar
+  {criterios_complejos}
+
+Mejor alternativa:
+GET /api/usuarios?campo1=valor&campo2=valor&...
+
+Más complejo (GraphQL):
+POST /api/graphql
+  {query con filtros}
+----
+
+====== Webhooks y Callbacks
+[source]
+----
+POST /api/webhooks/procesar
+POST /api/callbacks/completar-pago
+----
+
+===== Regla de Oro
+
+[source]
+----
+SI PUEDES USAR UN MÉTODO HTTP ESTÁNDAR, ÚSALO
+
+GET      → Leer/Recuperar
+POST     → Crear/Iniciar proceso
+PUT      → Reemplazar completo
+PATCH    → Actualizar parcial
+DELETE   → Eliminar
+HEAD     → Metadatos
+OPTIONS  → Opciones disponibles
+
+SOLO si NO encaja en los anteriores, considera una acción en la URI
+----
+
+==== 4. Ejemplos Correctos e Incorrectos
+
+===== Ejemplo Completo: API de E-commerce
+
+====== ❌ INCORRECTO (Anti-patrón)
+
+[source]
+----
+GET  /api/getProductos
+POST /api/createProducto
+GET  /api/getProducto/123
+POST /api/updateProducto/123
+GET  /api/deleteProducto/123
+GET  /api/getCarrito/usuario123
+POST /api/addToCart/usuario123
+POST /api/removeFromCart/usuario123
+GET  /api/checkoutCarrito
+POST /api/realizarPago/usuario123
+GET  /api/getOrdenes/usuario123
+GET  /api/getOrden/usuario123/orden456
+
+Problemas:
+- 12 endpoints con verbos
+- Inconsistencia (get/Get, create/add)
+- No aprovecha HTTP
+- Difícil de mantener
+- Confunde recursos con acciones
+----
+
+====== ✓ CORRECTO (RESTful)
+
+[source]
+----
+GET    /v1/productos              (listar todos)
+POST   /v1/productos              (crear)
+GET    /v1/productos/123          (obtener uno)
+PUT    /v1/productos/123          (actualizar completo)
+PATCH  /v1/productos/123          (actualizar parcial)
+DELETE /v1/productos/123          (eliminar)
+
+GET    /v1/usuarios/456/carrito   (obtener carrito)
+POST   /v1/usuarios/456/carrito/items  (agregar item)
+DELETE /v1/usuarios/456/carrito/items/789 (quitar item)
+PATCH  /v1/usuarios/456/carrito   (actualizar carrito)
+
+POST   /v1/usuarios/456/ordenes   (crear orden/checkout)
+GET    /v1/usuarios/456/ordenes   (listar órdenes)
+GET    /v1/usuarios/456/ordenes/789 (obtener orden)
+PATCH  /v1/usuarios/456/ordenes/789 (actualizar orden)
+
+POST   /v1/pagos                   (procesar pago)
+GET    /v1/pagos/pago-123         (estado del pago)
+
+Ventajas:
+- 6 endpoints principales para productos
+- Patrón consistente y predecible
+- Fácil de extender
+- Aprovecha HTTP correctamente
+- Una vez entendido el patrón, todo tiene sentido
+----
+
+===== Ejemplo: API de Red Social
+
+====== ❌ INCORRECTO
+
+[source]
+----
+GET  /api/getUser/123
+POST /api/updateUser/123
+GET  /api/getFollowers/123
+POST /api/addFollower/123
+GET  /api/getFollowing/123
+POST /api/removeFollower/123
+GET  /api/getTimeline/123
+POST /api/createPost
+GET  /api/getPost/456
+POST /api/deletePost/456
+POST /api/likePost/456
+POST /api/unlikePost/456
+GET  /api/getComments/456
+POST /api/addComment/456
+POST /api/deleteComment/789
+----
+
+====== ✓ CORRECTO
+
+[source]
+----
+Usuarios:
+GET    /v1/usuarios/123
+PATCH  /v1/usuarios/123
+
+Relaciones:
+GET    /v1/usuarios/123/seguidores
+GET    /v1/usuarios/123/siguiendo
+POST   /v1/usuarios/123/siguiendo        (seguir a alguien)
+DELETE /v1/usuarios/123/siguiendo/456   (dejar de seguir)
+
+Publicaciones:
+GET    /v1/usuarios/123/publicaciones
+POST   /v1/usuarios/123/publicaciones   (crear post)
+GET    /v1/publicaciones/456
+DELETE /v1/publicaciones/456
+
+Me gusta:
+POST   /v1/publicaciones/456/me-gusta   (dar like)
+DELETE /v1/publicaciones/456/me-gusta   (quitar like)
+
+Comentarios:
+GET    /v1/publicaciones/456/comentarios
+POST   /v1/publicaciones/456/comentarios (crear)
+DELETE /v1/comentarios/789
+
+Timeline/Feed:
+GET    /v1/usuarios/123/feed (timeline del usuario)
+----
+
+===== Ejemplo: API de Banco
+
+====== ❌ INCORRECTO
+
+[source]
+----
+GET  /api/getCuentas/usuario123
+GET  /api/getCuenta/usuario123/cuenta456
+POST /api/transferencia
+POST /api/pagarFactura
+GET  /api/getTransacciones/usuario123
+POST /api/bloquearCuenta/usuario123/cuenta456
+----
+
+====== ✓ CORRECTO
+
+[source]
+----
+Cuentas:
+GET    /v1/usuarios/123/cuentas
+POST   /v1/usuarios/123/cuentas          (crear cuenta)
+GET    /v1/usuarios/123/cuentas/456     (saldo, detalles)
+PATCH  /v1/usuarios/123/cuentas/456     (límites, estado)
+
+Transacciones:
+GET    /v1/usuarios/123/cuentas/456/transacciones
+POST   /v1/usuarios/123/cuentas/456/transacciones (nueva transacción)
+GET    /v1/transacciones/txn-789
+
+Transferencias:
+POST   /v1/transferencias
+  {from_account, to_account, amount}
+GET    /v1/transferencias/tfr-001
+
+Pagos:
+POST   /v1/pagos
+  {cuenta, factura, monto}
+GET    /v1/pagos/pago-123
+
+Bloqueos:
+PATCH  /v1/usuarios/123/cuentas/456
+  {estado: "bloqueado"}
+----
+
+===== Checklist de Bien Formación de URIs
+
+[width="100%",options="header"]
+|===
+| Aspecto | ✓ Cumple | ❌ No Cumple | Acción
+| Sin verbos | Usuarios, productos | getUsuarios | Remover verbo
+| Plural | /usuarios | /usuario | Pluralizar
+| HTTPS | https://api... | http://api... | Usar HTTPS
+| Minúsculas | /usuarios | /Usuarios | Convertir a minúsculas
+| Guiones | /usuarios-activos | /usuarios_activos | Usar guiones
+| Sin extensión | /usuarios/123 | /usuarios/123.json | Remover .json
+| Versionado | /v1/usuarios | /usuarios | Agregar versión
+| Consistente | Mismo patrón siempre | Patrones mixtos | Unificar
+| ID en URL | /usuarios/123 | /usuarios?id=123 | Mover a path
+| Query params | /usuarios?filtro=valor | /usuarios/filtro/valor | Usar query
+|===
+
+====== Aplicar Checklist
+
+[source]
+----
+URI inicial:   GET /api/getUsuarios_Activos.json
+
+Análisis:
+❌ Sin verbos: "get" → Remover
+❌ Plural: ok
+❌ HTTPS: cambiar a https
+✓ Minúsculas: ok (después de remover get)
+❌ Guiones: cambiar underscore
+❌ Sin extensión: remover .json
+❌ Versionado: agregar /v1
+✓ Consistente: N/A
+✓ ID en URL: N/A
+✓ Query params: N/A
+
+URI final:     GET https://api.ejemplo.com/v1/usuarios-activos
+----
+
+== 4. Métodos HTTP
+
+=== 4.1 Métodos Principales
+
+Los métodos HTTP son los verbos que definen qué acción realizar sobre un recurso. Cada método tiene semántica, características y casos de uso específicos.
+
+==== 1. GET - Obtener Datos
+
+===== Semántica
+* Recuperar información de un recurso
+* No modifica ningún dato en el servidor
+* Solicitud segura (sin efectos secundarios)
+
+===== Características
+* **Seguro**: Sí (no cambia estado del servidor)
+* **Idempotente**: Sí (múltiples llamadas = mismo resultado)
+* **Cacheable**: Sí (importante para performance)
+* **Cuerpo de request**: No
+* **Cuerpo de response**: Sí (datos del recurso)
+
+===== Casos de Uso
+[source]
+----
+# Obtener todos los recursos
+GET /api/usuarios
+GET /api/productos
+
+# Obtener un recurso específico
+GET /api/usuarios/123
+GET /api/productos/456/resenas/789
+
+# Obtener con filtros
+GET /api/usuarios?estado=activo&rol=admin
+GET /api/productos?categoria=electrónica&precio_max=1000
+
+# Obtener con paginación
+GET /api/usuarios?page=1&limit=10
+GET /api/articulos?offset=20&limit=5
+
+# Obtener con ordenamiento
+GET /api/usuarios?sort=nombre
+GET /api/productos?sort=-precio (descendente)
+
+# Búsqueda
+GET /api/usuarios?q=juan
+GET /api/productos?search=laptop
+----
+
+===== Respuestas Comunes
+[source,json]
+----
+# Obtener uno (200 OK)
+GET /api/usuarios/123
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": 123,
+  "nombre": "Juan",
+  "email": "juan@example.com"
+}
+
+---
+
+# Obtener muchos (200 OK)
+GET /api/usuarios
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "data": [
+    {"id": 123, "nombre": "Juan"},
+    {"id": 124, "nombre": "María"}
+  ],
+  "meta": {
+    "total": 2,
+    "page": 1,
+    "limit": 10
+  }
+}
+
+---
+
+# No encontrado (404 Not Found)
+GET /api/usuarios/999
+
+HTTP/1.1 404 Not Found
+Content-Type: application/json
+
+{
+  "error": "Usuario no encontrado",
+  "code": "USUARIO_NO_ENCONTRADO"
+}
+----
+
+===== Buenas Prácticas
+[source]
+----
+✓ Usar GET para leer datos
+✓ Incluir filtros en query params
+✓ Paginar resultados grandes
+✓ Usar headers de caché
+✓ Retornar 200 OK o 404 Not Found
+
+❌ Usar GET para crear/actualizar/eliminar
+❌ Incluir contraseñas en respuesta
+❌ Olvidar validar parámetros
+❌ Retornar datos sensibles sin autenticación
+----
+
+==== 2. POST - Crear Recurso
+
+===== Semántica
+* Crear un nuevo recurso
+* Enviar datos para procesamiento
+* Iniciar una acción/proceso en el servidor
+
+===== Características
+* **Seguro**: No (modifica el servidor)
+* **Idempotente**: No (cada llamada crea uno nuevo)
+* **Cacheable**: No (por defecto)
+* **Cuerpo de request**: Sí (datos a crear)
+* **Cuerpo de response**: Sí (recurso creado)
+
+===== Casos de Uso
+[source]
+----
+# Crear un nuevo recurso
+POST /api/usuarios
+POST /api/productos
+POST /api/pedidos
+
+# Crear en colección anidada
+POST /api/usuarios/123/pedidos
+POST /api/productos/456/resenas
+
+# Iniciar un proceso
+POST /api/transferencias
+POST /api/pagos
+POST /api/envios
+
+# Búsqueda compleja (alternativa a GET)
+POST /api/usuarios/buscar
+POST /api/productos/filtrar
+----
+
+===== Ejemplos de Solicitud y Respuesta
+[source,json]
+----
+# Crear usuario (201 Created)
+POST /api/usuarios
+Content-Type: application/json
+
+{
+  "nombre": "Juan",
+  "email": "juan@example.com",
+  "edad": 30
+}
+
+HTTP/1.1 201 Created
+Location: /api/usuarios/125
+Content-Type: application/json
+
+{
+  "id": 125,
+  "nombre": "Juan",
+  "email": "juan@example.com",
+  "edad": 30,
+  "fecha_creacion": "2025-10-21T10:30:00Z"
+}
+
+---
+
+# Validación fallida (422 Unprocessable Entity)
+POST /api/usuarios
+Content-Type: application/json
+
+{
+  "nombre": "",
+  "email": "correo-invalido"
+}
+
+HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/json
+
+{
+  "error": "Validación fallida",
+  "errors": {
+    "nombre": "Campo requerido",
+    "email": "Email inválido"
+  }
+}
+
+---
+
+# Crear con ID del cliente (idempotencia)
+POST /api/pagos
+Content-Type: application/json
+Idempotency-Key: pago-2025-10-21-001
+
+{
+  "monto": 100,
+  "cuenta": "cuenta-123"
+}
+
+HTTP/1.1 201 Created
+{
+  "id": "pago-001",
+  "monto": 100,
+  "estado": "completado"
+}
+----
+
+===== Headers Importantes
+[source]
+----
+# Header Location (obligatorio)
+Location: /api/usuarios/125
+(Indica dónde está el nuevo recurso)
+
+# Idempotency-Key (para operaciones críticas)
+Idempotency-Key: unique-key-123
+(Permite reintentos seguros)
+
+# Content-Type
+Content-Type: application/json
+(Tipo de datos enviados)
+----
+
+===== Buenas Prácticas
+[source]
+----
+✓ Retornar 201 Created con Location header
+✓ Retornar el recurso creado en la respuesta
+✓ Usar Idempotency-Key para operaciones críticas
+✓ Validar datos antes de crear
+✓ Incluir metadatos (id, timestamp, etc)
+
+❌ Retornar 200 OK en lugar de 201
+❌ No incluir el recurso creado
+❌ Olvidar el header Location
+❌ No validar datos de entrada
+❌ Permitir duplicados sin idempotencia
+----
+
+==== 3. PUT - Reemplazar Completo
+
+===== Semántica
+* Reemplazar completamente un recurso existente
+* Se envían TODOS los campos
+* Si no existe, puede crear (depende de implementación)
+* Operación idempotente
+
+===== Características
+* **Seguro**: No (modifica el servidor)
+* **Idempotente**: Sí (múltiples llamadas = mismo resultado)
+* **Cacheable**: No
+* **Cuerpo de request**: Sí (todos los campos)
+* **Cuerpo de response**: Sí (recurso actualizado) o vacío
+
+===== Diferencia: PUT vs PATCH
+[source]
+----
+PUT - Reemplazar TODO
+PATCH - Actualizar PARTE
+
+Ejemplo:
+Recurso actual: {id: 123, nombre: "Juan", email: "juan@old.com", edad: 30}
+
+PUT /api/usuarios/123
+{
+  "nombre": "Juan Nuevo",
+  "email": "juan@new.com",
+  "edad": 31
+}
+Resultado: {id: 123, nombre: "Juan Nuevo", email: "juan@new.com", edad: 31}
+
+PATCH /api/usuarios/123
+{
+  "email": "juan@new.com"
+}
+Resultado: {id: 123, nombre: "Juan", email: "juan@new.com", edad: 30}
+----
+
+===== Casos de Uso
+[source]
+----
+# Actualizar usuario completo
+PUT /api/usuarios/123
+
+# Actualizar configuración
+PUT /api/configuracion/sistema
+
+# Reemplazar colección completa (raro)
+PUT /api/usuarios/123/permisos
+----
+
+===== Ejemplos
+[source,json]
+----
+# Reemplazar usuario (200 OK)
+PUT /api/usuarios/123
+Content-Type: application/json
+
+{
+  "nombre": "Juan Modificado",
+  "email": "juan.nuevo@example.com",
+  "edad": 31
+}
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": 123,
+  "nombre": "Juan Modificado",
+  "email": "juan.nuevo@example.com",
+  "edad": 31
+}
+
+---
+
+# Campos faltantes (400 Bad Request)
+PUT /api/usuarios/123
+Content-Type: application/json
+
+{
+  "nombre": "Juan"
+}
+
+HTTP/1.1 400 Bad Request
+{
+  "error": "Faltan campos requeridos",
+  "campos_faltantes": ["email", "edad"]
+}
+
+---
+
+# Recurso no existe (404 Not Found)
+PUT /api/usuarios/999
+Content-Type: application/json
+
+{
+  "nombre": "Usuario Nuevo",
+  "email": "usuario@example.com",
+  "edad": 25
+}
+
+HTTP/1.1 404 Not Found
+{
+  "error": "Usuario no encontrado"
+}
+----
+
+===== Buenas Prácticas
+[source]
+----
+✓ Validar que se envíen TODOS los campos requeridos
+✓ Retornar 200 OK con recurso actualizado
+✓ Ser idempotente (misma llamada = mismo resultado)
+✓ Documentar campos requeridos
+✓ Retornar 404 si no existe
+
+❌ Permitir actualizaciones parciales (usar PATCH)
+❌ Retornar 201 Created
+❌ Aceptar campos faltantes sin error
+❌ Modificar el ID
+----
+
+==== 4. PATCH - Actualizar Parcialmente
+
+===== Semántica
+* Actualizar parcialmente un recurso
+* Se envían SOLO los campos a cambiar
+* Operación más flexible que PUT
+* Idempotencia depende de la implementación
+
+===== Características
+* **Seguro**: No (modifica el servidor)
+* **Idempotente**: Depende (recomendable que sí)
+* **Cacheable**: No
+* **Cuerpo de request**: Sí (solo campos a cambiar)
+* **Cuerpo de response**: Sí (recurso actualizado)
+
+===== Casos de Uso (Más Comunes que PUT)
+[source]
+----
+# Actualizar un campo
+PATCH /api/usuarios/123
+{"email": "nuevo@example.com"}
+
+# Actualizar varios campos
+PATCH /api/usuarios/123
+{"email": "nuevo@example.com", "edad": 31}
+
+# Cambiar estado
+PATCH /api/pedidos/456
+{"estado": "confirmado"}
+
+# Actualizar preferencias
+PATCH /api/usuarios/123/preferencias
+{"notificaciones": false, "idioma": "es"}
+
+# Cambiar configuración
+PATCH /api/configuracion
+{"timeout": 30000, "max_conexiones": 100}
+----
+
+===== Ejemplos
+[source,json]
+----
+# Actualizar parcial (200 OK)
+PATCH /api/usuarios/123
+Content-Type: application/json
+
+{
+  "email": "juan.nuevo@example.com"
+}
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": 123,
+  "nombre": "Juan",
+  "email": "juan.nuevo@example.com",
+  "edad": 30
+}
+
+---
+
+# Validación fallida (422 Unprocessable)
+PATCH /api/usuarios/123
+Content-Type: application/json
+
+{
+  "email": "correo-invalido"
+}
+
+HTTP/1.1 422 Unprocessable Entity
+{
+  "error": "Email inválido",
+  "campo": "email"
+}
+
+---
+
+# Sin cambios (200 OK)
+PATCH /api/usuarios/123
+Content-Type: application/json
+
+{
+  "email": "juan.nuevo@example.com"
+}
+
+HTTP/1.1 200 OK
+(Retorna el mismo recurso)
+----
+
+===== PATCH JSON vs JSON Merge Patch vs JSON Patch
+
+====== Simple (Recomendado para APIs REST)
+[source,json]
+----
+PATCH /api/usuarios/123
+Content-Type: application/json
+
+{
+  "email": "nuevo@example.com",
+  "edad": 31
+}
+
+# Solo envía los campos a cambiar
+----
+
+====== 2. JSON Merge Patch (RFC 7386)
+[source,json]
+----
+PATCH /api/usuarios/123
+Content-Type: application/merge-patch+json
+
+{
+  "email": "nuevo@example.com",
+  "edad": 31
+}
+
+# Más formal, para APIs complejas
+----
+
+====== JSON Patch (RFC 6902)
+[source,json]
+----
+PATCH /api/usuarios/123
+Content-Type: application/json-patch+json
+
+[
+  {"op": "replace", "path": "/email", "value": "nuevo@example.com"},
+  {"op": "replace", "path": "/edad", "value": 31}
+]
+
+# Muy formal, para operaciones complejas
+----
+
+===== Buenas Prácticas
+[source]
+----
+✓ Usar PATCH en lugar de PUT (más flexible)
+✓ Retornar recurso completo actualizado
+✓ Validar campos parciales
+✓ Ser idempotente si es posible
+✓ Documentar qué campos se pueden cambiar
+
+❌ Requerir todos los campos
+❌ Cambiar campos no permitidos
+❌ Cambiar el ID
+❌ Retornar datos parciales
+----
+
+==== 5. DELETE - Eliminar Recurso
+
+===== Semántica
+* Eliminar un recurso existente
+* Operación idempotente
+* Después de eliminar, GET retorna 404
+
+===== Características
+* **Seguro**: No (modifica el servidor)
+* **Idempotente**: Sí (múltiples llamadas = mismo resultado)
+* **Cacheable**: No
+* **Cuerpo de request**: No (normalmente)
+* **Cuerpo de response**: No (normalmente)
+
+===== Casos de Uso
+[source]
+----
+# Eliminar un recurso
+DELETE /api/usuarios/123
+DELETE /api/productos/456
+
+# Eliminar en colección anidada
+DELETE /api/usuarios/123/pedidos/456
+
+# Eliminar con confirmación
+DELETE /api/datos-criticos/789?confirm=true
+----
+
+===== Ejemplos
+[source,json]
+----
+# Eliminar exitoso (204 No Content)
+DELETE /api/usuarios/123
+
+HTTP/1.1 204 No Content
+
+---
+
+# Eliminar y retornar datos (200 OK)
+DELETE /api/usuarios/123
+
+HTTP/1.1 200 OK
+{
+  "id": 123,
+  "nombre": "Juan",
+  "estado": "eliminado"
+}
+
+---
+
+# No existe (404 Not Found)
+DELETE /api/usuarios/999
+
+HTTP/1.1 404 Not Found
+{
+  "error": "Usuario no encontrado"
+}
+
+---
+
+# Sin permisos (403 Forbidden)
+DELETE /api/usuarios/123
+
+HTTP/1.1 403 Forbidden
+{
+  "error": "No tienes permiso para eliminar"
+}
+
+---
+
+# Soft delete (marcar como eliminado)
+DELETE /api/usuarios/123
+
+HTTP/1.1 200 OK
+{
+  "id": 123,
+  "estado": "eliminado",
+  "fecha_eliminacion": "2025-10-21T10:30:00Z"
+}
+----
+
+===== Eliminación: Hard vs Soft Delete
+[source]
+----
+Hard Delete (Físico):
+- Se elimina completamente de la BD
+- No se puede recuperar
+- Usa espacio
+- Mejor para datos no sensibles
+
+DELETE /api/usuarios/123
+
+Soft Delete (Lógico):
+- Se marca como eliminado (campo estado)
+- Se puede recuperar
+- Mantiene integridad referencial
+- Mejor para datos críticos
+
+DELETE /api/usuarios/123
+Internamente: UPDATE usuarios SET estado='eliminado' WHERE id=123
+----
+
+===== Buenas Prácticas
+[source]
+----
+✓ Retornar 204 No Content o 200 OK
+✓ Ser idempotente (segundo DELETE = 204)
+✓ Validar permisos antes de eliminar
+✓ Usar soft delete para datos críticos
+✓ Incluir confirmación para datos sensibles
+
+❌ Usar GET para eliminar
+❌ Retornar 200 OK si ya está eliminado
+❌ No validar permisos
+❌ Eliminar datos sin confirmación
+❌ Hard delete datos críticos
+----
+
+==== 6. HEAD - Obtener Metadatos
+
+===== Semántica
+* Idéntico a GET pero SIN cuerpo de respuesta
+* Solo headers
+* Verificar disponibilidad sin descargar datos
+
+===== Características
+* **Seguro**: Sí (no modifica)
+* **Idempotente**: Sí
+* **Cacheable**: Sí
+* **Cuerpo de request**: No
+* **Cuerpo de response**: No (solo headers)
+
+===== Casos de Uso
+[source]
+----
+# Verificar si existe
+HEAD /api/usuarios/123
+
+# Obtener información sin descargar recurso
+HEAD /api/archivos/documento.pdf
+
+# Verificar última modificación
+HEAD /api/usuarios/123
+
+# Obtener tamaño
+HEAD /api/videos/video-1080p.mp4
+----
+
+===== Ejemplos
+[source]
+----
+# Verificar existencia
+HEAD /api/usuarios/123
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 256
+Last-Modified: Wed, 21 Oct 2025 07:28:00 GMT
+ETag: "33a64df551"
+
+(Sin cuerpo)
+
+---
+
+# No existe
+HEAD /api/usuarios/999
+
+HTTP/1.1 404 Not Found
+
+---
+
+# Archivo grande
+HEAD /api/archivos/video-1080p.mp4
+
+HTTP/1.1 200 OK
+Content-Type: video/mp4
+Content-Length: 2147483648
+Last-Modified: Wed, 20 Oct 2025 14:00:00 GMT
+----
+
+===== Buenas Prácticas
+[source]
+----
+✓ Retornar los mismos headers que GET
+✓ Usar para verificaciones rápidas
+✓ Implementar HEAD si se implementa GET
+✓ No incluir cuerpo en respuesta
+
+❌ Retornar cuerpo en respuesta
+❌ Cambiar headers respecto a GET
+❌ Ignorar HEAD en la implementación
+----
+
+==== 7. OPTIONS - Opciones Disponibles
+
+===== Semántica
+* Describir opciones de comunicación disponibles
+* Descubrir métodos permitidos
+* CORS (Cross-Origin Resource Sharing)
+
+===== Características
+* **Seguro**: Sí (no modifica)
+* **Idempotente**: Sí
+* **Cacheable**: Sí
+* **Cuerpo de request**: No
+* **Cuerpo de response**: Normalmente no
+
+===== Casos de Uso
+[source]
+----
+# Descubrir métodos permitidos
+OPTIONS /api/usuarios
+
+# CORS preflight
+OPTIONS /api/usuarios/123
+
+# Descubrir headers permitidos
+OPTIONS /api/productos
+----
+
+===== Ejemplos
+[source]
+----
+# Métodos permitidos
+OPTIONS /api/usuarios
+
+HTTP/1.1 200 OK
+Allow: GET, POST, PUT, DELETE, OPTIONS
+Content-Type: application/json
+
+---
+
+# Con CORS
+OPTIONS /api/usuarios
+
+HTTP/1.1 200 OK
+Allow: GET, POST, PUT, DELETE, OPTIONS
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+Access-Control-Allow-Headers: Content-Type, Authorization
+Access-Control-Max-Age: 3600
+
+---
+
+# Métodos restringidos
+OPTIONS /api/estadisticas
+
+HTTP/1.1 200 OK
+Allow: GET, OPTIONS
+(Sin POST, PUT, DELETE)
+----
+
+===== Buenas Prácticas
+[source]
+----
+✓ Incluir header Allow
+✓ Implementar CORS correctamente
+✓ Usar para discovery
+✓ Cachear respuestas OPTIONS
+
+❌ Ignorar OPTIONS
+❌ Permitir métodos no implementados
+❌ No incluir headers CORS
+----
+
+===== Tabla Comparativa de Métodos
+
+[width="100%",options="header"]
+|===
+| Método | Seguro | Idempotente | Cacheable | Cuerpo Req | Cuerpo Res | Uso
+| GET | Sí | Sí | Sí | No | Sí | Leer
+| POST | No | No | No | Sí | Sí | Crear
+| PUT | No | Sí | No | Sí | Sí/No | Reemplazar
+| PATCH | No | Depende | No | Sí | Sí | Actualizar parcial
+| DELETE | No | Sí | No | No | No | Eliminar
+| HEAD | Sí | Sí | Sí | No | No | Metadatos
+| OPTIONS | Sí | Sí | Sí | No | No | Descubrir
+|===
+
+===== Seleccionar el Método Correcto
+
+[width="100%",options="header"]
+|===
+| Necesidad | Método | Ejemplo
+| Obtener datos | GET | GET /api/usuarios
+| Crear dato | POST | POST /api/usuarios
+| Reemplazar completo | PUT | PUT /api/usuarios/123
+| Actualizar parcial | PATCH | PATCH /api/usuarios/123
+| Eliminar | DELETE | DELETE /api/usuarios/123
+| Verificar disponibilidad | HEAD | HEAD /api/usuarios/123
+| Descubrir opciones | OPTIONS | OPTIONS /api/usuarios
+|===
+
+=== 4.2 Semántica y Buenas Prácticas
+
+La semántica HTTP es crítica para crear APIs REST predecibles y mantenibles.
+
+==== Idempotencia
+
+===== Definición
+Una operación es **idempotente** si realizar varias llamadas idénticas produce el mismo resultado que una sola llamada.
+
+===== Métodos Idempotentes
+[source]
+----
+GET    - Idempotente (siempre retorna lo mismo)
+HEAD   - Idempotente
+OPTIONS - Idempotente
+PUT    - Idempotente (reemplaza igual cada vez)
+DELETE - Idempotente (segundo DELETE = 404 pero estado igual)
+----
+
+===== Métodos NO Idempotentes
+[source]
+----
+POST   - NO idempotente (cada llamada crea nuevo)
+PATCH  - Depende (algunos casos no son idempotentes)
+----
+
+===== Ejemplos de Idempotencia
+[source,json]
+----
+GET - Idempotente ✓
+GET /api/usuarios/123  →  {id: 123, nombre: "Juan"}
+GET /api/usuarios/123  →  {id: 123, nombre: "Juan"}  (Igual)
+
+---
+
+PUT - Idempotente ✓
+PUT /api/usuarios/123  {nombre: "Juan Nuevo"}  →  Actualizado
+PUT /api/usuarios/123  {nombre: "Juan Nuevo"}  →  Igual estado
+
+---
+
+POST - NO Idempotente ✗
+POST /api/usuarios  {nombre: "Juan"}  →  Crea usuario 1
+POST /api/usuarios  {nombre: "Juan"}  →  Crea usuario 2 (Diferente!)
+
+---
+
+PATCH - NO Idempotente ✗ (Depende)
+PATCH /api/contador  {sumar: 1}  →  contador = 11
+PATCH /api/contador  {sumar: 1}  →  contador = 12 (Diferente!)
+
+---
+
+PATCH - Idempotente ✓ (Si es asignación)
+PATCH /api/usuarios/123  {email: "nuevo@example.com"}  →  actualizado
+PATCH /api/usuarios/123  {email: "nuevo@example.com"}  →  igual
+----
+
+===== Cómo Hacer POST Idempotente (Crítico para Pagos)
+[source,json]
+----
+# Usar Idempotency-Key header
+POST /api/pagos
+Idempotency-Key: pago-2025-10-21-001
+Content-Type: application/json
+
+{
+  "monto": 100,
+  "cuenta": "cuenta-123"
+}
+
+# Primera llamada → Crea y procesa
+# Segunda llamada con mismo key → Retorna resultado anterior sin duplicar
+
+HTTP/1.1 201 Created
+{
+  "id": "pago-001",
+  "monto": 100,
+  "estado": "completado"
+}
+
+# Segunda llamada idéntica
+HTTP/1.1 200 OK  (Nota: 200, no 201)
+{
+  "id": "pago-001",
+  "monto": 100,
+  "estado": "completado"
+}
+----
+
+===== Buenas Prácticas
+[source]
+----
+✓ Respetar idempotencia de métodos
+✓ Usar Idempotency-Key para POST críticos
+✓ Documentar si operación es idempotente
+✓ Facilitar reintentos seguros
+
+❌ Ignorar idempotencia
+❌ Crear duplicados en POST
+❌ No proporcionar forma de hacer idempotente
+----
+
+==== Seguridad de Métodos
+
+===== Métodos Seguros
+Un método es **seguro** si no modifica el estado del servidor.
+
+[source]
+----
+Métodos Seguros:
+- GET (solo lectura)
+- HEAD (solo lectura)
+- OPTIONS (solo información)
+
+Métodos NO Seguros:
+- POST (puede crear)
+- PUT (modifica)
+- PATCH (modifica)
+- DELETE (elimina)
+
+Implicaciones:
+- Métodos seguros pueden cachearse
+- No requieren confirmación de usuario
+- No generan efectos secundarios
+----
+
+===== Buenas Prácticas
+[source]
+----
+✓ Usar métodos seguros solo para lectura
+✓ Proteger métodos no seguros con autenticación
+✓ Requerir HTTPS para operaciones sensibles
+✓ Limitar tasa (rate limiting) en métodos costosos
+
+❌ Usar GET para crear/modificar datos
+❌ Confiar en métodos para seguridad
+❌ Usar HTTP (sin encriptación) para datos sensibles
+----
+
+==== Validación de Entrada
+
+===== Validación en Solicitud
+[source,json]
+----
+# Validar tipos de datos
+POST /api/usuarios
+{
+  "nombre": 123,          ❌ Debe ser string
+  "email": "invalido",    ❌ Email inválido
+  "edad": -5              ❌ Debe ser positivo
+}
+
+HTTP/1.1 422 Unprocessable Entity
+{
+  "error": "Validación fallida",
+  "errors": {
+    "nombre": "Debe ser texto",
+    "email": "Email inválido",
+    "edad": "Debe ser mayor a 0"
+  }
+}
+
+---
+
+# Validar campos requeridos
+POST /api/usuarios
+{
+  "nombre": "Juan"
+  // Falta: email, edad
+}
+
+HTTP/1.1 422 Unprocessable Entity
+{
+  "error": "Campos requeridos faltantes",
+  "campos_faltantes": ["email", "edad"]
+}
+
+---
+
+# Validar tamaño
+POST /api/comentarios
+{
+  "texto": "Lorem ipsum..." (10000 caracteres) ❌ Max 1000
+}
+
+HTTP/1.1 422 Unprocessable Entity
+{
+  "error": "Texto demasiado largo",
+  "max_caracteres": 1000
+}
+----
+
+===== Validar Datos Duplicados
+[source,json]
+----
+# Email duplicado
+POST /api/usuarios
+{
+  "nombre": "Juan",
+  "email": "juan@example.com"  ❌ Ya existe
+}
+
+HTTP/1.1 409 Conflict
+{
+  "error": "Email ya registrado",
+  "campo": "email"
+}
+----
+
+===== Validar Integridad Referencial
+[source,json]
+----
+# Crear pedido con usuario inexistente
+POST /api/pedidos
+{
+  "usuario_id": 999,  ❌ Usuario no existe
+  "monto": 100
+}
+
+HTTP/1.1 422 Unprocessable Entity
+{
+  "error": "Usuario no encontrado",
+  "campo": "usuario_id"
+}
+----
+
+===== Buenas Prácticas
+[source]
+----
+✓ Validar todos los inputs del cliente
+✓ Retornar errores descriptivos
+✓ Validar tipos de datos
+✓ Validar rangos y límites
+✓ Validar integridad referencial
+✓ Usar código 422 para validación
+
+❌ Confiar en datos del cliente
+❌ Validación solo en frontend
+❌ Errores genéricos
+❌ Aceptar datos inválidos
+----
+
+==== Manejo de Errores Consistente
+
+===== Estructura de Error Recomendada
+[source,json]
+----
+{
+  "error": "Descripción legible del error",
+  "code": "CODIGO_ERROR",
+  "status": 422,
+  "timestamp": "2025-10-21T10:30:00Z",
+  "path": "/api/usuarios",
+  "message": "Validación fallida",
+  "details": {
+    "email": "Email inválido",
+    "edad": "Debe ser mayor a 18"
+  }
+}
+----
+
+===== Ejemplos de Errores Consistentes
+[source,json]
+----
+# 400 - Solicitud Malformada
+HTTP/1.1 400 Bad Request
+{
+  "error": "JSON inválido",
+  "code": "INVALID_JSON",
+  "message": "No se puede parsear JSON"
+}
+
+---
+
+# 401 - No Autenticado
+HTTP/1.1 401 Unauthorized
+{
+  "error": "Autenticación requerida",
+  "code": "UNAUTHORIZED",
+  "message": "Token expirado o inválido"
+}
+
+---
+
+# 403 - Sin Permiso
+HTTP/1.1 403 Forbidden
+{
+  "error": "Acceso denegado",
+  "code": "FORBIDDEN",
+  "message": "No tienes permiso para acceder a este recurso"
+}
+
+---
+
+# 404 - No Encontrado
+HTTP/1.1 404 Not Found
+{
+  "error": "Recurso no encontrado",
+  "code": "NOT_FOUND",
+  "message": "Usuario con ID 999 no existe"
+}
+
+---
+
+# 409 - Conflicto
+HTTP/1.1 409 Conflict
+{
+  "error": "Conflicto",
+  "code": "DUPLICATE_EMAIL",
+  "message": "Email ya registrado en el sistema"
+}
+
+---
+
+# 422 - No Procesable
+HTTP/1.1 422 Unprocessable Entity
+{
+  "error": "Validación fallida",
+  "code": "VALIDATION_ERROR",
+  "details": {
+    "email": "Email inválido",
+    "edad": "Debe ser número"
+  }
+}
+
+---
+
+# 429 - Too Many Requests
+HTTP/1.1 429 Too Many Requests
+{
+  "error": "Límite de solicitudes excedido",
+  "code": "RATE_LIMIT_EXCEEDED",
+  "retry_after": 60
+}
+
+---
+
+# 500 - Error del Servidor
+HTTP/1.1 500 Internal Server Error
+{
+  "error": "Error interno del servidor",
+  "code": "INTERNAL_SERVER_ERROR",
+  "message": "Ha ocurrido un error inesperado",
+  "request_id": "req-123456"  (Para debugging)
+}
+----
+
+===== Buenas Prácticas
+[source]
+----
+✓ Estructura consistente de errores
+✓ Incluir código de error específico
+✓ Mensajes claros y útiles
+✓ Incluir detalles cuando sea útil
+✓ Incluir timestamp
+✓ Incluir request ID (para debugging)
+
+❌ Errores genéricos ("Error")
+❌ Exponer detalles internos
+❌ Inconsistencia en estructura
+❌ Sin información útil para debuggear
+----
+
+==== Resumen: Seleccionar Método Correcto
+
+[width="100%",options="header"]
+|===
+| Operación | Método | Código Éxito | Idempotente | Ejemplo
+| Listar | GET | 200 | Sí | GET /usuarios
+| Obtener uno | GET | 200 | Sí | GET /usuarios/123
+| Crear | POST | 201 | No | POST /usuarios
+| Actualizar todo | PUT | 200 | Sí | PUT /usuarios/123
+| Actualizar parcial | PATCH | 200 | Depende | PATCH /usuarios/123
+| Eliminar | DELETE | 204 | Sí | DELETE /usuarios/123
+| Verificar | HEAD | 200 | Sí | HEAD /usuarios/123
+| Opciones | OPTIONS | 200 | Sí | OPTIONS /usuarios
+|===
+
+=== 4.2 Semántica y Buenas Prácticas
+
+==== 4.2.1 Idempotencia
+
+La idempotencia es una propiedad fundamental en el diseño de APIs REST que garantiza que ejecutar una operación múltiples veces produce el mismo resultado que ejecutarla una sola vez.
+
+**Operaciones Idempotentes:**
+* GET: Siempre devuelve el mismo resultado sin cambiar el estado del servidor
+* HEAD: Similar a GET pero sin devolver el cuerpo de la respuesta
+* PUT: Actualizar un recurso múltiples veces con los mismos datos produce el mismo estado
+* DELETE: Eliminar un recurso es idempotente; eliminar algo ya eliminado devuelve el mismo resultado
+
+**Operaciones NO Idempotentes:**
+* POST: Cada ejecución crea un nuevo recurso, generando resultados diferentes
+* PATCH: Puede tener efectos acumulativos dependiendo de la implementación
+
+**Beneficios:**
+* Permite reintentos seguros en caso de fallos de red
+* Facilita la recuperación ante errores de conectividad
+* Simplifica el diseño de clientes resilientes
+
+**Ejemplo:**
+[source, bash]
+----
+# Primera llamada
+PUT /api/usuarios/123 HTTP/1.1
+Content-Type: application/json
+{"nombre": "Juan", "edad": 30}
+# Respuesta: 200 OK
+
+# Segunda llamada idéntica
+PUT /api/usuarios/123 HTTP/1.1
+Content-Type: application/json
+{"nombre": "Juan", "edad": 30}
+# Respuesta: 200 OK (mismo resultado, el usuario no cambia)
+
+# POST es diferente - NO es idempotente
+POST /api/usuarios HTTP/1.1
+Content-Type: application/json
+{"nombre": "Juan", "edad": 30}
+# Primera vez: 201 Created (usuario1)
+# Segunda vez: 201 Created (usuario2) - ¡Nuevo usuario diferente!
+----
+
+==== 4.2.2 Seguridad
+
+La seguridad en APIs REST es crítica para proteger tanto los datos como la integridad del sistema. Implica múltiples capas de protección:
+
+**Autenticación:**
+* Verificar la identidad del cliente que realiza la solicitud
+* Métodos comunes:
+  - OAuth 2.0: Protocolo estándar para delegación de acceso
+  - JWT (JSON Web Tokens): Tokens auto-contenidos y digitalmente firmados
+  - Basic Auth: Usuario y contraseña en Base64 (solo con HTTPS)
+  - API Keys: Tokens simples para aplicaciones de máquina a máquina
+
+**Autorización:**
+* Verificar qué permisos tiene el usuario autenticado
+* Implementar control de acceso basado en roles (RBAC)
+* Validar que el usuario solo acceda a sus propios recursos
+
+**Transport Security:**
+* HTTPS es obligatorio para proteger datos en tránsito
+* Certificados SSL/TLS válidos y actualizados
+* TLS 1.2 como mínimo (preferiblemente 1.3)
+
+**Validación de Entrada:**
+* Sanitizar y validar todos los parámetros recibidos
+* Proteger contra inyección SQL, XSS, CSRF
+* Limitar tamaños de payload
+* Usar listas blancas de caracteres permitidos
+
+**Limitación de Tasa (Rate Limiting):**
+* Prevenir abuso y ataques de denegación de servicio (DoS)
+* Implementar throttling por cliente/IP
+* Devolver encabezados HTTP-RateLimit-*
+
+**Ejemplo:**
+[source, bash]
+----
+# Solicitud con JWT
+GET /api/usuarios/123 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+X-API-Key: sk_live_xyz123
+
+# Respuesta con encabezados de seguridad
+HTTP/1.1 200 OK
+Strict-Transport-Security: max-age=31536000
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'self'
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 999
+X-RateLimit-Reset: 1635724800
+----
+
+==== 4.2.3 Lado del Servidor
+
+Las consideraciones del lado del servidor incluyen aspectos de diseño e implementación que afectan cómo la API maneja las solicitudes:
+
+**Gestión de Estado:**
+* Las APIs REST deben ser stateless: cada solicitud contiene toda la información necesaria
+* El servidor no debe almacenar contexto de cliente entre solicitudes
+* Facilita escalabilidad horizontal y load balancing
+
+**Paginación:**
+* Implementar para grandes conjuntos de datos
+* Usar parámetros estándar: `limit`, `offset` o `page`, `size`
+* Incluir metadatos de paginación en la respuesta
+
+**Filtrado y Búsqueda:**
+* Permitir filtrado de resultados: `/api/usuarios?estado=activo&edad=30`
+* Soportar búsqueda: `/api/usuarios?q=Juan`
+* Validar y limitar opciones de filtrado
+
+**Caché:**
+* Usar encabezados HTTP Cache-Control apropiados
+* ETag para validación condicional
+* Implementar caché del lado del servidor cuando sea necesario
+
+**Manejo de Errores:**
+* Respuestas de error estructuradas y consistentes
+* Incluir códigos de error específicos, mensajes y detalles
+* Log detallado de errores para debugging
+
+**Versionado de API:**
+* Mantener compatibilidad hacia atrás
+* Versionar en la URL (`/v1/usuarios`) o encabezado
+* Deprecar versiones antiguas gradualmente
+
+**Ejemplo de respuesta del servidor:**
+[source, json]
+----
+{
+  "data": [
+    {"id": 1, "nombre": "Juan", "email": "juan@example.com"},
+    {"id": 2, "nombre": "María", "email": "maria@example.com"}
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 42,
+    "pages": 5
+  },
+  "links": {
+    "self": "/api/v1/usuarios?page=1&limit=10",
+    "next": "/api/v1/usuarios?page=2&limit=10",
+    "last": "/api/v1/usuarios?page=5&limit=10"
+  }
+}
+----
+
+== 5. Códigos de Estado HTTP
+
+=== 5.1 Respuestas 2xx (Éxito)
+
+Los códigos 2xx indican que la solicitud fue exitosa. La acción fue recibida, comprendida y aceptada correctamente.
+
+[options="header"]
+|===
+| Código | Nombre | Descripción | Uso típico
+
+| 200
+| OK
+| La solicitud fue exitosa y se devuelven los datos solicitados en el cuerpo de la respuesta.
+| GET, PUT, POST con resultado inmediato
+
+| 201
+| Created
+| La solicitud fue exitosa y se creó un nuevo recurso. El encabezado `Location` debe incluir la URL del recurso creado.
+| POST al crear un nuevo recurso
+
+| 202
+| Accepted
+| La solicitud fue aceptada para procesamiento pero aún no se ha completado. Se utiliza para operaciones asincrónicas.
+| Tareas de largo procesamiento, operaciones batch, trabajos en segundo plano
+
+| 203
+| Non-Authoritative Information
+| La solicitud fue exitosa pero los datos devueltos no provienen del servidor original, sino de una réplica o cache.
+| Respuestas desde proxies, caches intermedios
+
+| 204
+| No Content
+| La solicitud fue exitosa pero no hay contenido que devolver. El cuerpo de la respuesta está vacío.
+| DELETE exitoso, PUT/POST sin necesidad de devolver datos
+
+| 205
+| Reset Content
+| La solicitud fue exitosa. Le indica al cliente que debe resetear la vista del documento que causó la solicitud.
+| Formularios enviados exitosamente que requieren limpiar la interfaz
+
+| 206
+| Partial Content
+| La solicitud fue parcialmente exitosa. Solo se devuelve una parte del recurso solicitado (usado para descargas reanudables).
+| Descargas de archivos grandes, streaming de video/audio, solicitudes HTTP Range
+
+| 207
+| Multi-Status
+| La respuesta contiene múltiples códigos de estado independientes (utilizado en WebDAV).
+| Operaciones en batch donde algunos recursos tienen éxito y otros fallan
+
+| 208
+| Already Reported
+| Los miembros de una vinculación se han incluido anteriormente (utilizado en WebDAV).
+| Respuestas WebDAV complejas
+
+| 226
+| IM Used
+| El servidor ha cumplido una solicitud GET y la respuesta contiene representaciones de uno o más resultados.
+| Negociación de contenido avanzada
+|===
+
+=== 5.2 Respuestas 3xx (Redirección)
+
+Los códigos 3xx indican que se requieren acciones adicionales para completar la solicitud. Típicamente implican redirecciones a otra ubicación o validación condicional.
+
+[options="header"]
+|===
+| Código | Nombre | Descripción | Uso típico
+
+| 300
+| Multiple Choices
+| Hay múltiples opciones para el recurso solicitado. El cliente debe elegir una de ellas (raramente usado en APIs REST).
+| Cuando existen múltiples representaciones del mismo recurso
+
+| 301
+| Moved Permanently
+| El recurso se ha movido permanentemente a una nueva URL. Los clientes deben actualizar sus referencias a la nueva ubicación.
+| Cambios permanentes de estructura de API, migración de recursos
+
+| 302
+| Found
+| El recurso se ha encontrado en una URL diferente temporalmente. El cliente debe seguir la redirección en el encabezado `Location`.
+| Redirecciones temporales, mantenimiento de servidor
+
+| 303
+| See Other
+| La respuesta a la solicitud puede encontrarse bajo una URL diferente. Usado típicamente para redireccionar después de POST/PUT/DELETE.
+| POST que genera un recurso y redirige a su ubicación, separar escritura de lectura
+
+| 304
+| Not Modified
+| El recurso no ha sido modificado desde la última solicitud. El cliente puede usar su versión en caché. No incluye cuerpo de respuesta.
+| Negociación condicional con encabezados If-Modified-Since, If-None-Match, ETags
+
+| 305
+| Use Proxy
+| El recurso debe ser accedido a través de un proxy especificado en el encabezado `Location` (obsoleto).
+| Muy raramente usado en APIs REST modernas
+
+| 307
+| Temporary Redirect
+| Redirección temporal similar a 302, pero garantiza que el método HTTP no cambiará en la redirección.
+| Redirecciones temporales donde es crítico mantener el verbo HTTP (POST → POST)
+
+| 308
+| Permanent Redirect
+| Redirección permanente similar a 301, pero garantiza que el método HTTP no cambiará en la redirección.
+| Cambios permanentes donde es crítico mantener el verbo HTTP (PUT → PUT)
+
+| 310
+| Too Many Redirects
+| Se han alcanzado demasiadas redirecciones (no es un código estándar HTTP, pero es usado por algunos navegadores).
+| Detectar bucles de redirección
+
+| 311
+| Go to New URI
+| Se recomienda ir a una nueva URI, pero no es una redirección obligatoria (experimental/no estándar).
+| Sugerencias de cambio de URL
+|===
+
+=== 5.3 Respuestas 4xx (Error del Cliente)
+
+Los códigos 4xx indican que hay un error en la solicitud del cliente. El error es responsabilidad del cliente y no del servidor.
+
+[options="header"]
+|===
+| Código | Nombre | Descripción | Uso típico
+
+| 400
+| Bad Request
+| La solicitud es inválida o malformada. El servidor no puede o no procesará la solicitud debido a un error del cliente.
+| Parámetros inválidos, JSON malformado, sintaxis incorrecta
+
+| 401
+| Unauthorized
+| La solicitud requiere autenticación y el cliente no ha proporcionado credenciales válidas o están ausentes.
+| Falta de token JWT, credenciales expiradas, usuario no autenticado
+
+| 402
+| Payment Required
+| La solicitud requiere pago. Reservado para uso futuro en protocolos de pagos digitales.
+| Suscripciones vencidas, límite de crédito alcanzado
+
+| 403
+| Forbidden
+| El cliente está autenticado pero no tiene permisos para acceder al recurso solicitado (autorización fallida).
+| Usuario sin rol/permiso suficiente, acceso a recursos de otro usuario
+
+| 404
+| Not Found
+| El recurso solicitado no existe en el servidor.
+| ID de usuario inexistente, endpoint no definido, recurso eliminado
+
+| 405
+| Method Not Allowed
+| El método HTTP utilizado no es permitido para este recurso. La respuesta debe incluir encabezado `Allow`.
+| Intentar DELETE en un endpoint que solo permite GET, POST en recurso protegido
+
+| 406
+| Not Acceptable
+| El servidor no puede producir una respuesta que coincida con los valores aceptados del cliente (encabezado Accept).
+| Solicitar formato XML cuando solo se disponibiliza JSON
+
+| 408
+| Request Timeout
+| El cliente tardó demasiado tiempo en enviar la solicitud completa.
+| Conexión lenta, cliente inactivo durante demasiado tiempo
+
+| 409
+| Conflict
+| La solicitud entra en conflicto con el estado actual del recurso.
+| Intentar actualizar un recurso con versión antigua (optimistic locking), duplicar recurso único
+
+| 410
+| Gone
+| El recurso solicitado existió pero ya no está disponible y no volverá a estarlo.
+| Recurso permanentemente eliminado o deprecado
+
+| 411
+| Length Required
+| El servidor rechaza la solicitud porque falta el encabezado `Content-Length`.
+| Cliente no proporciona tamaño del contenido
+
+| 412
+| Precondition Failed
+| Se falló una precondición en los encabezados de solicitud (If-Match, If-Unmodified-Since, etc.).
+| ETag no coincide, recurso modificado desde la última lectura
+
+| 413
+| Payload Too Large
+| El cuerpo de la solicitud es más grande que lo que el servidor está dispuesto o puede procesar.
+| Archivo de carga demasiado grande, limite de payload excedido
+
+| 414
+| URI Too Long
+| La URI solicitada es más larga que lo que el servidor está dispuesto a procesar.
+| URL excesivamente larga con parámetros
+
+| 415
+| Unsupported Media Type
+| El formato del cuerpo de la solicitud no es soportado (Content-Type inválido).
+| Enviar XML cuando se espera JSON, tipo MIME no reconocido
+
+| 416
+| Range Not Satisfiable
+| El rango especificado en el encabezado `Range` no puede satisfacerse.
+| Solicitar bytes fuera del rango disponible del recurso
+
+| 418
+| I'm a Teapot
+| El servidor rechaza preparar café porque es una tetera (broma HTTP, RFC 2324).
+| Solo en propósitos humorísticos o especiales
+
+| 420
+| Enhance Your Calm
+| El cliente está siendo limitado por tasa (usado por Twitter API).
+| Rate limiting, demasiadas solicitudes
+
+| 422
+| Unprocessable Entity
+| La solicitud está bien formada pero contiene errores semánticos. Los datos son inválidos según las reglas de negocio.
+| Email duplicado, contraseña muy corta, validaciones de negocio fallidas
+
+| 423
+| Locked
+| El recurso que la solicitud intenta acceder está bloqueado.
+| Recurso en edición por otro usuario, bajo mantenimiento
+
+| 424
+| Failed Dependency
+| La solicitud falló debido a que falló una solicitud previa.
+| Operación dependiente de otra que fracasó
+
+| 428
+| Precondition Required
+| El servidor requiere que la solicitud sea condicional (encabezados If-Match, etc.).
+| Prevenir sobrescrituras accidentales
+
+| 429
+| Too Many Requests
+| El cliente ha enviado demasiadas solicitudes en un período de tiempo dado.
+| Rate limiting, cuota de API excedida
+
+| 431
+| Request Header Fields Too Large
+| Los encabezados de la solicitud son demasiado grandes.
+| Cookies excesivamente grandes, headers personalizados enormes
+
+| 451
+| Unavailable For Legal Reasons
+| El recurso no está disponible por razones legales (censurado, bloqueado geográficamente).
+| Geo-restricción, bloqueo legal, cumplimiento normativo
+|===
+
+=== 5.4 Respuestas 5xx (Error del Servidor)
+
+Los códigos 5xx indican que el servidor encontró un error inesperado y no puede completar la solicitud. La responsabilidad es del servidor.
+
+[options="header"]
+|===
+| Código | Nombre | Descripción | Uso típico
+
+| 500
+| Internal Server Error
+| El servidor encontró una condición inesperada que le impide cumplir la solicitud. Error genérico del servidor.
+| Excepción no capturada, error en lógica de negocio, fallo en base de datos
+
+| 501
+| Not Implemented
+| El servidor no soporta la funcionalidad requerida para cumplir la solicitud (método HTTP no implementado).
+| Método HTTP válido pero no soportado en este servidor, característica no desarrollada
+
+| 502
+| Bad Gateway
+| El servidor actuó como gateway o proxy y recibió una respuesta inválida del servidor aguas arriba.
+| Error de comunicación entre servidores, proxy misconfigured, servidor backend caído
+
+| 503
+| Service Unavailable
+| El servidor no está disponible temporalmente, usualmente debido a mantenimiento o sobrecarga.
+| Servidor en mantenimiento, recursos agotados, demasiadas conexiones
+
+| 504
+| Gateway Timeout
+| El servidor actuó como gateway o proxy y no recibió una respuesta a tiempo del servidor aguas arriba.
+| Timeout en llamada a servicio backend, servidor upstream no responde
+
+| 505
+| HTTP Version Not Supported
+| El servidor no soporta la versión del protocolo HTTP utilizada en la solicitud.
+| Cliente usando versión HTTP obsoleta o no soportada
+
+| 506
+| Variant Also Negotiates
+| El servidor tiene una configuración interna defectuosa en la negociación de contenido.
+| Problemas de configuración del servidor en Content-Negotiation
+
+| 507
+| Insufficient Storage
+| El servidor no tiene suficiente espacio de almacenamiento para completar la solicitud (WebDAV).
+| Disco lleno, cuota de almacenamiento excedida
+
+| 508
+| Loop Detected
+| El servidor detectó un bucle infinito al procesar la solicitud (WebDAV).
+| Configuración de proxy circular, redirecciones recursivas
+
+| 510
+| Not Extended
+| Se requieren extensiones de protocolo para cumplir la solicitud.
+| Extensiones de protocolo requeridas no implementadas
+
+| 511
+| Network Authentication Required
+| El cliente necesita autenticarse en la red para obtener acceso al recurso.
+| Portal cautivo, autenticación de red requerida
+|===
+
+== 6. Formatos de Representación
+
+=== 6.1 Formatos de Representación
+
+Los formatos de representación definen cómo se codifican y transmiten los datos en las solicitudes y respuestas HTTP. Se especifican mediante el encabezado `Content-Type`.
+
+[options="header"]
+|===
+| Media Type | Nombre | Descripción | Casos de uso
+
+| application/json
+| JSON
+| Notación de Objetos JavaScript. Formato ligero, legible y ampliamente soportado. Estándar de facto en APIs REST modernas.
+| APIs REST, configuración, intercambio de datos entre servicios
+
+| application/xml
+| XML
+| Lenguaje de Marcas Extensible. Más verboso que JSON pero muy estructurado y usado en sistemas empresariales legacy.
+| APIs SOAP, EDI, sistemas heredados, configuración compleja
+
+| text/xml
+| XML (texto)
+| Variante de XML especificada como texto plano. Similar a application/xml pero indicando que es texto.
+| Respuestas XML legibles, configuración, documentos
+
+| text/csv
+| CSV
+| Valores Separados por Comas. Formato simple para datos tabulares. Fácil de parsear y soportado por hojas de cálculo.
+| Exportación de datos, reportes, importación en Excel/Sheets
+
+| application/yaml
+| YAML
+| YAML Ain't Markup Language. Formato legible, con indentación significativa. Popular en DevOps.
+| Configuración (Kubernetes, Docker Compose), datos de configuración
+
+| application/x-www-form-urlencoded
+| Form URL Encoded
+| Formato tradicional para envío de formularios HTML. Los datos se codifican como pares clave-valor.
+| Formularios HTML, datos simple de aplicaciones web legadas
+
+| multipart/form-data
+| Multipart Form Data
+| Formato para enviar datos complejos incluyendo archivos binarios. Usado por formularios con carga de archivos.
+| Carga de archivos, formularios con datos mixtos (texto + binario)
+
+| application/octet-stream
+| Binario Genérico
+| Stream de bytes sin tipo específico. Indica contenido binario genérico.
+| Descargas de archivos, contenido binario sin tipo específico
+
+|===
+
+=== 6.2 Negociación de Contenido y Media Types Personalizados
+
+La negociación de contenido permite que cliente y servidor acuerden el formato más apropiado para la comunicación. Esto proporciona flexibilidad y compatibilidad en APIs.
+
+==== 6.2.1 Content Negotiation (Negociación de Contenido)
+
+**Encabezado Accept (Cliente → Servidor):**
+
+El cliente especifica qué formatos puede aceptar usando el encabezado `Accept`:
+
+[source, bash]
+----
+GET /api/usuarios/123 HTTP/1.1
+Accept: application/json, application/xml;q=0.9, text/plain;q=0.8
+
+# El servidor debe devolver uno de estos formatos
+# q (quality factor): 0-1, indica preferencia (1 = máxima preferencia)
+----
+
+**Encabezado Content-Type (Servidor → Cliente):**
+
+El servidor especifica el formato exacto en la respuesta:
+
+[source, bash]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "id": 123,
+  "nombre": "Juan Pérez"
+}
+----
+
+**Otros encabezados de negociación:**
+
+* `Accept-Language`: Idioma preferido (es, en, fr)
+* `Accept-Encoding`: Compresión soportada (gzip, deflate, brotli)
+* `Accept-Charset`: Conjunto de caracteres (utf-8, iso-8859-1)
+
+**Ejemplo completo:**
+[source, bash]
+----
+GET /api/usuarios/123 HTTP/1.1
+Accept: application/json
+Accept-Language: es-ES,es;q=0.9
+Accept-Encoding: gzip, deflate
+Accept-Charset: utf-8
+
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Content-Language: es
+
+{...}
+----
+
+==== 6.2.2 Media Types Personalizados (Vendor-Specific)
+
+Las APIs pueden definir tipos MIME personalizados para casos de uso específicos. Siguen el formato:
+
+`application/vnd.{empresa|organizacion}.{version}+{formato}`
+
+**Ejemplos:**
+
+* `application/vnd.github.v3+json` - GitHub API v3 en JSON
+* `application/vnd.myapp.v1+json` - Mi aplicación, versión 1, en JSON
+* `application/vnd.myapi.v2.hal+json` - Mi API v2 con HAL en JSON
+
+**Ventajas:**
+
+* Versionado de API en el Content-Type
+* Evolución de API sin romper compatibilidad
+* Identificación clara del tipo específico de datos
+
+**Ejemplo de uso:**
+[source, bash]
+----
+GET /api/usuarios HTTP/1.1
+Accept: application/vnd.myapi.v2+json
+
+HTTP/1.1 200 OK
+Content-Type: application/vnd.myapi.v2+json
+
+{
+  "usuarios": [
+    {"id": 1, "nombre": "Juan"}
+  ],
+  "_links": {
+    "self": {"href": "/api/usuarios"}
+  }
+}
+----
+
+==== 6.2.3 Estrategias de Negociación
+
+**Por encabezado (Recomendado):**
+[source, bash]
+----
+GET /api/usuarios HTTP/1.1
+Accept: application/json
+----
+
+**Por parámetro de query:**
+[source, bash]
+----
+GET /api/usuarios?format=json
+GET /api/usuarios?format=xml
+----
+
+**Por extensión en URL:**
+[source, bash]
+----
+GET /api/usuarios.json
+GET /api/usuarios.xml
+----
+
+**Por encabezado personalizado:**
+[source, bash]
+----
+GET /api/usuarios HTTP/1.1
+X-API-Format: json
+----
+
+**Jerarquía de preferencia (típica):**
+. Encabezado `Accept` (estándar HTTP)
+. Parámetro `format` en query string
+. Extensión en URL
+. Encabezados personalizados
+. Formato por defecto (usualmente JSON)
+
+==== 6.2.4 Tabla de Media Types Comunes
+
+[options="header"]
+|===
+| Media Type | Usos en APIs | Características | Versionado
+
+| application/json
+| APIs REST modernas
+| Ligero, rápido, fácil de parsear
+| application/vnd.api.v1+json
+
+| application/xml
+| Sistemas empresariales
+| Verboso, estructura compleja
+| application/vnd.api.v1+xml
+
+| application/hal+json
+| APIs REST con hipermedia
+| HAL (Hypertext Application Language)
+| application/vnd.api.hal+json
+
+| application/vnd.collection+json
+| APIs con collections
+| Collection+JSON estándar
+| Incluido en media type
+
+| application/problem+json
+| Respuestas de error (RFC 7807)
+| Errores estructurados
+| application/vnd.api.problem+json
+
+| application/ld+json
+| Datos enlazados, Web semántica
+| JSON-LD con contexto
+| application/vnd.api.ld+json
+|===
+
+== 7. Recomendaciones Clave para APIs REST
+
+=== 7.1 Seguridad
+
+La seguridad es un aspecto crítico en el desarrollo de APIs REST. Implica múltiples capas de protección para garantizar confidencialidad, integridad y disponibilidad.
+
+==== 7.1.1 Autenticación
+
+La autenticación verifica la identidad del cliente. Existen varios métodos:
+
+**OAuth 2.0**
+
+Protocolo estándar para delegación de acceso. Ideal para aplicaciones de terceros:
+
+[source, bash]
+----
+POST /oauth/token HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&code=AUTH_CODE&client_id=CLIENT_ID&client_secret=CLIENT_SECRET
+
+HTTP/1.1 200 OK
+{
+  "access_token": "ya29.a0AfH6SMBx...",
+  "expires_in": 3599,
+  "token_type": "Bearer"
+}
+
+# Uso del token en solicitudes
+GET /api/usuarios HTTP/1.1
+Authorization: Bearer ya29.a0AfH6SMBx...
+----
+
+**JWT (JSON Web Tokens)**
+
+Tokens auto-contenidos y digitalmente firmados:
+
+[source, bash]
+----
+POST /api/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "usuario": "juan@example.com",
+  "contraseña": "secreta123"
+}
+
+HTTP/1.1 200 OK
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaCBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+}
+
+# Estructura JWT: header.payload.signature
+# header: {"alg": "HS256", "typ": "JWT"}
+# payload: {"sub": "1234567890", "name": "John Doe"}
+# signature: HMACSHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload), secret)
+----
+
+**Basic Auth**
+
+Usuario y contraseña en Base64 (solo con HTTPS):
+
+[source, bash]
+----
+GET /api/usuarios HTTP/1.1
+Authorization: Basic am9hbjpzZWNyZXQxMjM=
+# Base64 de: juan:secreto123
+----
+
+**API Keys**
+
+Tokens simples para aplicaciones máquina-a-máquina:
+
+[source, bash]
+----
+GET /api/usuarios HTTP/1.1
+X-API-Key: sk_live_xyz123abc456def789
+# O en encabezado personalizado
+Authorization: ApiKey sk_live_xyz123abc456def789
+----
+
+**Comparativa de métodos:**
+
+[options="header"]
+|===
+| Método | Seguridad | Escalabilidad | Uso recomendado | Complejidad
+
+| Basic Auth
+| Baja (sin HTTPS es inseguro)
+| Baja
+| Desarrollo, sistemas internos
+| Muy baja
+
+| API Keys
+| Media
+| Media
+| Aplicaciones máquina-a-máquina
+| Baja
+
+| JWT
+| Alta (si se usa HTTPS)
+| Alta (stateless)
+| APIs públicas, microservicios
+| Media
+
+| OAuth 2.0
+| Muy Alta
+| Alta
+| Aplicaciones de terceros, delegación
+| Alta
+|===
+
+==== 7.1.2 Autorización
+
+La autorización verifica qué permisos tiene el usuario autenticado:
+
+**Control de Acceso Basado en Roles (RBAC):**
+
+[source, json]
+----
+{
+  "usuario_id": 123,
+  "nombre": "Juan Pérez",
+  "roles": ["usuario", "moderador"],
+  "permisos": ["leer:posts", "crear:posts", "eliminar:posts"]
+}
+
+// En el servidor:
+// GET /api/posts → Requiere "leer:posts"
+// POST /api/posts → Requiere "crear:posts"
+// DELETE /api/posts/456 → Requiere "eliminar:posts" + propietario del post
+----
+
+**Validación de autorización:**
+
+[source, bash]
+----
+GET /api/usuarios/456/perfil HTTP/1.1
+Authorization: Bearer TOKEN_JUAN
+
+# Servidor valida:
+# 1. Token válido y no expirado
+# 2. Usuario autenticado (Juan)
+# 3. ¿Juan puede acceder al perfil del usuario 456?
+#    - Si 456 es él mismo: SÍ
+#    - Si 456 es otro usuario y privado: NO (403 Forbidden)
+#    - Si Juan es admin: SÍ
+
+HTTP/1.1 200 OK (o 403 Forbidden)
+----
+
+==== 7.1.3 HTTPS Obligatorio
+
+**Protocolo de Transporte Seguro:**
+
+* TLS 1.2 como mínimo (preferiblemente TLS 1.3)
+* Certificados SSL/TLS válidos de autoridades confiables
+* No permitir conexiones HTTP sin encriptar
+
+**Configuración recomendada:**
+
+[source, bash]
+----
+# Redirigir HTTP a HTTPS
+HTTP/1.1 301 Moved Permanently
+Location: https://api.example.com/ruta
+
+# Encabezados de seguridad en respuesta HTTPS
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+Content-Security-Policy: default-src 'self'
+----
+
+==== 7.1.4 Validación de Entrada
+
+Proteger contra inyección SQL, XSS, CSRF y otros ataques:
+
+**Validación básica:**
+
+[source, bash]
+----
+POST /api/usuarios HTTP/1.1
+Content-Type: application/json
+
+{
+  "nombre": "Juan Pérez",           // Validar longitud, caracteres
+  "email": "juan@example.com",      // Validar formato email
+  "edad": 30,                       // Validar número en rango
+  "descripcion": "Texto libre"      // Sanitizar HTML/scripts
+}
+
+# Servidor valida:
+# - Nombre: 2-100 caracteres, sin caracteres especiales
+# - Email: Formato válido, dominio existe
+# - Edad: 18-120, número entero
+# - Descripción: Sin scripts, máximo 1000 caracteres
+
+# Si fallan validaciones → 422 Unprocessable Entity
+----
+
+**Sanitización:**
+
+[source, json]
+----
+{
+  "errores": [
+    {
+      "campo": "nombre",
+      "mensaje": "El nombre debe tener entre 2 y 100 caracteres"
+    },
+    {
+      "campo": "email",
+      "mensaje": "El formato de email no es válido"
+    },
+    {
+      "campo": "descripcion",
+      "mensaje": "La descripción contiene caracteres no permitidos"
+    }
+  ]
+}
+----
+
+**Mejores prácticas:**
+
+* Lista blanca de caracteres permitidos
+* Escapar salida HTML
+* Usar consultas parametrizadas para bases de datos
+* Validar en servidor (no confiar en validación del cliente)
+* Limitar tamaños de payload
+
+==== 7.1.5 Rate Limiting
+
+Prevenir abuso y ataques de denegación de servicio (DoS):
+
+**Implementación con encabezados:**
+
+[source, bash]
+----
+GET /api/usuarios HTTP/1.1
+
+HTTP/1.1 200 OK
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 999
+X-RateLimit-Reset: 1635724800
+
+# El cliente sabe que:
+# - Límite: 1000 solicitudes
+# - Restantes en esta ventana: 999
+# - Se reinicia en: timestamp 1635724800
+----
+
+**Cuando se excede el límite:**
+
+[source, bash]
+----
+GET /api/usuarios HTTP/1.1
+
+HTTP/1.1 429 Too Many Requests
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 0
+X-RateLimit-Reset: 1635724800
+Retry-After: 3600
+
+{
+  "error": "rate_limit_exceeded",
+  "mensaje": "Ha excedido el límite de solicitudes. Reintente en 3600 segundos."
+}
+----
+
+**Estrategias de rate limiting:**
+
+* Por IP: Limitar solicitudes por dirección IP
+* Por usuario: Limitar por usuario autenticado
+* Por API Key: Límites diferentes según tipo de cliente
+* Por endpoint: Límites específicos para operaciones costosas
+* Ventana deslizante: Contador que se reinicia periódicamente
+
+**Ejemplo de configuración:**
+
+[options="header"]
+|===
+| Cliente | Límite | Ventana | Caso de uso
+
+| Anónimo (IP)
+| 100 solicitudes
+| 1 hora
+| Usuarios no autenticados
+
+| Usuario básico
+| 1000 solicitudes
+| 1 día
+| Usuarios registrados
+
+| Usuario premium
+| 10000 solicitudes
+| 1 día
+| Suscriptores pagados
+
+| Admin/Bot
+| Ilimitado
+| N/A
+| Sistemas internos
+|===
+
+=== 7.2 Documentación
+
+Una documentación clara y completa es esencial para que los desarrolladores utilicen correctamente la API. Incluye especificaciones formales, ejemplos y guías prácticas.
+
+==== 7.2.1 OpenAPI/Swagger
+
+**OpenAPI** es el estándar industrial para documentar APIs REST de forma máquina-legible.
+
+**Especificación en formato YAML:**
+
+[source, yaml]
+----
+openapi: 3.0.0
+info:
+  title: API de Usuarios
+  version: 1.0.0
+  description: API REST para gestión de usuarios
+  contact:
+    name: Soporte
+    email: soporte@example.com
+  license:
+    name: MIT
+
+servers:
+  - url: https://api.example.com/v1
+    description: Servidor de producción
+  - url: https://staging-api.example.com/v1
+    description: Servidor de pruebas
+
+paths:
+  /usuarios:
+    get:
+      summary: Obtener lista de usuarios
+      description: Devuelve una lista paginada de usuarios
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Usuario'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          description: No autenticado
+        '429':
+          description: Demasiadas solicitudes
+    
+    post:
+      summary: Crear nuevo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioCrear'
+      responses:
+        '201':
+          description: Usuario creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '400':
+          description: Datos inválidos
+        '422':
+          description: Error de validación
+
+  /usuarios/{id}:
+    get:
+      summary: Obtener usuario por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Datos del usuario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '404':
+          description: Usuario no encontrado
+
+components:
+  schemas:
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: integer
+        nombre:
+          type: string
+        email:
+          type: string
+          format: email
+        activo:
+          type: boolean
+        fecha_creacion:
+          type: string
+          format: date-time
+      required:
+        - id
+        - nombre
+        - email
+
+    UsuarioCrear:
+      type: object
+      properties:
+        nombre:
+          type: string
+          minLength: 2
+          maxLength: 100
+        email:
+          type: string
+          format: email
+        contraseña:
+          type: string
+          minLength: 8
+      required:
+        - nombre
+        - email
+        - contraseña
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+        pages:
+          type: integer
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+----
+
+**Ventajas de OpenAPI:**
+
+* ✅ Especificación estándar e independiente de lenguaje
+* ✅ Generación automática de clientes y servidores
+* ✅ Validación automática de solicitudes/respuestas
+* ✅ Herramientas como Swagger UI para visualizar interactivamente
+* ✅ Análisis de cobertura de documentación
+
+**Herramientas relacionadas:**
+
+* **Swagger UI**: Interfaz web interactiva para explorar la API
+* **Swagger Editor**: Editor para escribir especificaciones OpenAPI
+* **Postman**: Puede importar especificaciones OpenAPI
+* **ReDoc**: Documentación alternativa a Swagger UI
+
+==== 7.2.2 Ejemplos de Uso
+
+Proporcionar ejemplos claros de cómo usar la API:
+
+**Ejemplo: Crear un usuario**
+
+[source, bash]
+----
+curl -X POST https://api.example.com/v1/usuarios \
+  -H "Authorization: Bearer TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nombre": "Juan Pérez",
+    "email": "juan@example.com",
+    "contraseña": "SecurePass123"
+  }'
+
+# Respuesta exitosa (201 Created)
+{
+  "id": 456,
+  "nombre": "Juan Pérez",
+  "email": "juan@example.com",
+  "activo": true,
+  "fecha_creacion": "2025-10-31T10:30:00Z"
+}
+
+# Respuesta de error (422 Unprocessable Entity)
+{
+  "error": "validation_error",
+  "detalles": [
+    {
+      "campo": "email",
+      "mensaje": "El email ya está registrado"
+    },
+    {
+      "campo": "contraseña",
+      "mensaje": "La contraseña debe tener al menos 8 caracteres"
+    }
+  ]
+}
+----
+
+**Ejemplo en diferentes lenguajes:**
+
+[source, python]
+----
+import requests
+
+url = "https://api.example.com/v1/usuarios"
+headers = {
+    "Authorization": "Bearer TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "nombre": "Juan Pérez",
+    "email": "juan@example.com",
+    "contraseña": "SecurePass123"
+}
+
+response = requests.post(url, headers=headers, json=data)
+usuario = response.json()
+print(f"Usuario creado: {usuario['id']}")
+----
+
+[source, javascript]
+----
+const response = await fetch('https://api.example.com/v1/usuarios', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    nombre: 'Juan Pérez',
+    email: 'juan@example.com',
+    contraseña: 'SecurePass123'
+  })
+});
+
+const usuario = await response.json();
+console.log(`Usuario creado: ${usuario.id}`);
+----
+
+==== 7.2.3 Guías de Integración
+
+Documentación práctica paso a paso:
+
+**Guía: Autenticación con JWT**
+
+1. **Obtener token:**
+   - Realizar POST a `/auth/login` con credenciales
+   - Recibir token JWT en respuesta
+   - Guardar token en cliente
+
+2. **Usar token en solicitudes:**
+   - Incluir encabezado `Authorization: Bearer TOKEN`
+   - Token válido por 24 horas
+   - Refresco de token con endpoint `/auth/refresh`
+
+3. **Manejo de tokens expirados:**
+   - Detectar respuesta 401 Unauthorized
+   - Intentar refrescar token con `/auth/refresh`
+   - Si falla, redirigir a login
+
+**Guía: Paginación de resultados**
+
+1. **Primera página:**
+   - GET `/usuarios?page=1&limit=10`
+   - Respuesta incluye `pagination` con `pages` total
+
+2. **Navegar entre páginas:**
+   - Usar campo `next` en respuesta para ir a siguiente
+   - Usar campo `prev` para ir a anterior
+
+3. **Optimización:**
+   - Usar cursor-based pagination para grandes conjuntos
+   - Filtrar antes de paginar cuando sea posible
+
+==== 7.2.4 Changelog
+
+Mantener registro de cambios en la API:
+
+[source, markdown]
+----
+# Changelog de API v1
+
+## [1.5.0] - 2025-10-31
+
+### Agregado
+- Nuevo endpoint GET `/usuarios/{id}/posts` para obtener posts de usuario
+- Nuevo filtro `estado` en GET `/usuarios`
+- Soporte para filtrado por rango de fechas
+
+### Mejorado
+- Rendimiento de búsqueda en 40%
+- Reducción de tamaño de payload en 20%
+
+### Cambiado
+- Encabezado de autenticación: `X-API-Key` → `Authorization: Bearer`
+
+### Deprecado
+- Endpoint `/usuarios/search` (usar GET `/usuarios?q=...` en su lugar)
+- Campo `user_id` en favor de `userId` (camelCase)
+
+### Corregido
+- Bug en paginación cuando limit > 100
+- Validación incorrecta de email con dominios internacionales
+
+### Seguridad
+- Actualización de dependencias para CVE-2025-12345
+- Implementación de rate limiting por IP
+
+## [1.4.0] - 2025-09-15
+
+### Agregado
+- Novo webhook para eventos de usuario
+
+...
+----
+
+**Información importante en Changelog:**
+
+* Versión y fecha de lanzamiento
+* Cambios por categoría (Agregado, Mejorado, Cambiado, Deprecado, Corregido, Seguridad)
+* Guía de migración para cambios breaking
+* Enlaces a documentación detallada
+* Avisos de deprecación con tiempo de vida útil
+
+==== 7.2.5 Herramientas de Documentación
+
+[options="header"]
+|===
+| Herramienta | Tipo | Características | Mejor para
+
+| Swagger/OpenAPI
+| Especificación estándar
+| Máquina-legible, generación de código, Swagger UI
+| APIs documentadas formalmente
+
+| Postman
+| Entorno de pruebas
+| Colecciones, ejemplos, tests, documentación
+| Pruebas manuales, ejemplos interactivos
+
+| ReDoc
+| Visualizador
+| Diseño moderno, documentación limpia
+| Documentación legible para usuarios
+
+| ReadTheDocs
+| Generador de docs
+| Hospedaje gratuito, versionado, búsqueda
+| Documentación extensa en Markdown
+
+| API Blueprint
+| Lenguaje de especificación
+| Similar a OpenAPI, más simple
+| APIs simples, prototipado rápido
+
+| RAML
+| Especificación
+| Jerárquica, bien estructurada
+| Organizaciones grandes
+|===
+
+=== 7.3 Versionado
+
+El versionado de API permite mantener múltiples versiones concurrentes mientras se evoluciona la API sin romper la compatibilidad con clientes existentes.
+
+==== 7.3.1 Estrategias de Versionado
+
+**1. Versionado en la URL (URI Versioning)**
+
+La forma más común y explícita:
+
+[source, bash]
+----
+GET https://api.example.com/v1/usuarios
+GET https://api.example.com/v2/usuarios
+GET https://api.example.com/v3/usuarios
+----
+
+**Ventajas:**
+* Muy explícito y fácil de entender
+* Fácil de usar en navegador y herramientas
+* Cada versión es una URL diferente
+
+**Desventajas:**
+* URLs diferentes para la misma funcionalidad
+* Requiere actualizar código cliente
+* Puede parecer poco elegante
+
+**2. Versionado en Encabezados (Header Versioning)**
+
+Especificar versión en encabezados HTTP:
+
+[source, bash]
+----
+GET https://api.example.com/usuarios HTTP/1.1
+Accept: application/vnd.myapi.v2+json
+X-API-Version: 2
+
+# O con content negotiation más específico
+Accept: application/vnd.company.myapi+json; version=2
+----
+
+**Ventajas:**
+* URL única para todas las versiones
+* Más elegante desde el punto de vista REST puro
+* Facilita la negociación de contenido
+
+**Desventajas:**
+* No es visible en la URL
+* Más difícil de debuggear
+* Menos intuitivo para usuarios
+
+**3. Versionado por Parámetro Query**
+
+Especificar versión como parámetro:
+
+[source, bash]
+----
+GET https://api.example.com/usuarios?api_version=2
+GET https://api.example.com/usuarios?v=2
+----
+
+**Ventajas:**
+* Fácil de implementar
+* Visible en la URL
+* Flexible
+
+**Desventajas:**
+* No es estándar
+* Puede causar confusión con otros parámetros
+* Menos claro que estás haciendo versionado
+
+**4. Versionado Semántico (Recomendado)**
+
+Usar versionado semántico (MAJOR.MINOR.PATCH):
+
+[source, bash]
+----
+v1.0.0 - Primera versión
+v1.1.0 - Cambios hacia atrás compatibles (nuevos campos)
+v1.1.1 - Bug fixes hacia atrás compatibles
+v2.0.0 - Cambios breaking (no compatible con v1)
+----
+
+**Tabla comparativa:**
+
+[options="header"]
+|===
+| Estrategia | Visibilidad | Estándar | Escalabilidad | Recomendado
+
+| URL Versioning
+| Alta
+| No estándar
+| Alta
+| ✅ Sí (más común)
+
+| Header Versioning
+| Baja
+| RFC 7231
+| Alta
+| ⭐ Ideal teóricamente
+
+| Query Parameter
+| Media
+| No estándar
+| Media
+| ❌ Evitar
+
+| Semántico
+| N/A
+| Estándar (SemVer)
+| Alta
+| ✅ Para releases
+|===
+
+==== 7.3.2 Deprecación de Versiones
+
+Proceso para retirarse gradualmente de versiones antiguas:
+
+**Fases de Deprecación:**
+
+1. **Anuncio (Fase 1):**
+   - Publicar en changelog que versión será deprecada
+   - Avisar con 6-12 meses de anticipación
+   - Incluir razones y guía de migración
+
+2. **Suporte Limitado (Fase 2):**
+   - Mantener versión funcionando
+   - No agregar nuevas características
+   - Solo corregir bugs críticos
+   - Advertencia en encabezados HTTP
+
+3. **Read-Only (Fase 3):**
+   - Permitir solo lectura (GET)
+   - Bloquer escritura (POST, PUT, DELETE)
+   - Devolver error 410 Gone o 400 Bad Request
+
+4. **Shutdown (Fase 4):**
+   - Versión completamente removida
+   - Devolver error 404 o 410 Gone
+
+**Ejemplo con encabezados de deprecación:**
+
+[source, bash]
+----
+GET https://api.example.com/v1/usuarios HTTP/1.1
+
+HTTP/1.1 200 OK
+Deprecation: true
+Sunset: Wed, 31 Dec 2025 23:59:59 GMT
+Link: </v2/usuarios>; rel="successor-version"
+Warning: 299 - "API v1 está deprecada. Migrar a v2 antes del 31/12/2025"
+
+{...}
+----
+
+**Encabezados de deprecación estándar (RFC 8594):**
+
+* `Deprecation: true` - Indica que el endpoint está deprecado
+* `Sunset: <date>` - Fecha en que desaparecerá
+* `Link: <url>; rel="successor-version"` - Versión/endpoint alternativo
+* `Warning: 299 - <mensaje>` - Mensaje de advertencia
+
+**Timeline de ejemplo:**
+
+[source, text]
+----
+Hoy:              API v1 es la actual
++3 meses:         Anunciar deprecación de v1
++6 meses:         v1 en modo "Read-Only"
++12 meses:        v1 es completamente removida
+                  Clientes deben estar en v2 o superior
+----
+
+==== 7.3.3 Migración de Clientes
+
+Guía para que los clientes migren de una versión a otra:
+
+**Guía de Migración: v1 → v2**
+
+**Cambios principales en v2:**
+
+[source, text]
+----
+1. Estructura de respuesta:
+   v1: {"users": [...]}
+   v2: {"data": [...], "pagination": {...}}
+
+2. Nombres de campos:
+   v1: user_id, user_name
+   v2: userId, userName (camelCase)
+
+3. URLs de endpoints:
+   v1: /users/{id}/posts
+   v2: /users/{id}/timeline/posts
+
+4. Autenticación:
+   v1: X-API-Key: key
+   v2: Authorization: Bearer token
+----
+
+**Pasos para migrar:**
+
+[source, markdown]
+----
+## Paso 1: Instalar cliente compatible con v2
+
+\`\`\`bash
+npm install @company/api-client@^2.0.0
+\`\`\`
+
+## Paso 2: Actualizar endpoint base
+
+\`\`\`javascript
+// v1
+const client = new APIClient({url: 'https://api.example.com/v1'});
+
+// v2
+const client = new APIClient({url: 'https://api.example.com/v2'});
+\`\`\`
+
+## Paso 3: Actualizar autenticación
+
+\`\`\`javascript
+// v1
+client.setApiKey('sk_live_xyz');
+
+// v2
+client.setToken('eyJhbGc...');
+\`\`\`
+
+## Paso 4: Actualizar manejo de respuestas
+
+\`\`\`javascript
+// v1
+const users = response.users;
+
+// v2
+const users = response.data;
+const pagination = response.pagination;
+\`\`\`
+
+## Paso 5: Actualizar nombres de campos
+
+\`\`\`javascript
+// v1
+user.user_id, user.user_name
+
+// v2
+user.userId, user.userName
+\`\`\`
+
+## Paso 6: Probar completamente
+
+\`\`\`bash
+npm test
+\`\`\`
+
+## Paso 7: Deployer en producción
+
+\`\`\`bash
+npm run build
+npm run deploy
+\`\`\`
+----
+
+**Soporte durante la migración:**
+
+* Documentación clara y ejemplos
+* SDKs actualizados
+* Herramienta de validación automática
+* Período de soporte técnico extendido
+* Notificaciones de progreso
+* Dashboard de estado de migración
+
+**Matriz de compatibilidad:**
+
+[options="header"]
+|===
+| Cliente | v1 | v2 | v3 | Recomendado
+
+| 1.x
+| ✅ Full
+| ⚠️ Parcial
+| ❌ No
+| Actualizar a 2.x
+
+| 2.x
+| ❌ No
+| ✅ Full
+| ⚠️ Parcial
+| Actual (usar 2.5.x)
+
+| 3.x
+| ❌ No
+| ❌ No
+| ✅ Full
+| Recomendado
+|===
+
+**Modelo de ciclo de vida:**
+
+[source, text]
+----
+Versión  Estado          End of Life  Acciones para clientes
+------   ------          -----------  ----------------------
+v1       ❌ Obsoleta     2025-12-31   MIGRAR a v2 o superior
+v2       ⚠️  Mantenida    2026-12-31   Mantener o actualizar a v3
+v3       ✅ Actual       2027-12-31   Usar esta versión
+v4       ℹ️  Beta         TBD          Probar, reportar issues
+----
+
+==== 7.3.4 Estrategia Recomendada
+
+**Para APIs públicas:**
+1. Usar versionado URI (`/v1/`, `/v2/`)
+2. Mantener 2-3 versiones concurrentes máximo
+3. Deprecar versiones con 12 meses de anticipación
+4. Proporcionar SDKs para facilitar migración
+5. Comunicar cambios tempranamente en changelog
+
+**Para APIs internas:**
+1. Considerar versionado por encabezado
+2. Coordinar directamente con consumidores internos
+3. Ciclos de deprecación más cortos (3-6 meses)
+4. Migración obligatoria antes de shutdown
+
+=== 7.4 Paginación y Filtrado
+
+Estrategias para manejar grandes conjuntos de datos de forma eficiente, permitiendo al cliente recuperar solo los datos que necesita.
+
+==== 7.4.1 Paginación
+
+La paginación divide grandes conjuntos de datos en páginas más manejables.
+
+**1. Offset-Based Pagination**
+
+La forma más simple. Especifica cuántos registros saltar:
+
+[source, bash]
+----
+GET https://api.example.com/usuarios?limit=10&offset=0   # Primeros 10
+GET https://api.example.com/usuarios?limit=10&offset=10  # Registros 11-20
+GET https://api.example.com/usuarios?limit=10&offset=20  # Registros 21-30
+----
+
+**Respuesta:**
+
+[source, json]
+----
+{
+  "data": [
+    {"id": 1, "nombre": "Juan"},
+    {"id": 2, "nombre": "María"},
+    ...
+  ],
+  "pagination": {
+    "limit": 10,
+    "offset": 0,
+    "total": 245,
+    "pages": 25
+  },
+  "links": {
+    "self": "/usuarios?limit=10&offset=0",
+    "next": "/usuarios?limit=10&offset=10",
+    "last": "/usuarios?limit=10&offset=240"
+  }
+}
+----
+
+**Ventajas:**
+* Simple de entender e implementar
+* Fácil cálculo de página
+* Permite saltar a página específica
+
+**Desventajas:**
+* Ineficiente con datos que cambian constantemente
+* Problemas si se eliminan registros durante paginación
+* Lento con offsets muy grandes
+
+**2. Page-Based Pagination**
+
+Similar a offset pero usando número de página:
+
+[source, bash]
+----
+GET https://api.example.com/usuarios?page=1&limit=10
+GET https://api.example.com/usuarios?page=2&limit=10
+GET https://api.example.com/usuarios?page=3&limit=10
+----
+
+**Respuesta:**
+
+[source, json]
+----
+{
+  "data": [...],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 245,
+    "pages": 25
+  },
+  "links": {
+    "first": "/usuarios?page=1&limit=10",
+    "prev": null,
+    "self": "/usuarios?page=1&limit=10",
+    "next": "/usuarios?page=2&limit=10",
+    "last": "/usuarios?page=25&limit=10"
+  }
+}
+----
+
+**Ventajas:**
+* Más intuitivo que offset
+* Mejor experiencia en UI (botones "Anterior", "Siguiente")
+
+**Desventajas:**
+* Los mismos problemas que offset-based
+
+**3. Cursor-Based Pagination (Recomendado)**
+
+Usa un cursor para marcar posición en los datos. Más eficiente con grandes conjuntos:
+
+[source, bash]
+----
+# Primera solicitud
+GET https://api.example.com/usuarios?limit=10
+
+# Solicitudes subsecuentes
+GET https://api.example.com/usuarios?limit=10&after=Y3Vyc29yXzEwMA==
+GET https://api.example.com/usuarios?limit=10&after=Y3Vyc29yXzIwMA==
+----
+
+**Respuesta:**
+
+[source, json]
+----
+{
+  "data": [
+    {"id": 1, "nombre": "Juan"},
+    {"id": 2, "nombre": "María"},
+    ...
+  ],
+  "pageInfo": {
+    "hasNextPage": true,
+    "hasPreviousPage": false,
+    "startCursor": "Y3Vyc29yXzA=",
+    "endCursor": "Y3Vyc29yXzk="
+  },
+  "links": {
+    "self": "/usuarios?limit=10",
+    "next": "/usuarios?limit=10&after=Y3Vyc29yXzk=",
+    "prev": null
+  }
+}
+----
+
+**Ventajas:**
+* ✅ Eficiente incluso con millones de registros
+* ✅ Maneja cambios en datos sin problemas
+* ✅ Ideal para aplicaciones en tiempo real
+* ✅ Usado por Facebook, GitHub, etc.
+
+**Desventajas:**
+* Más complejo de implementar
+* No permite saltar a página específica
+* Cursores pueden ser opacos para usuario
+
+**Tabla comparativa:**
+
+[options="header"]
+|===
+| Estrategia | Complejidad | Escalabilidad | Bueno para | Evitar
+
+| Offset-Based
+| Baja
+| Media
+| APIs simples, datos pequeños
+| Conjuntos > 100K registros
+
+| Page-Based
+| Baja
+| Media
+| Interfaces web tradicionales
+| Datos que cambian constantemente
+
+| Cursor-Based
+| Alta
+| Muy Alta
+| APIs públicas, feeds, datos grandes
+| APIs simples internas
+|===
+
+==== 7.4.2 Filtrado de Resultados
+
+Permite al cliente especificar qué registros devolver basado en criterios:
+
+**Filtros simples:**
+
+[source, bash]
+----
+GET /usuarios?estado=activo
+GET /usuarios?estado=activo&ciudad=Madrid
+GET /usuarios?estado=activo&ciudad=Madrid&edad=30
+----
+
+**Filtros avanzados:**
+
+[source, bash]
+----
+# Operadores de comparación
+GET /usuarios?edad[gte]=18&edad[lte]=65  # edad >= 18 AND edad <= 65
+GET /usuarios?fecha_creacion[gte]=2025-01-01
+
+# Búsqueda de texto
+GET /usuarios?q=Juan                      # Búsqueda full-text
+GET /usuarios?nombre[like]=%Juan%         # LIKE pattern
+
+# Filtros múltiples (OR)
+GET /usuarios?estado=activo,inactivo      # estado IN ('activo', 'inactivo')
+
+# Negación
+GET /usuarios?estado[ne]=eliminado        # estado != 'eliminado'
+----
+
+**Respuesta con metadatos de filtro:**
+
+[source, json]
+----
+{
+  "data": [
+    {"id": 1, "nombre": "Juan", "edad": 30, "estado": "activo"},
+    {"id": 2, "nombre": "María", "edad": 25, "estado": "activo"}
+  ],
+  "filters": {
+    "estado": "activo",
+    "edad": {"gte": 18, "lte": 65}
+  },
+  "pagination": {...}
+}
+----
+
+**Operadores recomendados:**
+
+[options="header"]
+|===
+| Operador | Sintaxis | Ejemplo | Significado
+
+| Igual
+| field=value
+| status=active
+| Igualdad exacta
+
+| No igual
+| field[ne]=value
+| status[ne]=deleted
+| No igual
+
+| Mayor que
+| field[gt]=value
+| age[gt]=18
+| Mayor que
+
+| Mayor o igual
+| field[gte]=value
+| date[gte]=2025-01-01
+| Mayor o igual
+
+| Menor que
+| field[lt]=value
+| price[lt]=100
+| Menor que
+
+| Menor o igual
+| field[lte]=value
+| price[lte]=100
+| Menor o igual
+
+| Contiene
+| field[like]=pattern
+| name[like]=%Juan%
+| LIKE SQL
+
+| En lista
+| field=val1,val2,val3
+| status=active,pending
+| IN SQL
+
+| Existe
+| field[exists]=true
+| email[exists]=true
+| Campo no nulo
+|===
+
+==== 7.4.3 Ordenamiento
+
+Especificar el orden en que devolver los registros:
+
+**Ordenamiento simple:**
+
+[source, bash]
+----
+GET /usuarios?sort=nombre               # Ascendente por defecto
+GET /usuarios?sort=-nombre              # Descendente (con -)
+GET /usuarios?sort=+nombre              # Explícitamente ascendente
+
+# Alias común
+GET /usuarios?order_by=nombre&direction=asc
+GET /usuarios?order_by=nombre&direction=desc
+----
+
+**Ordenamiento múltiple:**
+
+[source, bash]
+----
+GET /usuarios?sort=estado,-fecha_creacion  # Por estado ASC, luego por fecha DESC
+GET /usuarios?sort=-edad,nombre            # Por edad DESC, luego por nombre ASC
+----
+
+**Respuesta:**
+
+[source, json]
+----
+{
+  "data": [
+    {"id": 5, "nombre": "Ana", "estado": "activo", "fecha": "2025-10-01"},
+    {"id": 2, "nombre": "María", "estado": "activo", "fecha": "2025-10-15"},
+    {"id": 1, "nombre": "Juan", "estado": "activo", "fecha": "2025-10-31"}
+  ],
+  "sort": {
+    "fields": ["estado", "-fecha_creacion"],
+    "orders": [
+      {"field": "estado", "direction": "asc"},
+      {"field": "fecha_creacion", "direction": "desc"}
+    ]
+  }
+}
+----
+
+**Campos permitidos para ordenar:**
+
+* Especificar en documentación API cuáles campos se pueden usar
+* Previene queries complejas en campos indexados
+* Protege datos sensibles
+
+[source, bash]
+----
+# Permitido
+GET /usuarios?sort=nombre,edad,fecha_creacion
+
+# No permitido (error 400)
+GET /usuarios?sort=contraseña_hash,token_secreto
+# Error: Campos no permitidos para ordenar
+----
+
+==== 7.4.4 Proyección de Campos (Sparse Fieldsets)
+
+Permite al cliente solicitar solo los campos que necesita:
+
+**Sintaxis:**
+
+[source, bash]
+----
+# Especificar campos a incluir
+GET /usuarios/123?fields=id,nombre,email
+
+# O solicitar todas las categorías de campos
+GET /usuarios/123?fields=id,nombre,email,perfil.ciudad,perfil.edad
+
+# Usando parámetro de header (GraphQL style)
+GET /usuarios?fields[usuario]=id,nombre&fields[perfil]=ciudad,edad
+----
+
+**Respuesta optimizada:**
+
+[source, json]
+----
+# Sin fields (todos los campos)
+GET /usuarios/123
+{
+  "id": 1,
+  "nombre": "Juan",
+  "email": "juan@example.com",
+  "edad": 30,
+  "ciudad": "Madrid",
+  "contraseña_hash": "...",
+  "token": "...",
+  "creado_en": "2025-01-01",
+  "actualizado_en": "2025-10-31"
+}
+
+# Con fields
+GET /usuarios/123?fields=id,nombre,email
+{
+  "id": 1,
+  "nombre": "Juan",
+  "email": "juan@example.com"
+}
+----
+
+**Beneficios:**
+
+* 🚀 Reduce ancho de banda
+* ⚡ Mejora rendimiento
+* 🔒 Control sobre datos sensibles
+* 📱 Ideal para clientes móviles
+
+**Ejemplo combinado:**
+
+[source, bash]
+----
+GET /usuarios?estado=activo&sort=-fecha_creacion&page=1&limit=20&fields=id,nombre,email
+----
+
+**Respuesta:**
+
+[source, json]
+----
+{
+  "data": [
+    {"id": 1, "nombre": "Juan", "email": "juan@example.com"},
+    {"id": 2, "nombre": "María", "email": "maria@example.com"},
+    ...
+  ],
+  "filters": {"estado": "activo"},
+  "sort": {"fields": ["-fecha_creacion"]},
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 245
+  }
+}
+----
+
+==== 7.4.5 Mejores Prácticas
+
+**Límites y Validación:**
+
+[source, bash]
+----
+# Límite máximo de registros por página
+GET /usuarios?limit=50       # ✅ OK (default 10, max 100)
+GET /usuarios?limit=5000     # ❌ Error: limit demasiado alto
+
+# Respuesta de error
+HTTP/1.1 400 Bad Request
+{
+  "error": "invalid_limit",
+  "mensaje": "limit debe ser entre 1 y 100",
+  "sugerencia": "usar limit=100"
+}
+----
+
+**Encabezados informativos:**
+
+[source, bash]
+----
+GET /usuarios?page=1&limit=10
+
+HTTP/1.1 200 OK
+X-Total-Count: 245
+X-Page: 1
+X-Page-Size: 10
+X-Pages: 25
+----
+
+**Documentación clara:**
+
+[source, markdown]
+----
+### Parámetros de Query
+
+| Parámetro | Tipo | Default | Máximo | Ejemplo |
+|-----------|------|---------|--------|---------|
+| page      | int  | 1       | N/A    | ?page=2 |
+| limit     | int  | 10      | 100    | ?limit=50 |
+| sort      | str  | -id     | 5 campos | ?sort=-fecha,nombre |
+| fields    | str  | todos   | N/A    | ?fields=id,nombre |
+| q         | str  | null    | N/A    | ?q=Juan |
+| estado    | enum | null    | N/A    | ?estado=activo |
+
+### Ejemplos
+
+```bash
+# Primeros 20 usuarios activos
+GET /usuarios?estado=activo&limit=20
+
+# Página 2, ordenado por nombre
+GET /usuarios?page=2&sort=nombre
+
+# Solo id y email, búsqueda por texto
+GET /usuarios?fields=id,email&q=juan@example.com
+```
+----
+
+=== 7.5 Manejo de Errores
+
+El manejo consistente de errores es crucial para que los clientes puedan entender qué salió mal y cómo solucionarlo. Un buen manejo de errores mejora la experiencia del desarrollador.
+
+==== 7.5.1 Estructura Consistente de Errores
+
+**Formato recomendado (RFC 7807 - Problem Details):**
+
+[source, json]
+----
+{
+  "type": "https://api.example.com/errors/validation-error",
+  "title": "Validation Error",
+  "status": 422,
+  "detail": "One or more validation errors occurred",
+  "instance": "/usuarios",
+  "timestamp": "2025-10-31T10:30:00Z",
+  "trace_id": "0HN1GCDVCCBTF:00000001",
+  "errors": [
+    {
+      "field": "email",
+      "message": "Email is already registered",
+      "code": "EMAIL_DUPLICATE"
+    },
+    {
+      "field": "password",
+      "message": "Password must be at least 8 characters",
+      "code": "PASSWORD_TOO_SHORT"
+    }
+  ]
+}
+----
+
+**Estructura alternativa más simple:**
+
+[source, json]
+----
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Request validation failed",
+    "status": 422,
+    "details": [
+      {
+        "field": "email",
+        "message": "Email already exists"
+      },
+      {
+        "field": "age",
+        "message": "Must be between 18 and 120"
+      }
+    ],
+    "timestamp": "2025-10-31T10:30:00Z",
+    "request_id": "req_xyz123"
+  }
+}
+----
+
+**Estructura mínima:**
+
+[source, json]
+----
+{
+  "error": "validation_error",
+  "message": "Email is invalid",
+  "status": 400
+}
+----
+
+**Recomendación:** Usar la estructura RFC 7807 para APIs públicas profesionales.
+
+==== 7.5.2 Códigos de Error Personalizados
+
+Códigos alfanuméricos que identifican específicamente el problema:
+
+**Convenciones de nomenclatura:**
+
+* Mayúsculas con guiones: `INVALID_EMAIL`, `DUPLICATE_USERNAME`
+* Prefijo del dominio: `USER_NOT_FOUND`, `PAYMENT_FAILED`
+* Sufijo descriptivo: `_REQUIRED`, `_TOO_LONG`, `_INVALID`
+
+**Catálogo de errores comunes:**
+
+[options="header"]
+|===
+| Código | HTTP | Descripción | Ejemplo
+
+| INVALID_REQUEST
+| 400
+| Solicitud malformada o parámetros inválidos
+| JSON inválido, tipo de dato incorrecto
+
+| AUTHENTICATION_REQUIRED
+| 401
+| Falta autenticación
+| Token ausente o expirado
+
+| AUTHENTICATION_FAILED
+| 401
+| Credenciales incorrectas
+| Usuario/contraseña inválida
+
+| PERMISSION_DENIED
+| 403
+| Usuario no tiene permisos
+| Usuario sin rol de admin
+
+| RESOURCE_NOT_FOUND
+| 404
+| Recurso no existe
+| ID de usuario inexistente
+
+| METHOD_NOT_ALLOWED
+| 405
+| Verbo HTTP no permitido
+| POST en endpoint que solo acepta GET
+
+| CONFLICT
+| 409
+| Conflicto en el estado del recurso
+| Intentar actualizar recurso modificado
+
+| VALIDATION_ERROR
+| 422
+| Errores de validación de negocio
+| Email duplicado, contraseña débil
+
+| DUPLICATE_ENTRY
+| 422
+| Entrada duplicada
+| Email/username ya registrado
+
+| RATE_LIMIT_EXCEEDED
+| 429
+| Demasiadas solicitudes
+| Excedió cuota de API
+
+| INTERNAL_ERROR
+| 500
+| Error del servidor
+| Excepción no capturada
+
+| SERVICE_UNAVAILABLE
+| 503
+| Servicio no disponible
+| Servidor en mantenimiento
+|===
+
+**Ejemplos de respuestas con códigos personalizados:**
+
+[source, bash]
+----
+# 400 - Invalid Request
+HTTP/1.1 400 Bad Request
+{
+  "error_code": "INVALID_JSON",
+  "message": "Request body contains invalid JSON",
+  "status": 400
+}
+
+# 401 - Authentication Required
+HTTP/1.1 401 Unauthorized
+{
+  "error_code": "TOKEN_EXPIRED",
+  "message": "JWT token has expired",
+  "status": 401,
+  "details": {
+    "expired_at": "2025-10-31T08:00:00Z",
+    "refresh_url": "/auth/refresh"
+  }
+}
+
+# 422 - Validation Error
+HTTP/1.1 422 Unprocessable Entity
+{
+  "error_code": "VALIDATION_ERROR",
+  "message": "One or more validation errors occurred",
+  "status": 422,
+  "errors": [
+    {"field": "email", "code": "EMAIL_INVALID"},
+    {"field": "password", "code": "PASSWORD_TOO_SHORT"}
+  ]
+}
+
+# 429 - Rate Limit
+HTTP/1.1 429 Too Many Requests
+{
+  "error_code": "RATE_LIMIT_EXCEEDED",
+  "message": "You have exceeded your rate limit",
+  "status": 429,
+  "details": {
+    "limit": 1000,
+    "reset_at": "2025-10-31T11:00:00Z",
+    "retry_after": 1800
+  }
+}
+----
+
+==== 7.5.3 Mensajes Claros y Útiles
+
+Los mensajes de error deben ser informativos y orientados al usuario:
+
+**Malos ejemplos:**
+
+[source, json]
+----
+// ❌ Demasiado técnico
+{"error": "NullPointerException at line 342"}
+
+// ❌ Muy vago
+{"error": "Something went wrong"}
+
+// ❌ No accionable
+{"error": "Invalid input"}
+----
+
+**Buenos ejemplos:**
+
+[source, json]
+----
+// ✅ Claro y específico
+{
+  "error_code": "EMAIL_INVALID",
+  "message": "Email format is invalid. Use format: user@example.com",
+  "status": 422
+}
+
+// ✅ Proporciona solución
+{
+  "error_code": "PASSWORD_TOO_SHORT",
+  "message": "Password must be at least 8 characters. You provided 5 characters.",
+  "status": 422,
+  "suggestion": "Add more characters to your password"
+}
+
+// ✅ Enlaza a documentación
+{
+  "error_code": "AUTHENTICATION_FAILED",
+  "message": "Invalid API key",
+  "status": 401,
+  "help_url": "https://docs.example.com/authentication"
+}
+----
+
+**Guía para mensajes:**
+
+1. **Ser específico:** Indicar exactamente qué falló
+2. **Ser accionable:** Sugerir cómo solucionarlo
+3. **Ser respetuoso:** No culpar al cliente
+4. **Ser conciso:** No más de 1-2 oraciones
+5. **Ser accesible:** Lenguaje simple, no jerga técnica
+6. **En idioma del cliente:** Respetar Accept-Language
+
+**Ejemplos en contexto:**
+
+[source, json]
+----
+// Validación de edad
+{
+  "field": "age",
+  "message": "Age must be between 18 and 120. You provided -5."
+}
+
+// Recursos duplicados
+{
+  "field": "email",
+  "message": "Email 'juan@example.com' is already registered. Did you mean to log in?"
+}
+
+// Límite de tasa
+{
+  "error": "rate_limit_exceeded",
+  "message": "You've made 1000 requests this hour. Your limit will reset at 14:30.",
+  "remaining": 0,
+  "reset_at": "2025-10-31T14:30:00Z"
+}
+----
+
+==== 7.5.4 Detalles de Contexto
+
+Información adicional que ayuda a debuggear y resolver problemas:
+
+**Campos de contexto recomendados:**
+
+[source, json]
+----
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Validation failed",
+    "status": 422,
+    
+    // Contexto temporal
+    "timestamp": "2025-10-31T10:30:45.123Z",
+    
+    // Rastreo de solicitud
+    "request_id": "req_abc123def456",
+    "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736",
+    
+    // Detalles de la solicitud
+    "path": "/api/usuarios",
+    "method": "POST",
+    
+    // Información del usuario (opcional)
+    "user_id": "usr_789",
+    "account_id": "acc_456",
+    
+    // Detalles específicos del error
+    "errors": [
+      {
+        "field": "email",
+        "code": "EMAIL_INVALID",
+        "message": "Invalid email format",
+        "value": "not-an-email"  // El valor que causó error
+      }
+    ]
+  }
+}
+----
+
+**Ejemplo completo con contexto:**
+
+[source, bash]
+----
+POST /api/usuarios HTTP/1.1
+Authorization: Bearer token123
+Content-Type: application/json
+
+{
+  "nombre": "Juan",
+  "email": "invalid-email"
+}
+
+HTTP/1.1 422 Unprocessable Entity
+X-Request-ID: req_abc123def456
+Content-Type: application/json
+
+{
+  "type": "https://api.example.com/errors/validation-error",
+  "title": "Validation Error",
+  "status": 422,
+  "detail": "One or more validation errors",
+  "instance": "/api/usuarios",
+  "request_id": "req_abc123def456",
+  "timestamp": "2025-10-31T10:30:45Z",
+  "errors": [
+    {
+      "pointer": "/email",
+      "code": "EMAIL_INVALID",
+      "message": "Must be a valid email address",
+      "received": "invalid-email"
+    }
+  ]
+}
+----
+
+**Encabezados informativos:**
+
+[source, bash]
+----
+X-Request-ID: req_abc123def456          # ID único para rastrear
+X-Correlation-ID: corr_xyz789           # Correlacionar servicios
+X-RateLimit-Remaining: 45                # Cuotas restantes
+Retry-After: 3600                       # Cuándo reintentar
+Content-Type: application/problem+json   # Tipo estándar de error
+----
+
+==== 7.5.5 Manejo de Errores por Tipo
+
+**Errores de Validación (4xx):**
+
+[source, json]
+----
+HTTP/1.1 422 Unprocessable Entity
+
+{
+  "error_code": "VALIDATION_ERROR",
+  "message": "Validation failed",
+  "status": 422,
+  "errors": [
+    {
+      "field": "email",
+      "message": "Must be a valid email",
+      "code": "EMAIL_INVALID",
+      "value": "not-email"
+    }
+  ]
+}
+----
+
+**Errores de Autorización (4xx):**
+
+[source, json]
+----
+HTTP/1.1 403 Forbidden
+
+{
+  "error_code": "PERMISSION_DENIED",
+  "message": "You don't have permission to access this resource",
+  "status": 403,
+  "required_permission": "write:users",
+  "documentation_url": "https://docs.example.com/permissions"
+}
+----
+
+**Errores del Servidor (5xx):**
+
+[source, json]
+----
+HTTP/1.1 500 Internal Server Error
+
+{
+  "error_code": "INTERNAL_ERROR",
+  "message": "An unexpected error occurred",
+  "status": 500,
+  "request_id": "req_abc123",
+  "support_url": "https://support.example.com",
+  "support_email": "support@example.com"
+}
+----
+
+==== 7.5.6 Mejores Prácticas
+
+**Encabezados de error estándar:**
+
+[source, bash]
+----
+X-Request-ID: Identificador único por solicitud
+X-Error-Code: Código de error programático
+Content-Type: application/problem+json
+Retry-After: Segundos a esperar antes de reintentar
+----
+
+**Logging de errores:**
+
+* Registrar todos los errores del servidor (5xx)
+* Incluir contexto: usuario, solicitud, stack trace
+* Usar el request_id para correlacionar logs
+* Alertar sobre errores críticos
+
+**Documentación de errores:**
+
+* Documenter todos los códigos de error posibles
+* Explicar qué significa cada error
+* Proporcionar ejemplos de cómo solucionarlo
+* Incluir códigos de error en especificación OpenAPI
+
+**Cliente-side:**
+
+* Implementar reintentos con backoff exponencial
+* Mostrar mensajes de error amigables
+* Loguear errores para debugging
+* No exponer mensajes técnicos al usuario final
+
+=== 7.6 Performance
+
+Optimizar el rendimiento de una API es crucial para una buena experiencia de usuario y reducción de costos de infraestructura.
+
+==== 7.6.1 Caching con Headers HTTP
+
+**Cache-Control Header (RFC 7234):**
+
+Define cómo y durante cuánto tiempo cachear una respuesta:
+
+[source, bash]
+----
+GET /api/usuarios/123 HTTP/1.1
+
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=3600
+
+# Cache por 1 hora en navegador y proxies públicos
+----
+
+**Directivas principales:**
+
+[source, bash]
+----
+# public: Puede ser cacheado por cualquiera (navegadores, proxies)
+Cache-Control: public, max-age=3600
+
+# private: Solo navegador, no por proxies
+Cache-Control: private, max-age=1800
+
+# max-age: Segundos antes de que expire
+Cache-Control: max-age=86400  # 24 horas
+
+# no-cache: Validar con servidor antes de usar copia en caché
+Cache-Control: no-cache
+
+# no-store: No cachear (datos sensibles)
+Cache-Control: no-store
+
+# must-revalidate: Revalidar después de expirar
+Cache-Control: max-age=3600, must-revalidate
+
+# Combinadas
+Cache-Control: public, max-age=3600, must-revalidate
+----
+
+**Ejemplo completo con validación condicional:**
+
+[source, bash]
+----
+# Primera solicitud
+GET /api/usuarios HTTP/1.1
+
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=3600
+ETag: "abc123def456"
+Last-Modified: Wed, 31 Oct 2025 10:00:00 GMT
+
+[datos...]
+
+# Cliente cachea la respuesta
+
+# Solicitud posterior (dentro de 1 hora)
+# El cliente usa caché sin contactar servidor
+
+# Solicitud posterior (después de 1 hora)
+GET /api/usuarios HTTP/1.1
+If-None-Match: "abc123def456"
+# O
+If-Modified-Since: Wed, 31 Oct 2025 10:00:00 GMT
+
+HTTP/1.1 304 Not Modified
+# No se envían datos, cliente usa caché existente
+----
+
+**Estrategia de caching por tipo de endpoint:**
+
+[options="header"]
+|===
+| Tipo de Endpoint | Cache | Tiempo | Directivas
+
+| GET usuarios (lista)
+| Sí
+| 5-15 minutos
+| public, max-age=600
+
+| GET usuario/{id}
+| Sí
+| 30 minutos
+| public, max-age=1800
+
+| GET datos estáticos
+| Sí
+| 24 horas
+| public, max-age=86400
+
+| POST (crear)
+| No
+| -
+| no-cache, no-store
+
+| PUT (actualizar)
+| No
+| -
+| no-cache, no-store
+
+| DELETE
+| No
+| -
+| no-cache, no-store
+
+| Datos personalizados
+| Sí
+| 1-5 minutos
+| private, max-age=300
+
+| Datos sensibles
+| No
+| -
+| no-store
+|===
+
+**ETag para validación:**
+
+[source, bash]
+----
+# Respuesta con ETag
+HTTP/1.1 200 OK
+ETag: "33a64df551425fcc55e4d42a148795d9f25f89d4"
+
+# Cliente envía ETag si existe en caché
+GET /api/usuarios HTTP/1.1
+If-None-Match: "33a64df551425fcc55e4d42a148795d9f25f89d4"
+
+# Si no ha cambiado
+HTTP/1.1 304 Not Modified
+
+# Si ha cambiado
+HTTP/1.1 200 OK
+ETag: "6d82cbb8c0a4a1c0a4a1c0a4a1c0a4a1"
+[nuevos datos...]
+----
+
+==== 7.6.2 Compresión GZIP
+
+Reduce el tamaño de transferencia de datos:
+
+**Solicitud con Accept-Encoding:**
+
+[source, bash]
+----
+GET /api/usuarios HTTP/1.1
+Accept-Encoding: gzip, deflate, br
+
+# br = Brotli (mejor compresión pero menos soporte)
+# gzip = Estándar
+# deflate = Antiguo, evitar
+----
+
+**Respuesta comprimida:**
+
+[source, bash]
+----
+HTTP/1.1 200 OK
+Content-Encoding: gzip
+Content-Length: 1234
+
+[datos comprimidos en gzip...]
+----
+
+**Impacto:**
+
+* JSON: 60-80% de reducción
+* XML: 70-85% de reducción
+* HTML: 70-90% de reducción
+* Imágenes: Poco impacto (ya comprimidas)
+
+**Configuración recomendada:**
+
+[source, nginx]
+----
+# Nginx
+gzip on;
+gzip_types application/json text/plain application/xml;
+gzip_min_length 1000;  # Solo comprimir > 1KB
+gzip_level 6;          # Balance entre tiempo y tamaño
+----
+
+**Ejemplo de reducción:**
+
+[source, text]
+----
+Sin compresión: 150 KB
+Con gzip:       25 KB
+Reducción:      83%
+Tiempo extra:   ~5ms (en conexión rápida)
+----
+
+==== 7.6.3 CDN (Content Delivery Network)
+
+Distribuye contenido geográficamente para reducir latencia:
+
+**Mejoras de CDN:**
+
+* Reduce latencia (distancia física → ~50ms → ~10ms)
+* Distribuye carga del servidor
+* Caché distribuido globalmente
+* Protección contra DDoS
+
+**Ejemplo de implementación:**
+
+[source, bash]
+----
+# Sin CDN
+Cliente en Tokio → Servidor en Madrid → 150ms
+
+# Con CDN
+Cliente en Tokio → Nodo CDN Tokio → 10ms
+Nodo CDN Tokio ← Servidor Madrid (caché) → 150ms primera vez
+----
+
+**CDN populares:**
+
+* Cloudflare (mejor para APIs)
+* AWS CloudFront
+* Azure CDN
+* Akamai
+
+**Configuración de CDN:**
+
+[source, bash]
+----
+# Headers para CDN
+Cache-Control: public, max-age=3600
+
+# Añadir dominio CDN en DNS
+api.example.com → CDN (CNAME)
+
+# CDN automáticamente cachea y distribuye
+----
+
+==== 7.6.4 Lazy Loading
+
+Cargar datos bajo demanda en lugar de todo de una vez:
+
+**Sin lazy loading:**
+
+[source, bash]
+----
+GET /api/usuarios/123
+
+HTTP/1.1 200 OK
+{
+  "id": 123,
+  "nombre": "Juan",
+  "email": "juan@example.com",
+  "posts": [
+    {"id": 1, "titulo": "Post 1", "contenido": "..."},
+    {"id": 2, "titulo": "Post 2", "contenido": "..."},
+    // ... 1000 posts más
+  ],
+  "comentarios": [...],
+  "seguidores": [...]
+}
+----
+
+**Con lazy loading:**
+
+[source, bash]
+----
+GET /api/usuarios/123
+
+HTTP/1.1 200 OK
+{
+  "id": 123,
+  "nombre": "Juan",
+  "email": "juan@example.com",
+  "_links": {
+    "posts": "/api/usuarios/123/posts",
+    "comentarios": "/api/usuarios/123/comentarios",
+    "seguidores": "/api/usuarios/123/seguidores"
+  }
+}
+
+# Cliente carga datos solo si es necesario
+GET /api/usuarios/123/posts?limit=10
+----
+
+**Beneficios:**
+
+* 🚀 Respuesta más rápida
+* 📉 Menos consumo de memoria
+* 🔗 APIs más modulares
+* 📱 Mejor para móviles
+
+**Implementación con expansión (expand):**
+
+[source, bash]
+----
+# Sin expandir
+GET /api/usuarios/123
+{
+  "id": 123,
+  "nombre": "Juan",
+  "_links": {"posts": "/api/usuarios/123/posts"}
+}
+
+# Con expansión (include)
+GET /api/usuarios/123?include=posts,comentarios
+{
+  "id": 123,
+  "nombre": "Juan",
+  "posts": [...],
+  "comentarios": [...]
+}
+----
+
+==== 7.6.5 Batch Operations
+
+Permite múltiples operaciones en una sola solicitud:
+
+**Sin batch:**
+
+[source, bash]
+----
+# 5 solicitudes separadas
+GET /api/usuarios/1
+GET /api/usuarios/2
+GET /api/usuarios/3
+GET /api/usuarios/4
+GET /api/usuarios/5
+
+# Latencia total: 5 × 100ms = 500ms (aproximado)
+----
+
+**Con batch:**
+
+[source, bash]
+----
+POST /api/batch HTTP/1.1
+Content-Type: application/json
+
+{
+  "requests": [
+    {"method": "GET", "path": "/usuarios/1"},
+    {"method": "GET", "path": "/usuarios/2"},
+    {"method": "GET", "path": "/usuarios/3"},
+    {"method": "GET", "path": "/usuarios/4"},
+    {"method": "GET", "path": "/usuarios/5"}
+  ]
+}
+
+HTTP/1.1 200 OK
+{
+  "responses": [
+    {"status": 200, "body": {...}},
+    {"status": 200, "body": {...}},
+    {"status": 200, "body": {...}},
+    {"status": 200, "body": {...}},
+    {"status": 200, "body": {...}}
+  ]
+}
+
+# Latencia total: 1 × 100ms = 100ms
+----
+
+**Batch para modificaciones:**
+
+[source, bash]
+----
+POST /api/batch HTTP/1.1
+
+{
+  "requests": [
+    {
+      "id": "req1",
+      "method": "POST",
+      "path": "/usuarios",
+      "body": {"nombre": "Juan"}
+    },
+    {
+      "id": "req2",
+      "method": "POST",
+      "path": "/usuarios",
+      "body": {"nombre": "María"}
+    }
+  ]
+}
+
+HTTP/1.1 200 OK
+{
+  "responses": [
+    {"id": "req1", "status": 201, "body": {"id": 1}},
+    {"id": "req2", "status": 201, "body": {"id": 2}}
+  ]
+}
+----
+
+**Alternativa: Usar GraphQL para queries complejas**
+
+==== 7.6.6 Mejores Prácticas de Performance
+
+**Monitoreo:**
+
+* Medir latencia en percentiles (p50, p95, p99)
+* Monitorear tiempo de respuesta por endpoint
+* Alertas si latencia > umbral
+
+**Optimización de database:**
+
+* Índices en campos de búsqueda/filtrado
+* Denormalización donde sea apropiado
+* Queries optimizadas (EXPLAIN PLAN)
+* Connection pooling
+
+**Caching en capas:**
+
+[source, text]
+----
+1. Browser cache (Cache-Control headers)
+2. CDN cache (distribuido globalmente)
+3. API server cache (Redis, Memcached)
+4. Database query cache
+5. Database result cache
+----
+
+**Tabla de mejoras de performance:**
+
+[options="header"]
+|===
+| Técnica | Mejora | Dificultad | Costo | Impacto
+
+| Caching HTTP
+| 50-80%
+| Baja
+| Nulo
+| Alto
+
+| GZIP
+| 70-80%
+| Muy baja
+| Nulo
+| Alto
+
+| CDN
+| 50-70%
+| Baja
+| Bajo
+| Alto
+
+| Lazy loading
+| 30-50%
+| Media
+| Nulo
+| Medio
+
+| Batch ops
+| 60-80%
+| Media
+| Bajo
+| Medio
+
+| Índices DB
+| 50-100x
+| Media
+| Bajo
+| Alto
+
+| Query optimization
+| 10-100x
+| Alta
+| Nulo
+| Alto
+|===
+
+==== 7.6.7 Ejemplo: API Optimizada
+
+[source, bash]
+----
+GET /api/usuarios?limite=20&campos=id,nombre,email HTTP/1.1
+Accept-Encoding: gzip
+Accept-Language: es
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Encoding: gzip
+Cache-Control: public, max-age=600
+ETag: "abc123"
+X-RateLimit-Remaining: 999
+
+[gzip comprimido: 5KB en lugar de 25KB]
+----
+
+**Beneficios:**
+
+* ✅ Respuesta rápida (100ms)
+* ✅ Bajo uso de ancho de banda (5KB)
+* ✅ Cacheado por 10 minutos
+* ✅ Comprimido automáticamente
+* ✅ Solo campos necesarios
+
+== 8. Comparativas, Herramientas y Antipatrones
+
+=== 8.1 GraphQL vs REST
+
+**GraphQL** es una alternativa moderna a REST que permite clientes solicitar exactamente los datos que necesitan.
+
+==== 8.1.1 Comparación
+
+[options="header"]
+|===
+| Aspecto | REST | GraphQL
+
+| **Query**
+| Múltiples endpoints
+| Un solo endpoint
+
+| **Datos**
+| Servidor define estructura
+| Cliente define estructura
+
+| **Over-fetching**
+| Común (datos innecesarios)
+| Eliminado (solo lo pedido)
+
+| **Under-fetching**
+| Requiere solicitudes adicionales
+| Todo en una solicitud
+
+| **Curva de aprendizaje**
+| Baja (HTTP estándar)
+| Media-Alta (lenguaje específico)
+
+| **Caching**
+| Fácil (HTTP Cache-Control)
+| Difícil (todas son POST)
+
+| **Debugging**
+| Fácil (URL visible)
+| Media (sin URL específica)
+
+| **Documentación**
+| Manual (OpenAPI)
+| Automática (Introspection)
+
+| **Seguridad**
+| Granular por endpoint
+| Requiere validación en resolver
+
+| **Complejidad de servidor**
+| Baja
+| Alta (resolvers complejos)
+
+| **Rendimiento**
+| Bueno (simple)
+| Puede ser malo (N+1 queries)
+|===
+
+**Ejemplo REST:**
+
+[source, bash]
+----
+# 3 solicitudes para obtener usuario, posts y comentarios
+GET /api/usuarios/123
+GET /api/usuarios/123/posts
+GET /api/usuarios/123/comentarios
+
+# Respuestas incluyen TODOS los campos
+{
+  "id": 123,
+  "nombre": "Juan",
+  "email": "juan@example.com",
+  "edad": 30,
+  "ciudad": "Madrid",
+  // ... campos innecesarios
+}
+----
+
+**Ejemplo GraphQL:**
+
+[source, graphql]
+----
+# 1 solicitud, solo campos solicitados
+query {
+  usuario(id: 123) {
+    nombre
+    email
+    posts {
+      titulo
+      fecha
+      comentarios {
+        texto
+        autor
+      }
+    }
+  }
+}
+
+# Respuesta exacta
+{
+  "data": {
+    "usuario": {
+      "nombre": "Juan",
+      "email": "juan@example.com",
+      "posts": [
+        {
+          "titulo": "Post 1",
+          "fecha": "2025-10-31",
+          "comentarios": [...]
+        }
+      ]
+    }
+  }
+}
+----
+
+==== 8.1.2 Casos de Uso
+
+**Usar REST cuando:**
+* ✅ APIs simples y CRUD
+* ✅ Caché es importante
+* ✅ Endpoints bien definidos
+* ✅ Equipo prefiere HTTP estándar
+* ✅ Clientes diversos con necesidades claras
+
+**Usar GraphQL cuando:**
+* ✅ Muchas consultas complejas
+* ✅ Clientes con necesidades variadas
+* ✅ Over-fetching es problema
+* ✅ Documentación automática importante
+* ✅ Equipo con experiencia GraphQL
+
+**Ejemplos:**
+
+[options="header"]
+|===
+| Caso | Mejor opción | Razón
+
+| CRUD básico (usuarios, posts)
+| REST
+| Simplez, caché fácil
+
+| Datos complejos e interconectados
+| GraphQL
+| Evita over-fetching
+
+| API pública masiva
+| REST
+| Predictibilidad, estabilidad
+
+| Dashboard personalizado
+| GraphQL
+| Cada usuario pide datos distintos
+
+| Mobile app con límite de datos
+| GraphQL
+| Solo envía lo necesario
+
+| Microservicios internos
+| Ambas
+| REST para simplicidad, GraphQL para flexibilidad
+|===
+
+==== 8.1.3 Híbridos (GraphQL + REST)
+
+Combinar ambas tecnologías para obtener lo mejor de cada una:
+
+**Estrategia 1: GraphQL como capa de abstracción**
+
+[source, text]
+----
+Cliente (Mobile) ──→ GraphQL Gateway ──→ REST Services
+Cliente (Web)   ──→ GraphQL Gateway ──→ REST Services
+
+GraphQL Gateway convierte GraphQL queries en llamadas REST internas
+----
+
+**Estrategia 2: REST + GraphQL en paralelo**
+
+[source, bash]
+----
+# Endpoint REST tradicional
+GET /api/usuarios/123
+{"id": 123, "nombre": "Juan", ...}
+
+# Endpoint GraphQL
+POST /graphql
+{"query": "{ usuario(id: 123) { nombre email } }"}
+{"data": {"usuario": {"nombre": "Juan", "email": "juan@example.com"}}}
+----
+
+**Estrategia 3: GraphQL sobre REST**
+
+[source, bash]
+----
+# API tiene tanto REST como GraphQL
+GET /api/usuarios       # REST tradicional
+POST /api/graphql       # GraphQL endpoint
+
+# Clientes eligen qué usar según necesidad
+----
+
+**Recomendación:** Para la mayoría de casos, **REST es mejor**. GraphQL es overkill para CRUD simple pero excelente para datos complejos.
+
+=== 8.2 Herramientas para Desarrollo y Testing
+
+Herramientas esenciales para crear, testear y documentar APIs REST:
+
+[options="header"]
+|===
+| Herramienta | Tipo | Descripción | Mejores para
+
+| **Swagger/OpenAPI**
+| Especificación
+| Estándar para documentación de APIs
+| Documentación formal, generación de código
+
+| **Postman**
+| Cliente HTTP/Testing
+| Interfaz gráfica para solicitudes, colecciones, tests
+| Desarrollo, testing manual, documentación
+
+| **cURL**
+| CLI
+| Herramienta línea de comandos para HTTP
+| Scripts, automatización, debugging
+
+| **HTTPie**
+| CLI
+| cURL mejorado con sintaxis más clara
+| Testing desde terminal, scripts
+
+| **Insomnia**
+| Cliente HTTP
+| Alternativa moderna a Postman (más ligera)
+| Desarrollo rápido, diseño limpio
+
+| **SoapUI**
+| Testing
+| Especializado en testing de servicios
+| Testing complejo, mocking, SoapUI pro
+
+| **Fiddler**
+| Proxy
+| Proxy para inspeccionar tráfico HTTP/HTTPS
+| Debugging, inspección de tráfico
+
+| **Thunder Client**
+| Extension VS Code
+| Cliente HTTP integrado en editor
+| Desarrollo en editor, rápido
+
+| **REST Client**
+| Extension VS Code
+| Cliente REST minimalista en VS Code
+| Desarrollo ágil, .rest files
+|===
+
+==== 8.2.1 Swagger/OpenAPI
+
+Ya documentado en sección 7.2.1. Estándar de facto para especificación de APIs.
+
+==== 8.2.2 Postman
+
+**Características principales:**
+
+* Interfaz gráfica intuitiva
+* Colecciones de solicitudes
+* Ambiente para variablesy credenciales
+* Tests automatizados
+* Documentación interactiva
+* Colaboración en equipo
+* Mocking de APIs
+
+**Ejemplo de colección:**
+
+[source, json]
+----
+{
+  "info": {
+    "name": "Mi API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "Listar usuarios",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/usuarios?limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios"]
+            }
+          }
+        },
+        {
+          "name": "Crear usuario",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/usuarios",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nombre\": \"Juan\", \"email\": \"juan@example.com\"}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+----
+
+==== 8.2.3 cURL
+
+Herramienta CLI estándar para HTTP:
+
+[source, bash]
+----
+# GET simple
+curl https://api.example.com/usuarios
+
+# Con headers
+curl -H "Authorization: Bearer TOKEN" https://api.example.com/usuarios
+
+# POST con datos
+curl -X POST https://api.example.com/usuarios \
+  -H "Content-Type: application/json" \
+  -d '{"nombre": "Juan", "email": "juan@example.com"}'
+
+# Mostrar headers de respuesta
+curl -i https://api.example.com/usuarios
+
+# Verbose (ver detalles)
+curl -v https://api.example.com/usuarios
+
+# Guardar en archivo
+curl https://api.example.com/data > archivo.json
+
+# Autenticación básica
+curl -u usuario:contraseña https://api.example.com/usuarios
+----
+
+==== 8.2.4 HTTPie
+
+Alternativa más amigable a cURL:
+
+[source, bash]
+----
+# GET
+http GET https://api.example.com/usuarios
+
+# POST con JSON automático
+http POST https://api.example.com/usuarios \
+  nombre="Juan" \
+  email="juan@example.com"
+
+# Con autenticación
+http --auth usuario:contraseña GET https://api.example.com/usuarios
+
+# Con headers
+http GET https://api.example.com/usuarios \
+  "Authorization: Bearer TOKEN"
+
+# Mostrar todo (request + response)
+http -v POST https://api.example.com/usuarios
+
+# Formato más legible que cURL
+http -p=HhBb GET https://api.example.com/usuarios
+# H = request headers, B = request body
+# h = response headers, b = response body
+----
+
+==== 8.2.5 Insomnia
+
+Cliente HTTP moderno, alternativa a Postman:
+
+* Interfaz más limpia
+* Más ligera
+* Soporta GraphQL nativo
+* Versionado de solicitudes
+* Plugins para extensibilidad
+
+==== 8.2.6 VS Code Extensions
+
+**REST Client:**
+
+[source, rest]
+----
+### GET usuarios
+GET https://api.example.com/usuarios
+
+### GET usuario específico
+GET https://api.example.com/usuarios/123
+
+### POST crear usuario
+POST https://api.example.com/usuarios
+Content-Type: application/json
+
+{
+  "nombre": "Juan",
+  "email": "juan@example.com"
+}
+
+### Variables
+@base_url = https://api.example.com
+
+GET @base_url/usuarios
+----
+
+**Thunder Client:** Similar pero interfaz integrada.
+
+=== 8.3 Antipatrones a Evitar
+
+Prácticas comunes que generan APIs de baja calidad:
+
+==== 8.3.1 Usar verbos en URIs
+
+❌ **INCORRECTO - Verbos en URI:**
+
+[source, bash]
+----
+GET /api/usuarios/obtener/123
+GET /api/usuarios/listar
+POST /api/usuarios/crear
+POST /api/usuarios/actualizar/123
+POST /api/usuarios/eliminar/123
+----
+
+✅ **CORRECTO - Verbos HTTP:**
+
+[source, bash]
+----
+GET /api/usuarios/123        # Obtener
+GET /api/usuarios            # Listar
+POST /api/usuarios           # Crear
+PUT /api/usuarios/123        # Actualizar
+DELETE /api/usuarios/123     # Eliminar
+----
+
+**Por qué es malo:** Mezcla verbos HTTP con verbos en URIs, violando principios REST.
+
+==== 8.3.2 Mezclar métodos HTTP
+
+❌ **INCORRECTO:**
+
+[source, bash]
+----
+# POST para todo
+POST /api/usuarios?action=get&id=123
+POST /api/usuarios?action=create
+POST /api/usuarios?action=delete&id=456
+
+# GET para modificaciones
+GET /api/usuarios/delete/123
+GET /api/usuarios/update/456?name=Juan
+----
+
+✅ **CORRECTO:**
+
+[source, bash]
+----
+GET /api/usuarios/123
+POST /api/usuarios
+PUT /api/usuarios/456
+DELETE /api/usuarios/456
+----
+
+**Por qué es malo:** Los verbos HTTP tienen semántica específica. GET no debe modificar, POST no debe ser idempotente.
+
+==== 8.3.3 Códigos de estado incorrectos
+
+❌ **INCORRECTO:**
+
+[source, bash]
+----
+# Siempre 200, error en body
+HTTP/1.1 200 OK
+{
+  "error": "User not found",
+  "status": 404
+}
+
+# Usar 500 para errores de cliente
+HTTP/1.1 500 Internal Server Error
+{
+  "error": "Invalid email format"
+}
+----
+
+✅ **CORRECTO:**
+
+[source, bash]
+----
+HTTP/1.1 404 Not Found
+{
+  "error": "User not found",
+  "status": 404
+}
+
+HTTP/1.1 400 Bad Request
+{
+  "error": "Invalid email format",
+  "status": 400
+}
+----
+
+**Por qué es malo:** Los códigos HTTP comunican estado. Cliente no sabe si falló o tuvo éxito sin parsear JSON.
+
+==== 8.3.4 Falta de versionado
+
+❌ **INCORRECTO - Sin versionado:**
+
+[source, bash]
+----
+GET /api/usuarios
+
+# Al cambiar API, clientes antiguos se rompen
+# Sin forma de mantener compatibilidad
+----
+
+✅ **CORRECTO - Con versionado:**
+
+[source, bash]
+----
+GET /api/v1/usuarios
+GET /api/v2/usuarios
+
+# Mantener v1 funcionando mientras clientes migran a v2
+----
+
+**Por qué es malo:** Cambios inevitables rompen clientes antiguos.
+
+==== 8.3.5 Sin documentación
+
+❌ **INCORRECTO:**
+
+[source, text]
+----
+No hay documentación
+Desarrolladores tienen que leer código
+Cambios no comunicados
+Ejemplos desactualizados
+----
+
+✅ **CORRECTO:**
+
+[source, text]
+----
+Especificación OpenAPI
+Documentación interactiva (Swagger UI)
+Ejemplos en múltiples lenguajes
+Changelog actualizado
+Guías de integración
+----
+
+**Por qué es malo:** Sin documentación, API es inútil.
+
+==== 8.3.6 Cambios sin deprecación
+
+❌ **INCORRECTO:**
+
+[source, bash]
+----
+# v1.0: GET /api/usuarios/{id}
+# v1.1: Cambiar a GET /api/users/{id} SIN aviso
+# Clientes se rompen inmediatamente
+----
+
+✅ **CORRECTO:**
+
+[source, bash]
+----
+# v1.0: GET /api/usuarios/{id}
+# v1.1: Agregar GET /api/users/{id}, marcar usuarios como deprecated
+# v1.2: Remover /api/usuarios/{id} después de 6 meses
+Deprecation: true
+Sunset: Wed, 31 Dec 2025 23:59:59 GMT
+Link: </api/users/{id}>; rel="successor-version"
+----
+
+**Por qué es malo:** Clientes no tienen tiempo de migrar. Rompe confianza.
+
+==== 8.3.7 Respuestas inconsistentes
+
+❌ **INCORRECTO - Inconsistente:**
+
+[source, json]
+----
+// Endpoint 1
+{
+  "id": 123,
+  "userName": "juan"
+}
+
+// Endpoint 2
+{
+  "user_id": 456,
+  "user_name": "maria"
+}
+
+// Endpoint 3
+{
+  "ID": 789,
+  "NAME": "pedro"
+}
+----
+
+✅ **CORRECTO - Consistente:**
+
+[source, json]
+----
+// Todos usan camelCase
+{
+  "id": 123,
+  "userName": "juan"
+}
+
+{
+  "id": 456,
+  "userName": "maria"
+}
+
+{
+  "id": 789,
+  "userName": "pedro"
+}
+----
+
+**Por qué es malo:** Clientes must parsear múltiples formatos. Confusión y bugs.
+
+==== 8.3.8 Más antipatrones
+
+**Otros errores comunes:**
+
+* ❌ Usar diferentes códigos 2xx para el mismo resultado
+* ❌ Devolver datos sensibles en URLs
+* ❌ No usar HTTPS
+* ❌ Rate limiting sin comunicar límites
+* ❌ Sin request/trace IDs para debugging
+* ❌ Cambiar formato de respuesta sin versionado
+* ❌ No validar entrada
+* ❌ Cambios breaking sin período de transición
+
+**Resumen de buenas prácticas:**
+
+[source, text]
+----
+✅ DO                              ❌ DON'T
+
+✅ Usar nombres de recursos       ❌ Verbos en URLs
+✅ HTTP verbs correctos            ❌ Mezclar POST/GET
+✅ Códigos de estado correctos     ❌ Siempre 200
+✅ Versionado                      ❌ Sin versionado
+✅ Documentación completa          ❌ Código es documentación
+✅ Deprecación gradual             ❌ Cambios abruptos
+✅ Respuestas consistentes         ❌ Formatos variables
+✅ Validación de entrada           ❌ Confiar en cliente
+✅ HTTPS siempre                   ❌ HTTP sin TLS
+✅ Comunicar cambios               ❌ Cambios silenciosos
+----
+

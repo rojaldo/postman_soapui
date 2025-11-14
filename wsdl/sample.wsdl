@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions 
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://ejemplo.com/servicio"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    targetNamespace="http://ejemplo.com/servicio"
+    name="ServicioCliente">
+
+    <!-- Tipos de datos -->
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://ejemplo.com/servicio">
+
+            <!-- Tipo de entrada -->
+            <xsd:element name="ObtenerCliente">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Id" type="xsd:int"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <!-- Tipo de salida -->
+            <xsd:element name="ObtenerClienteResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Cliente" type="tns:Cliente"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <!-- Tipo complejo Cliente -->
+            <xsd:complexType name="Cliente">
+                <xsd:sequence>
+                    <xsd:element name="Id" type="xsd:int"/>
+                    <xsd:element name="Nombre" type="xsd:string"/>
+                    <xsd:element name="Email" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+        </xsd:schema>
+    </wsdl:types>
+
+    <!-- Mensajes -->
+    <wsdl:message name="ObtenerClienteRequest">
+        <wsdl:part name="parameters" element="tns:ObtenerCliente"/>
+    </wsdl:message>
+
+    <wsdl:message name="ObtenerClienteResponse">
+        <wsdl:part name="parameters" element="tns:ObtenerClienteResponse"/>
+    </wsdl:message>
+
+    <!-- Operaciones -->
+    <wsdl:portType name="ServicioClientePortType">
+        <wsdl:operation name="ObtenerCliente">
+            <wsdl:input message="tns:ObtenerClienteRequest"/>
+            <wsdl:output message="tns:ObtenerClienteResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <!-- Enlace SOAP -->
+    <wsdl:binding name="ServicioClienteBinding" type="tns:ServicioClientePortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="ObtenerCliente">
+            <soap:operation soapAction="http://ejemplo.com/servicio/ObtenerCliente"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <!-- Servicio -->
+    <wsdl:service name="ServicioClienteService">
+        <wsdl:port name="ServicioClientePort" binding="tns:ServicioClienteBinding">
+            <soap:address location="http://ejemplo.com/servicio/ServicioCliente"/>
+        </wsdl:port>
+    </wsdl:service>
+
+</definitions>

@@ -1,0 +1,124 @@
+openapi: '3.0.3'
+info:
+  title: Apod API Documentation
+  description: This is the API documentation for the Apod service. This API provides information about astronomical pictures of the day. Since June 1995, NASA has been sharing a new image or photograph of our universe each day, along with a brief explanation written by a professional astronomer.
+  version: '1.0.0'
+servers:
+  - url: https://api.nasa.gov/planetary
+    description: NASA Planetary API Server
+  - url: http://localhost:8080/planetary
+    description: Local Development Server
+paths:
+  /apod:
+    get:
+      summary: Get Astronomy Picture of the Day
+      description: Retrieve the Astronomy Picture of the Day (APOD) along with its explanation.
+      parameters:
+        - name: date
+          in: query
+          description: The date of the APOD to retrieve in YYYY-MM-DD format. If not provided, the current day's APOD is returned.
+          required: false
+          schema:
+            type: string
+            format: date
+            example: 2022-12-25
+        - name: start_date
+          in: query
+          description: The start date for a range of APODs in YYYY-MM-DD format. Works with end_date to specify a date range.
+          required: false
+          schema:
+            type: string
+            format: date
+            example: 2022-12-01
+        - name: end_date
+          in: query
+          description: The end date for a range of APODs in YYYY-MM-DD format. Works with start_date to specify a date range.
+          required: false
+          schema:
+            type: string
+            format: date
+            example: 2022-12-5
+        - name: count
+          in: query
+          description: The number of random APODs to retrieve. Cannot be used with date, start_date, or end_date.
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            example: 5
+        - name: thumbs
+          in: query
+          description: If true, returns a URL to a video thumbnail if the APOD is a video. If it is not a video, this parameter has no effect.
+          required: false
+          schema:
+            type: boolean
+            default: false
+            example: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApodResultSchema'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+components:
+  schemas:
+    ApodResultSchema:
+      type: array
+      items:
+        type: object
+        properties:
+          date:
+            type: string
+            format: date
+            example: "2023-12-13"
+          explanation:
+            type: string
+            example: "What excites the Heart Nebula? First, the large emission nebula on the left, catalogued as IC 1805, looks somewhat like a human heart.  The nebula glows brightly in red light emitted by its most prominent element, hydrogen, but this long-exposure image was also blended with light emitted by silicon (yellow) and oxygen (blue).  In the center of the Heart Nebula are young stars from the open star cluster Melotte 15 that are eroding away several picturesque dust pillars with their atom-exciting energetic light and winds. The Heart Nebula is located about 7,500 light years away toward the constellation of Cassiopeia.  At the bottom right of the Heart Nebula is the companion Fishhead Nebula.  This wide and deep image clearly shows, though, that glowing gas surrounds the Heart Nebula in all directions.   Tonight watch: The Geminids"
+          hdurl:
+            type: string
+            format: uri
+            example: "https://apod.nasa.gov/apod/image/2312/Heart_TelLiveOstling_2953.jpg"
+          media_type:
+            type: string
+            example: "image"
+          service_version:
+            type: string
+            example: "v1"
+          title:
+            type: string
+            example: "Deep Field: The Heart Nebula"
+          url:
+            type: string
+            format: uri
+            example: "https://apod.nasa.gov/apod/image/2312/Heart_TelLiveOstling_960.jpg"
+      properties:
+        message:
+          type: string
+    ErrorSchema:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: "Bad Request: Invalid date format."
+        service_version:
+          type: string
+          example: "v1"
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: query
+      name: api_key
+      description: API key for authentication
+security:
+  - ApiKeyAuth: []

@@ -1,0 +1,42 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:ns="http://ejemplo.com/servicio">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:GetClient>
+         <ns:Id>123</ns:Id>
+      </ns:GetClient>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:ns="http://ejemplo.com/servicio">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:CreateClient>
+            <ns:Name>Juan Perez</ns:Name>
+            <ns:Email>juan.perez@example.com</ns:Email>
+            <ns:Phone>+1234567890</ns:Phone>
+        </ns:CreateClient>
+    </soapenv:Body>
+</soapenv:Envelope>
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:ns="http://ejemplo.com/servicio">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:UpdateClient>
+            <ns:Id>123</ns:Id>
+            <ns:Email>juan.perez@nuevoejemplo.com</ns:Email>
+        </ns:UpdateClient>
+    </soapenv:Body>
+</soapenv:Envelope>
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:ns="http://ejemplo.com/servicio">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:DeleteClient>
+         <ns:Id>123</ns:Id>
+      </ns:DeleteClient>
+   </soapenv:Body>
+</soapenv:Envelope>
