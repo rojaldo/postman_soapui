@@ -4016,24 +4016,6 @@ fn main() {
 
 ---
 
-**Comparativa de Servidores**
-
-[cols="1,1,1,1,1"]
-|===
-| Característica | Apollo | Express | Yoga | Graphene | Juniper
-
-| Lenguaje | Node | Node | Node | Python | Rust
-| Complejidad | Media | Baja | Baja | Media | Alta
-| Performance | Buena | Muy Buena | Excelente | Buena | Excelente
-| Subscriptions | Sí | Requiere config | Sí | Sí | Sí
-| Federation | Sí | No | No | No | No
-| Edge Ready | No | No | Sí | No | Sí
-| Comunidad | Muy Grande | Grande | Creciente | Mediana | Pequeña
-| Documentación | Excelente | Buena | Buena | Buena | Buena
-|===
-
----
-
 ==== 5.3 Integración con Bases de Datos
 
 **Patrones de Resolvers**
